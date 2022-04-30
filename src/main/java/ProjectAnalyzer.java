@@ -7,7 +7,7 @@ public interface ProjectAnalyzer {
 	 * Async method to retrieve the report about a specific class,
 	 * given the full path of the class source file
 	 * 
-	 * @param srcClassFileName
+	 * @param srcClassPath
 	 * @return
 	 */
 	Future<ClassReport> getClassReport(String srcClassPath);
@@ -16,7 +16,7 @@ public interface ProjectAnalyzer {
 	 * Async method to retrieve the report about a package,
 	 * given the full path of the package folder
 	 * 
-	 * @param srcClassFileName
+	 * @param srcPackagePath
 	 * @return
 	 */
 	Future<PackageReport> getPackageReport(String srcPackagePath);
