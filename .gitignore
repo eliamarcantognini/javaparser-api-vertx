@@ -2,3 +2,5 @@
 /.gradle/
 *.iml
 /gradle.xml
+/build/
+/out/
