@@ -44,7 +44,7 @@ class FullCollector extends VoidVisitorAdapter<Void> {
 public class TestJavaParser {
 
 	public static void main(String[] args) throws Exception {
-		CompilationUnit cu = StaticJavaParser.parse(new File("src/pcd/ass02/TestJavaParser.java"));
+		CompilationUnit cu = StaticJavaParser.parse(new File("src/main/java/TestJavaParser.java"));
 		/*
 		var methodNames = new ArrayList<String>();
 		var methodNameCollector = new MethodNameCollector();
