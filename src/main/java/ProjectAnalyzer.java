@@ -1,4 +1,8 @@
 import io.vertx.core.*;
+import reports.ClassReport;
+import reports.PackageReport;
+import reports.ProjectReport;
+
 import java.util.function.*;
 
 public interface ProjectAnalyzer {
