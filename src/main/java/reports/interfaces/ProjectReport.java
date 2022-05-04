@@ -1,4 +1,4 @@
-package reports;
+package reports.interfaces;
 
 import java.util.List;
 

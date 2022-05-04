@@ -1,11 +1,11 @@
 package reports.info;
 
-import reports.ClassReport;
-import reports.InterfaceReport;
+import reports.interfaces.InterfaceReport;
+import reports.info.interfaces.MethodInfo;
 
 import java.util.Optional;
 
-public class MethodInfoImpl implements MethodInfo{
+public class MethodInfoImpl implements MethodInfo {
 
     final String methodName;
     final int srcBeginLine;

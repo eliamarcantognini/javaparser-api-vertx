@@ -1,7 +1,7 @@
-package reports;
+package reports.interfaces;
 
-import reports.info.FieldInfo;
-import reports.info.MethodInfo;
+import reports.info.interfaces.FieldInfo;
+
 import java.util.List;
 
 public interface ClassReport extends InterfaceReport {

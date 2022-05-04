@@ -1,11 +1,13 @@
 package reports;
 
-import reports.info.FieldInfo;
-import reports.info.MethodInfo;
+import reports.info.interfaces.FieldInfo;
+import reports.info.interfaces.MethodInfo;
+import reports.interfaces.ClassReport;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClassReportImpl implements ClassReport{
+public class ClassReportImpl implements ClassReport {
 
     String fullClassName;
     String srcFullFileName;

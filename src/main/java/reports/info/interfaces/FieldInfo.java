@@ -1,6 +1,6 @@
-package reports.info;
+package reports.info.interfaces;
 
-import reports.ClassReport;
+import reports.interfaces.ClassReport;
 
 public interface FieldInfo {
 

@@ -1,7 +1,5 @@
-package reports;
+package reports.interfaces;
 
-import reports.info.FieldInfo;
-import reports.info.MethodInfo;
 import java.util.List;
 
 public interface PackageReport {

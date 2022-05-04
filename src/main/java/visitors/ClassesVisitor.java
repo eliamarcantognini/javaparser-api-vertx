@@ -3,7 +3,7 @@ package visitors;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import reports.ClassReport;
+import reports.interfaces.ClassReport;
 import reports.info.MethodInfoBuilder;
 
 public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {

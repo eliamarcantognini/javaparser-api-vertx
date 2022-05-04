@@ -1,7 +1,6 @@
-package reports.info;
+package reports.info.interfaces;
 
-import reports.ClassReport;
-import reports.InterfaceReport;
+import reports.interfaces.InterfaceReport;
 
 import java.util.Optional;
 

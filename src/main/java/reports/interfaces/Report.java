@@ -1,4 +1,4 @@
-package reports;
+package reports.interfaces;
 
 public interface Report {
     String getName();

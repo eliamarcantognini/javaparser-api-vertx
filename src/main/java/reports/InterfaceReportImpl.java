@@ -1,11 +1,12 @@
 package reports;
 
-import reports.info.MethodInfo;
+import reports.info.interfaces.MethodInfo;
+import reports.interfaces.InterfaceReport;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class InterfaceReportImpl implements InterfaceReport{
+public class InterfaceReportImpl implements InterfaceReport {
 
     private String interfaceName;
     private String interfaceFullPath;

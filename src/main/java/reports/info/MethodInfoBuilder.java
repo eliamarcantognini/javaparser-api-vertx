@@ -1,6 +1,7 @@
 package reports.info;
 
-import reports.InterfaceReport;
+import reports.interfaces.InterfaceReport;
+import reports.info.interfaces.MethodInfo;
 
 public class MethodInfoBuilder {
 

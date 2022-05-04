@@ -2,7 +2,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reports.InterfaceReport;
+import reports.interfaces.InterfaceReport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
