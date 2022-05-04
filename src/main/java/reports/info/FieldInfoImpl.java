@@ -38,4 +38,13 @@ public class FieldInfoImpl implements FieldInfo {
     public Report getParentClassReport() {
         return parentClassReport;
     }
+
+    @Override
+    public String toString(){
+        return "\n\t\tFieldInfoImpl{"
+                + "fieldName=" + this.getFieldName()
+                + ", fieldType=" + this.getFieldType()
+                + ", fieldModifiers=" + this.getFieldModifiers()
+                + ", parent=" + this.getParentClassReport().getName();
+    }
 }
