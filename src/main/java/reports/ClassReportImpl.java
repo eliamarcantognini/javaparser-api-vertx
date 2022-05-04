@@ -56,4 +56,13 @@ public class ClassReportImpl implements ClassReport{
     public void addFieldInfo(FieldInfo fieldInfo) {
         this.fieldsInfo.add(fieldInfo);
     }
+
+    @Override
+    public String toString() {
+        return "ClassReport:\n"
+                + "\tClass Name: " + this.getFullClassName() + "\n"
+                + "\tSource Full File Name: " + this.getSrcFullFileName() + "\n"
+                + "\tMethods Info: " + this.getMethodsInfo() + "\n"
+                + "\tFields Info: " + this.getFieldsInfo();
+    }
 }
