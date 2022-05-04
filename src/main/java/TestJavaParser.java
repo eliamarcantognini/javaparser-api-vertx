@@ -11,8 +11,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import reports.ClassReport;
-import reports.InterfaceReport;
+import reports.interfaces.ClassReport;
+import reports.interfaces.InterfaceReport;
 
 class MethodNameCollector extends VoidVisitorAdapter<List<String>> {
   public void visit(MethodDeclaration md, List<String> collector) {
