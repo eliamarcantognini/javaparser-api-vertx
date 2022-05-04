@@ -1,7 +1,7 @@
 package reports.info;
 
-import reports.interfaces.InterfaceReport;
 import reports.info.interfaces.MethodInfo;
+import reports.interfaces.Report;
 
 import java.util.Optional;
 
@@ -11,9 +11,9 @@ public class MethodInfoImpl implements MethodInfo {
     final int srcBeginLine;
     final int endBeginLine;
     final String modifiers;
-    final InterfaceReport parent;
+    final Report parent;
 
-    public MethodInfoImpl(String methodName, int srcBeginLine, int endBeginLine, String modifiers, InterfaceReport parent) {
+    public MethodInfoImpl(String methodName, int srcBeginLine, int endBeginLine, String modifiers, Report parent) {
         this.methodName = methodName;
         this.srcBeginLine = srcBeginLine;
         this.endBeginLine = endBeginLine;
@@ -42,7 +42,7 @@ public class MethodInfoImpl implements MethodInfo {
     }
 
     @Override
-    public InterfaceReport getParent() {
+    public Report getParent() {
         return this.parent;
     }
 

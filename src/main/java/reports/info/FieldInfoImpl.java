@@ -1,9 +1,8 @@
 package reports.info;
 
 import reports.info.interfaces.FieldInfo;
-import reports.interfaces.ClassReport;
+import reports.interfaces.Report;
 
-import java.util.List;
 import java.util.Optional;
 
 public class FieldInfoImpl implements FieldInfo {
@@ -11,9 +10,9 @@ public class FieldInfoImpl implements FieldInfo {
     final String fieldName;
     final String fieldType;
     final String fieldModifiers;
-    final ClassReport parentClassReport;
+    final Report parentClassReport;
 
-    public FieldInfoImpl(String fieldName, String fieldType, String fieldModifiers, ClassReport parentClassReport){
+    public FieldInfoImpl(String fieldName, String fieldType, String fieldModifiers, Report parentClassReport){
         this.fieldName = fieldName;
         this.fieldType = fieldType;
         this.fieldModifiers = fieldModifiers;
@@ -36,7 +35,7 @@ public class FieldInfoImpl implements FieldInfo {
     }
 
     @Override
-    public ClassReport getParentClassReport() {
+    public Report getParentClassReport() {
         return parentClassReport;
     }
 }

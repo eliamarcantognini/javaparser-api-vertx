@@ -17,7 +17,7 @@ public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
     public void visit(MethodDeclaration md, InterfaceReport collector) {
         super.visit(md, collector);
         InfoBuilder builder = new InfoBuilder()
-                .classReport(collector)
+                .report(collector)
                 .name(md.getNameAsExpression().toString())
                 .modifiers(md.getModifiers().toString()); //OPTIONAL.EMPTY
 

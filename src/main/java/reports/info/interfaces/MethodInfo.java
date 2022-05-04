@@ -1,6 +1,6 @@
 package reports.info.interfaces;
 
-import reports.interfaces.InterfaceReport;
+import reports.interfaces.Report;
 
 import java.util.Optional;
 
@@ -10,5 +10,5 @@ public interface MethodInfo {
 	int getSrcBeginLine();
 	int getEndBeginLine();
 	Optional<String> getModifiers();
-	InterfaceReport getParent();
+	Report getParent();
 }

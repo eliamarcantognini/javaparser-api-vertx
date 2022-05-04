@@ -2,11 +2,11 @@ package reports.info;
 
 import reports.info.interfaces.FieldInfo;
 import reports.info.interfaces.MethodInfo;
-import reports.interfaces.ClassReport;
+import reports.interfaces.Report;
 
 public class InfoBuilder {
 
-    private ClassReport parent;
+    private Report report;
     private String name;
     private int beginLine;
     private int endLine;
@@ -16,8 +16,8 @@ public class InfoBuilder {
     /*
     TODO: decidere come gestire il caso di getRange == null
      */
-    public InfoBuilder classReport(final ClassReport classReport) {
-        this.parent = classReport;
+    public InfoBuilder report(final Report report) {
+        this.report = report;
         return this;
     }
 
@@ -47,11 +47,11 @@ public class InfoBuilder {
     }
 
     public MethodInfo buildMethod() {
-        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.parent);
+        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.report);
     }
 
     public FieldInfo buildField() {
-        return new FieldInfoImpl(this.name, this.type, this.modifiers, this.parent);
+        return new FieldInfoImpl(this.name, this.type, this.modifiers, this.report);
     }
 
 }
