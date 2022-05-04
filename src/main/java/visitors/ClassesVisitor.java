@@ -7,26 +7,10 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import reports.interfaces.ClassReport;
 import reports.info.InfoBuilder;
 
-public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
-    public void visit(ClassOrInterfaceDeclaration cd, ClassReport collector) {
-        super.visit(cd, collector);
-        collector.setName(cd.getNameAsString());
-        collector.setFullPath(cd.getFullyQualifiedName().orElse("Fully class name not found"));
-    }
+public class ClassesVisitor extends FileVisitor<ClassReport> {
 
-    public void visit(MethodDeclaration md, ClassReport collector) {
-        super.visit(md, collector);
-        InfoBuilder builder = new InfoBuilder()
-                .report(collector)
-                .name(md.getNameAsExpression().toString())
-                .modifiers(md.getModifiers().toString());
-
-        if (md.getRange().isPresent()) {
-            builder.beginLine(md.getRange().get().begin.line).endLine(md.getRange().get().end.line);
-        } else {
-            builder.beginLine(-1).endLine(-1);
-        }
-        collector.addMethodInfo(builder.buildMethod());
+    public ClassesVisitor() {
+        super(true);
     }
 
     public void visit(FieldDeclaration fd, ClassReport collector) {

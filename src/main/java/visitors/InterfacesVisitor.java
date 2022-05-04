@@ -6,27 +6,10 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import reports.interfaces.InterfaceReport;
 import reports.info.InfoBuilder;
 
-public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
+public class InterfacesVisitor extends FileVisitor<InterfaceReport> {
 
-    public void visit(ClassOrInterfaceDeclaration cd, InterfaceReport collector) {
-        super.visit(cd, collector);
-        collector.setName(cd.getNameAsString());
-        collector.setFullPath(cd.getFullyQualifiedName().orElse("Package not found!"));
-    }
-
-    public void visit(MethodDeclaration md, InterfaceReport collector) {
-        super.visit(md, collector);
-        InfoBuilder builder = new InfoBuilder()
-                .report(collector)
-                .name(md.getNameAsExpression().toString()); //OPTIONAL.EMPTY
-
-        if (md.getRange().isPresent()) {
-            builder.beginLine(md.getRange().get().begin.line).endLine(md.getRange().get().end.line);
-        } else {
-            builder.beginLine(-1).endLine(-1);
-        }
-
-        collector.addMethodInfo(builder.buildMethod());
+    public InterfacesVisitor() {
+        super(false);
     }
 
     private void testMethodDeclarationMethods(MethodDeclaration md){
