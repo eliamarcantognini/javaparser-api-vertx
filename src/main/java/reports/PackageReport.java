@@ -10,8 +10,8 @@ public interface PackageReport {
 	
 	String getSrcFullFileName();
 
-	List<MethodInfo> getMethodsInfo();
+	List<ClassReport> getClassesReport();
 
-	List<FieldInfo> getFieldsInfo();
+	List<InterfaceReport> getInterfaceReports();
 	
 }
