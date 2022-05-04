@@ -4,7 +4,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import reports.interfaces.InterfaceReport;
-import reports.info.MethodInfoBuilder;
+import reports.info.InfoBuilder;
 
 public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
 
@@ -16,7 +16,7 @@ public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
 
     public void visit(MethodDeclaration md, InterfaceReport collector) {
         super.visit(md, collector);
-        MethodInfoBuilder builder = new MethodInfoBuilder()
+        InfoBuilder builder = new InfoBuilder()
                 .classReport(collector)
                 .name(md.getNameAsExpression().toString())
                 .modifiers(md.getModifiers().toString()); //OPTIONAL.EMPTY
@@ -27,7 +27,7 @@ public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
             builder.beginLine(-1).endLine(-1);
         }
 
-        collector.addMethodsName(builder.build());
+        collector.addMethodsName(builder.buildMethod());
     }
 
     private void testMethodDeclarationMethods(MethodDeclaration md){
