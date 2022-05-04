@@ -6,7 +6,7 @@ public interface ProjectReport {
 
 	ClassReport getMainClass();
 	
-	List<ClassReport> getAllClasses();
+	List<PackageReport> getAllProjects();
 	
 	ClassReport getClassReport(String fullClassName);
 }
