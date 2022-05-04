@@ -13,5 +13,13 @@ public interface ClassReport {
 	List<MethodInfo> getMethodsInfo();
 
 	List<FieldInfo> getFieldsInfo();
+
+	void setFullClassName(String fullClassName);
+
+	void setSrcFullFileName(String srcFullFileName);
+
+	void addMethodInfo(MethodInfo methodInfo);
+
+	void addFieldInfo(FieldInfo fieldInfo);
 	
 }

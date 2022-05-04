@@ -3,8 +3,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import reports.*;
+import visitors.ClassesVisitor;
 import visitors.InterfacesVisitor;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
 public class ProjectAnalyzerImpl implements ProjectAnalyzer {
@@ -18,13 +20,13 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
     @Override
     public Future<InterfaceReport> getInterfaceReport(String srcInterfacePath) {
         return this.vertx.executeBlocking(ev -> {
+            InterfacesVisitor interfaceVisitor = new InterfacesVisitor();
+            InterfaceReport interfaceReport = new InterfaceReportImpl();
             try {
-                CompilationUnit cu = StaticJavaParser.parse(new File(srcInterfacePath));
-                InterfacesVisitor interfaceVisitor = new InterfacesVisitor();
-                InterfaceReport interfaceReport = new InterfaceReportImpl();
-                interfaceVisitor.visit(cu,interfaceReport);
+                //CompilationUnit cu = StaticJavaParser.parse(new File(srcInterfacePath));
+                interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath),interfaceReport);
                 ev.complete(interfaceReport);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 ev.fail("EXEPTION: getInterfaceReport has failed with message: " + e.getMessage());
             }
         });
@@ -32,7 +34,16 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
 
     @Override
     public Future<ClassReport> getClassReport(String srcClassPath) {
-        return null;
+        return this.vertx.executeBlocking(ev -> {
+            ClassesVisitor classVisitor = new ClassesVisitor();
+            ClassReport classReport = new ClassReportImpl();
+            try {
+                classVisitor.visit(this.getCompilationUnit(srcClassPath),classReport);
+                ev.complete(classReport);
+            } catch (FileNotFoundException e) {
+                ev.fail("EXEPTION: getClassReport has failed with message: " + e.getMessage());
+            }
+        });
     }
 
     @Override
@@ -48,5 +59,9 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
     @Override
     public void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback) {
 
+    }
+
+    private CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
+        return StaticJavaParser.parse(new File(path));
     }
 }
