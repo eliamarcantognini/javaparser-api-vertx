@@ -1,10 +1,12 @@
 package visitors;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import reports.ClassReport;
 import reports.MethodInfoBuilder;
+import reports.info.MethodInfo;
 
 public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
     public void visit(ClassOrInterfaceDeclaration cd, ClassReport collector) {
@@ -15,7 +17,14 @@ public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
 
     public void visit(MethodDeclaration md, ClassReport collector) {
         super.visit(md, collector);
-        collector.addMethodInfo(new MethodInfoBuilder(md,collector).buildMethodInfo());
+        MethodInfo mi = new MethodInfoBuilder()
+                .classReport(collector)
+                .name(md.getNameAsExpression().toString())
+                .beginLine(md.getRange().get().begin.line)
+                .endLine(md.getRange().get().end.line)
+                .modifiers(md.getModifiers().toString())
+                .build();
+        collector.addMethodInfo(mi);
     }
 
     /*

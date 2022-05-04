@@ -1,27 +1,46 @@
 package reports;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import reports.info.MethodInfo;
 import reports.info.MethodInfoImpl;
 
 public class MethodInfoBuilder {
 
-    private final MethodDeclaration md;
-    private final ClassReport parentClassReport;
-
-    public MethodInfoBuilder(final MethodDeclaration md, ClassReport classReport){
-        this.md = md;
-        this.parentClassReport = classReport;
-    }
+    private ClassReport parentClassReport;
+    private String name;
+    private int beginLine;
+    private int endLine;
+    private String modifiers;
 
     /*
     TODO: decidere come gestire il caso di getRange == null
      */
-    public MethodInfo buildMethodInfo(){
-        return new MethodInfoImpl(md.getNameAsExpression().toString(),
-                md.getRange().get().begin.line,
-                md.getRange().get().end.line,
-                md.getModifiers().toString(),
-                this.parentClassReport);
+    public MethodInfoBuilder classReport(final ClassReport classReport){
+        this.parentClassReport = classReport;
+        return this;
     }
+
+    public MethodInfoBuilder name(final String name) {
+        this.name = name;
+        return this;
+    }
+
+    public MethodInfoBuilder beginLine(final int line) {
+        this.beginLine = line;
+        return this;
+    }
+
+    public MethodInfoBuilder endLine(final int line) {
+        this.endLine = line;
+        return this;
+    }
+
+    public MethodInfoBuilder modifiers(final String modifiers) {
+        this.modifiers = modifiers;
+        return this;
+    }
+
+    public MethodInfo build() {
+        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.parentClassReport);
+    }
+
 }
