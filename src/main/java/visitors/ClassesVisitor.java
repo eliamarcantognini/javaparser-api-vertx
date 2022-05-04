@@ -36,7 +36,7 @@ public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
                 .name(""+fd.getVariable(0))
                 .type(""+fd.getElementType())
                 .modifiers(""+fd.getModifiers())
-                .classReport(collector);
+                .report(collector);
         collector.addFieldInfo(builder.buildField());
         this.testFieldDeclarationMethods(fd);
     }
