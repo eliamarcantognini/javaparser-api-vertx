@@ -18,8 +18,7 @@ public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
         super.visit(md, collector);
         InfoBuilder builder = new InfoBuilder()
                 .report(collector)
-                .name(md.getNameAsExpression().toString())
-                .modifiers(md.getModifiers().toString()); //OPTIONAL.EMPTY
+                .name(md.getNameAsExpression().toString()); //OPTIONAL.EMPTY
 
         if (md.getRange().isPresent()) {
             builder.beginLine(md.getRange().get().begin.line).endLine(md.getRange().get().end.line);
