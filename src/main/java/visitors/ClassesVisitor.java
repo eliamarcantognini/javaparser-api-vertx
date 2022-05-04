@@ -17,14 +17,18 @@ public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
 
     public void visit(MethodDeclaration md, ClassReport collector) {
         super.visit(md, collector);
-        MethodInfo mi = new MethodInfoBuilder()
+        MethodInfoBuilder builder = new MethodInfoBuilder()
                 .classReport(collector)
                 .name(md.getNameAsExpression().toString())
-                .beginLine(md.getRange().get().begin.line)
-                .endLine(md.getRange().get().end.line)
-                .modifiers(md.getModifiers().toString())
-                .build();
-        collector.addMethodInfo(mi);
+                .modifiers(md.getModifiers().toString());
+
+        if (md.getRange().isPresent()) {
+            builder.beginLine(md.getRange().get().begin.line).endLine(md.getRange().get().end.line);
+        } else {
+            builder.beginLine(-1).endLine(-1);
+        }
+
+        collector.addMethodInfo(builder.build());
     }
 
     /*
