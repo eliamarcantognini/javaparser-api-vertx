@@ -1,12 +1,10 @@
 package visitors;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import reports.ClassReport;
-import reports.MethodInfoBuilder;
-import reports.info.MethodInfo;
+import reports.info.MethodInfoBuilder;
 
 public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
     public void visit(ClassOrInterfaceDeclaration cd, ClassReport collector) {
