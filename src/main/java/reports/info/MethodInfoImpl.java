@@ -53,7 +53,7 @@ public class MethodInfoImpl implements MethodInfo {
                 + "methodName=" + methodName
                 + ", srcBeginLine=" + srcBeginLine
                 + ", endBeginLine=" + endBeginLine
-                + ", modifiers=" + modifiers
+                + (this.getModifiers().isPresent() ? ", modifiers=" + modifiers : "")
                 + ", parent=" + parent.getName();
     }
 }
