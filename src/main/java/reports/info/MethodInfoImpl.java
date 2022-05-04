@@ -56,6 +56,7 @@ public class MethodInfoImpl implements MethodInfo{
                 + "methodName=" + methodName
                 + ", srcBeginLine=" + srcBeginLine
                 + ", endBeginLine=" + endBeginLine
-                + ", modifiers=" + modifiers;
+                + ", modifiers=" + modifiers
+                + ", parent=" + parent.getSrcFullFileName();
     }
 }
