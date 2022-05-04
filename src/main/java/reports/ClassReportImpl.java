@@ -65,6 +65,6 @@ public class ClassReportImpl implements ClassReport {
                 + "\tClass Name: " + this.getName() + "\n"
                 + "\tSource Full File Name: " + this.getSourceFullPath() + "\n"
                 + "\tMethods Info: " + this.getMethodsInfo().toString() + "\n"
-                + "\tFields Info: " + this.getFieldsInfo();
+                + "\tFields Info: " + this.getFieldsInfo() + "\n";
     }
 }
