@@ -44,7 +44,7 @@ public class FieldInfoImpl implements FieldInfo {
         return "\n\t\tFieldInfoImpl{"
                 + "fieldName=" + this.getFieldName()
                 + ", fieldType=" + this.getFieldType()
-                + ", fieldModifiers=" + this.getFieldModifiers()
+                + ", fieldModifiers=" + this.getFieldModifiers().orElse("")
                 + ", parent=" + this.getParentClassReport().getName();
     }
 }
