@@ -26,17 +26,20 @@ public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
         } else {
             builder.beginLine(-1).endLine(-1);
         }
-        collector.addMethodsName(builder.buildMethod());
+        collector.addMethodInfo(builder.buildMethod());
     }
 
     public void visit(FieldDeclaration fd, ClassReport collector) {
         super.visit(fd, collector);
+        InfoBuilder builder = new InfoBuilder()
+                //TODO: hardcoded fd.getVariable(0) per prendere il nome del campo
+                .name(""+fd.getVariable(0))
+                .type(""+fd.getElementType())
+                .modifiers(""+fd.getModifiers())
+                .classReport(collector);
+        collector.addFieldInfo(builder.buildField());
         this.testFieldDeclarationMethods(fd);
     }
-
-    /*
-    TODO: Manca lo studio dei campi della classe
-     */
 
     private void testMethodDeclarationMethods(MethodDeclaration md){
         System.out.println("=== START VISIT METHODS OF METHOD DECLARATION ===");
