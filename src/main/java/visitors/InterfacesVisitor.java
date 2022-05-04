@@ -27,7 +27,7 @@ public class InterfacesVisitor extends VoidVisitorAdapter<InterfaceReport> {
             builder.beginLine(-1).endLine(-1);
         }
 
-        collector.addMethodsName(builder.buildMethod());
+        collector.addMethodInfo(builder.buildMethod());
     }
 
     private void testMethodDeclarationMethods(MethodDeclaration md){

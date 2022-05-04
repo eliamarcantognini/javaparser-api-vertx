@@ -30,7 +30,7 @@ public class ClassReportImpl implements ClassReport {
     }
 
     @Override
-    public List<MethodInfo> getMethodsNames() {
+    public List<MethodInfo> getMethodsInfo() {
         return this.methodsInfo;
     }
 
@@ -50,7 +50,7 @@ public class ClassReportImpl implements ClassReport {
     }
 
     @Override
-    public void addMethodsName(MethodInfo methodInfo) {
+    public void addMethodInfo(MethodInfo methodInfo) {
         this.methodsInfo.add(methodInfo);
     }
 
@@ -64,7 +64,7 @@ public class ClassReportImpl implements ClassReport {
         return "ClassReport:\n"
                 + "\tClass Name: " + this.getName() + "\n"
                 + "\tSource Full File Name: " + this.getSourceFullPath() + "\n"
-                + "\tMethods Info: " + this.getMethodsNames().toString() + "\n"
+                + "\tMethods Info: " + this.getMethodsInfo().toString() + "\n"
                 + "\tFields Info: " + this.getFieldsInfo();
     }
 }

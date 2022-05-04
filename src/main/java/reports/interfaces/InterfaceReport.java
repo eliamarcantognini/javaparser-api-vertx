@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface InterfaceReport extends Report{
 
-    List<MethodInfo> getMethodsNames();
-    void addMethodsName(MethodInfo methodName);
+    List<MethodInfo> getMethodsInfo();
+    void addMethodInfo(MethodInfo methodInfo);
 }

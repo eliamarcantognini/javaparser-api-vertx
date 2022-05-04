@@ -10,10 +10,10 @@ public class InterfaceReportImpl implements InterfaceReport {
 
     private String interfaceName;
     private String interfaceFullPath;
-    private final List<MethodInfo> methodsName;
+    private final List<MethodInfo> methodsInfo;
 
     public InterfaceReportImpl(){
-        this.methodsName = new LinkedList<>();
+        this.methodsInfo = new LinkedList<>();
     }
 
     @Override
@@ -27,8 +27,8 @@ public class InterfaceReportImpl implements InterfaceReport {
     }
 
     @Override
-    public List<MethodInfo> getMethodsNames() {
-        return this.methodsName;
+    public List<MethodInfo> getMethodsInfo() {
+        return this.methodsInfo;
     }
 
     @Override
@@ -42,8 +42,8 @@ public class InterfaceReportImpl implements InterfaceReport {
     }
 
     @Override
-    public void addMethodsName(MethodInfo methodName) {
-        this.methodsName.add(methodName);
+    public void addMethodInfo(MethodInfo methodInfo) {
+        this.methodsInfo.add(methodInfo);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class InterfaceReportImpl implements InterfaceReport {
         return "InterfaceReport: \n"
                 + "\tName: " + this.getName() + "\n"
                 + "\tFull Path: " + this.getSourceFullPath() + "\n"
-                + "\tMethods: " + this.getMethodsNames().toString();
+                + "\tMethods: " + this.getMethodsInfo().toString();
     }
 
 }
