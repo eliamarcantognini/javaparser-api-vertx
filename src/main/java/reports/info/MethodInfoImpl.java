@@ -46,11 +46,6 @@ public class MethodInfoImpl implements MethodInfo {
         return this.parent;
     }
 
-    /*
-    TODO: Non è presente la stampa del class report parent perché si creerebbe
-        un loop dato che anche class report del padre richiamerebbe la toString di
-        method info, decidere come gestirlo.
-    */
     @Override
     public String toString() {
 
