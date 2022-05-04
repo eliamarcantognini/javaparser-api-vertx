@@ -52,7 +52,7 @@ public class MethodInfoImpl implements MethodInfo{
     @Override
     public String toString() {
 
-        return "MethodInfoImpl{"
+        return "\n\t\tMethodInfoImpl{"
                 + "methodName=" + methodName
                 + ", srcBeginLine=" + srcBeginLine
                 + ", endBeginLine=" + endBeginLine
