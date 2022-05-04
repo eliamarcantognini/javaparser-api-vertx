@@ -11,8 +11,8 @@ import reports.info.MethodInfo;
 public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
     public void visit(ClassOrInterfaceDeclaration cd, ClassReport collector) {
         super.visit(cd, collector);
-        collector.setFullClassName(cd.getNameAsString());
-        collector.setSrcFullFileName(cd.getFullyQualifiedName().orElse("Fully class name not found"));
+        collector.setName(cd.getNameAsString());
+        collector.setFullPath(cd.getFullyQualifiedName().orElse("Fully class name not found"));
     }
 
     public void visit(MethodDeclaration md, ClassReport collector) {
@@ -28,7 +28,7 @@ public class ClassesVisitor extends VoidVisitorAdapter<ClassReport> {
             builder.beginLine(-1).endLine(-1);
         }
 
-        collector.addMethodInfo(builder.build());
+        collector.addMethodsName(builder.build());
     }
 
     /*

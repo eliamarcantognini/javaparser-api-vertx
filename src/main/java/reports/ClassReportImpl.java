@@ -18,17 +18,17 @@ public class ClassReportImpl implements ClassReport{
     }
 
     @Override
-    public String getFullClassName() {
+    public String getName() {
         return this.fullClassName;
     }
 
     @Override
-    public String getSrcFullFileName() {
+    public String getSourceFullPath() {
         return this.srcFullFileName;
     }
 
     @Override
-    public List<MethodInfo> getMethodsInfo() {
+    public List<MethodInfo> getMethodsNames() {
         return this.methodsInfo;
     }
 
@@ -38,17 +38,17 @@ public class ClassReportImpl implements ClassReport{
     }
 
     @Override
-    public void setFullClassName(String fullClassName) {
+    public void setName(String fullClassName) {
         this.fullClassName = fullClassName;
     }
 
     @Override
-    public void setSrcFullFileName(String srcFullFileName) {
+    public void setFullPath(String srcFullFileName) {
         this.srcFullFileName = srcFullFileName;
     }
 
     @Override
-    public void addMethodInfo(MethodInfo methodInfo) {
+    public void addMethodsName(MethodInfo methodInfo) {
         this.methodsInfo.add(methodInfo);
     }
 
@@ -60,9 +60,9 @@ public class ClassReportImpl implements ClassReport{
     @Override
     public String toString() {
         return "ClassReport:\n"
-                + "\tClass Name: " + this.getFullClassName() + "\n"
-                + "\tSource Full File Name: " + this.getSrcFullFileName() + "\n"
-                + "\tMethods Info: " + this.getMethodsInfo() + "\n"
+                + "\tClass Name: " + this.getName() + "\n"
+                + "\tSource Full File Name: " + this.getSourceFullPath() + "\n"
+                + "\tMethods Info: " + this.getMethodsNames().toString() + "\n"
                 + "\tFields Info: " + this.getFieldsInfo();
     }
 }

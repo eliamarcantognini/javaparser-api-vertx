@@ -5,7 +5,7 @@ import reports.info.MethodInfoImpl;
 
 public class MethodInfoBuilder {
 
-    private ClassReport parentClassReport;
+    private InterfaceReport parent;
     private String name;
     private int beginLine;
     private int endLine;
@@ -14,8 +14,8 @@ public class MethodInfoBuilder {
     /*
     TODO: decidere come gestire il caso di getRange == null
      */
-    public MethodInfoBuilder classReport(final ClassReport classReport){
-        this.parentClassReport = classReport;
+    public MethodInfoBuilder classReport(final InterfaceReport classReport){
+        this.parent = classReport;
         return this;
     }
 
@@ -40,7 +40,7 @@ public class MethodInfoBuilder {
     }
 
     public MethodInfo build() {
-        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.parentClassReport);
+        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.parent);
     }
 
 }

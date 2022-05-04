@@ -1,6 +1,8 @@
 package reports.info;
 
 import reports.ClassReport;
+import reports.InterfaceReport;
+
 import java.util.Optional;
 
 public interface MethodInfo {
@@ -9,5 +11,5 @@ public interface MethodInfo {
 	int getSrcBeginLine();
 	int getEndBeginLine();
 	Optional<String> getModifiers();
-	ClassReport getParent();
+	InterfaceReport getParent();
 }
