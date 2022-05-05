@@ -7,7 +7,7 @@ import java.util.List;
 public interface InterfaceReport extends Report {
 
     /**
-     * Get the list of the methods inside the item (class/interface)
+     * Get a list of methods inside the item (class/interface)
      *
      * @return a {@link List} of {@link MethodInfo}
      */
