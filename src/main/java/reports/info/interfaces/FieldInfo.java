@@ -5,7 +5,7 @@ import reports.interfaces.Report;
 import java.util.Optional;
 
 public interface FieldInfo {
-    
+
     /**
      * Get the name of the field
      *
