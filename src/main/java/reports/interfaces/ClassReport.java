@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ClassReport extends InterfaceReport {
 
-	List<FieldInfo> getFieldsInfo();
+    List<FieldInfo> getFieldsInfo();
 
-	void addFieldInfo(FieldInfo fieldInfo);
+    void addFieldInfo(FieldInfo fieldInfo);
 }
