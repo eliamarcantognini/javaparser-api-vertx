@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ClassReportImpl implements ClassReport {
 
-    String fullClassName;
-    String srcFullFileName;
-    final List<MethodInfo> methodsInfo;
-    final List<FieldInfo> fieldsInfo;
+    private String fullClassName;
+    private String srcFullFileName;
+    private final List<MethodInfo> methodsInfo;
+    private final List<FieldInfo> fieldsInfo;
 
     public ClassReportImpl() {
         this.methodsInfo = new LinkedList<>();
