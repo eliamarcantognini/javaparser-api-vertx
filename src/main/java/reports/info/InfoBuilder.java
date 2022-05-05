@@ -13,9 +13,6 @@ public class InfoBuilder {
     private String modifiers;
     private String type;
 
-    /*
-    TODO: decidere come gestire il caso di getRange == null
-     */
     public InfoBuilder report(final Report report) {
         this.report = report;
         return this;
