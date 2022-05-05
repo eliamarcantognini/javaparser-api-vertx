@@ -14,7 +14,7 @@ public interface InterfaceReport extends Report {
     List<MethodInfo> getMethodsInfo();
 
     /**
-     * Add a {@link MethodInfo}
+     * Add a {@link MethodInfo} to the report
      *
      * @param methodInfo the {@link MethodInfo}
      */
