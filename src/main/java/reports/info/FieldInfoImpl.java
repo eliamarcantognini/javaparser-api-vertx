@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public class FieldInfoImpl implements FieldInfo {
 
-    final String fieldName;
-    final String fieldType;
-    final String fieldModifiers;
-    final Report parentClassReport;
+    private final String fieldName;
+    private final String fieldType;
+    private final String fieldModifiers;
+    private final Report parentClassReport;
 
     public FieldInfoImpl(String fieldName, String fieldType, String fieldModifiers, Report parentClassReport){
         this.fieldName = fieldName;
