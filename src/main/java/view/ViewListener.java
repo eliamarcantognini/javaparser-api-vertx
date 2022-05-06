@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 
 public class ViewListener{
 //    private final Controller controller;
@@ -29,24 +30,18 @@ public class ViewListener{
 
     private String getFilePath(){
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
+        File f = new java.io.File(".");
+        chooser.setCurrentDirectory(f);
         chooser.setDialogTitle(TITLE);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         chooser.setFileFilter(new FileNameExtensionFilter("Java File", "java"));
-        //
-        // disable the "All files" option.
-        //
         chooser.setAcceptAllFileFilterUsed(false);
-        //
+
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                    +  chooser.getCurrentDirectory());
-            System.out.println("getSelectedFile() : "
-                    +  chooser.getSelectedFile());
-            return chooser.getSelectedFile().toString();
-        }
-        else {
-            System.out.println("No Selection ");
+            // Delete the "." at the end of the path
+            String _f = f.getAbsolutePath().substring(0, f.getAbsolutePath().length()-1);
+            // Transfrom the absolute path in a relative path
+            return chooser.getSelectedFile().getAbsolutePath().substring(_f.length());
         }
         return "";
     }
