@@ -4,6 +4,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import reports.interfaces.ClassReport;
@@ -43,6 +44,7 @@ class FullCollector extends VoidVisitorAdapter<Void> {
 
 
 public class TestJavaParser {
+	static GUIView view;
 
 	// main del prof
 //	public static void main(String[] args) throws Exception {
@@ -58,18 +60,20 @@ public class TestJavaParser {
 //	}
 
 	public static void main(String[] args) throws Exception {
-		GUIView view = new GUIView(600, 600);
+		view = new GUIView(1000, 1000);
 		view.addListener(new ViewListener());
 		ProjectAnalyzer projectAnalyzer;
 		projectAnalyzer = new ProjectAnalyzerImpl(Vertx.vertx());
 		testClassReport(projectAnalyzer);
 	}
 
-	private void testInterfaceReport(ProjectAnalyzer projectAnalyzer){
-		Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/reports/InterfaceReport.java");
-		future.onSuccess(event -> {
+	private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer){
+		Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/reports/interfaces/InterfaceReport.java");
+		future.onSuccess(interfaceReport -> {
 			System.out.println("Prova1");
-			System.out.println(event.toString());
+			System.out.println(interfaceReport.toString());
+			view.setText(interfaceReport.toString());
+			view.setDTO(DTOs.createInterfaceDTO(interfaceReport));
 		});
 		future.onFailure(event ->{
 			System.out.println("Prova2");
@@ -84,9 +88,11 @@ public class TestJavaParser {
 
 	private static void testClassReport(ProjectAnalyzer projectAnalyzer){
 		Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/reports/ClassReportImpl.java");
-		future.onSuccess(event -> {
+		future.onSuccess(classReport -> {
 			System.out.println("Future Success:");
-			System.out.println(event.toString());
+			System.out.println(classReport.toString());
+			view.setText(classReport.toString());
+			view.setDTO(DTOs.createClassDTO(classReport));
 			System.out.println();
 		});
 		future.onFailure(event ->{
