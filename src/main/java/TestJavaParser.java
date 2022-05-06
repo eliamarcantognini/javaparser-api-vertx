@@ -8,6 +8,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import reports.interfaces.ClassReport;
 import reports.interfaces.InterfaceReport;
+import view.GUIView;
 
 class MethodNameCollector extends VoidVisitorAdapter<List<String>> {
   public void visit(MethodDeclaration md, List<String> collector) {
@@ -56,6 +57,7 @@ public class TestJavaParser {
 //	}
 
 	public static void main(String[] args) throws Exception {
+		new GUIView(600, 600);
 		ProjectAnalyzer projectAnalyzer;
 		projectAnalyzer = new ProjectAnalyzerImpl(Vertx.vertx());
 		testClassReport(projectAnalyzer);
