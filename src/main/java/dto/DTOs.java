@@ -57,8 +57,7 @@ public final class DTOs {
         for (MethodInfo m : methods)
             if (attachModifiers)
                 methodDTOs.add(new MethodDTO(m.getName(), m.getSrcBeginLine(), m.getEndBeginLine(), m.getModifiers().orElse("")));
-            else
-                methodDTOs.add(new MethodDTO(m.getName(), m.getSrcBeginLine(), m.getEndBeginLine()));
+            else methodDTOs.add(new MethodDTO(m.getName(), m.getSrcBeginLine(), m.getEndBeginLine()));
         return methodDTOs;
     }
 
