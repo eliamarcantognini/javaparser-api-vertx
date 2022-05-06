@@ -12,10 +12,10 @@ import java.awt.event.KeyListener;
  */
 public class GUIView implements View {
 
-    private final VisualiserFrame frame;
     private JButton btnFolder;
     private JButton btnStart;
     private JButton btnStop;
+    private JTextPane txtPane;
 
     /**
      * Creates a view of the specified size (in pixels)
@@ -24,7 +24,7 @@ public class GUIView implements View {
      * @param h height
      */
     public GUIView(int w, int h) {
-        this.frame = new VisualiserFrame(w, h);
+        VisualiserFrame frame = new VisualiserFrame(w, h);
     }
 
 //    @Override
@@ -65,22 +65,14 @@ public class GUIView implements View {
             btnPanel.add(btnStart);
             btnPanel.add(btnStop);
 
+            txtPane = new JTextPane();
+            txtPane.setEditable(false);
+
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(btnPanel, BorderLayout.NORTH);
+            getContentPane().add(txtPane, BorderLayout.CENTER);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            this.addKeyListener(new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                }
 
-                @Override
-                public void keyPressed(KeyEvent e) {
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
-                }
-            });
             this.setVisible(true);
         }
 
@@ -89,6 +81,10 @@ public class GUIView implements View {
             setFocusTraversalKeysEnabled(false);
             requestFocusInWindow();
             repaint();
+        }
+
+        public void setText(final String text){
+            txtPane.setText(text);
         }
     }
 }
