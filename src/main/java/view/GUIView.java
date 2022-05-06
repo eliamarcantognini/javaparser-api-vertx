@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 public class GUIView implements View {
 
     private final VisualiserFrame frame;
+    private JButton btnFolder;
     private JButton btnStart;
     private JButton btnStop;
 
@@ -62,10 +63,14 @@ public class GUIView implements View {
             setSize(w, h);
             setResizable(false);
 
+            btnFolder = new JButton("SELECT FILE");
+            btnFolder.addActionListener(new FileChooser());
+
             JPanel btnPanel = new JPanel();
             btnPanel.setLayout(new FlowLayout());
             btnStart = new JButton("START");
             btnStop = new JButton("STOP");
+            btnPanel.add(btnFolder);
             btnPanel.add(btnStart);
             btnPanel.add(btnStop);
 
