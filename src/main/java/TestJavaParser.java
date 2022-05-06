@@ -64,7 +64,7 @@ public class TestJavaParser {
 		view.addListener(new ViewListener());
 		ProjectAnalyzer projectAnalyzer;
 		projectAnalyzer = new ProjectAnalyzerImpl(Vertx.vertx());
-		testClassReport(projectAnalyzer);
+		testInterfaceReport(projectAnalyzer);
 	}
 
 	private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer){
