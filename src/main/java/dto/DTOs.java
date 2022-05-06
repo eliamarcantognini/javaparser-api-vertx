@@ -5,6 +5,7 @@ import reports.info.interfaces.MethodInfo;
 import reports.interfaces.ClassReport;
 import reports.interfaces.InterfaceReport;
 import reports.interfaces.PackageReport;
+import reports.interfaces.ProjectReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,10 @@ import java.util.List;
 public final class DTOs {
 
     private DTOs() {
+    }
+
+    public static ProjectDTO createProjectDTO(ProjectReport report){
+        return new ProjectDTO(createClassDTO(report.getMainClass()), createPackageDTOs(report.getAllProjects()));
     }
 
     public static PackageDTO createPackageDTO(PackageReport report) {
@@ -24,6 +29,13 @@ public final class DTOs {
 
     public static ClassInterfaceDTO createClassDTO(ClassReport report) {
         return new ClassInterfaceDTO(report.getName(), report.getSourceFullPath(), createMethodsDTO(report.getMethodsInfo(), true), createFieldsDTO(report.getFieldsInfo()));
+    }
+
+    private static List<PackageDTO> createPackageDTOs(List<PackageReport> reports){
+        List<PackageDTO> packageDTOs = new ArrayList<>();
+        for (PackageReport r : reports)
+            packageDTOs.add(createPackageDTO(r));
+        return packageDTOs;
     }
 
     private static List<ClassInterfaceDTO> createInterfacesDTO(List<InterfaceReport> reports) {
