@@ -22,7 +22,8 @@ public class ViewListener{
 //                controller.stopParsing();
                 break;
             case FOLDER:
-                String path = getFilePath();
+                getFilePath();
+//                controller.setFilePath(getFilePath());
             default:
                 break;
         }
