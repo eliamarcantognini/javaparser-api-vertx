@@ -46,15 +46,8 @@ public class GUIView implements View {
     public void addListener(final ViewListener listener) {
         this.btnStart.addActionListener(e -> listener.eventPerformed(Commands.START));
         this.btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP));
+        this.btnFolder.addActionListener(e -> listener.eventPerformed(Commands.FOLDER));
     }
-
-//    @Override
-//    public void showMessage(final String message) {
-//        SwingUtilities.invokeLater(() -> {
-//            JOptionPane.showInternalMessageDialog(this.frame.getContentPane(), message);
-//            this.frame.repaintView();
-//        });
-//    }
 
     public class VisualiserFrame extends JFrame {
 
@@ -63,11 +56,9 @@ public class GUIView implements View {
             setSize(w, h);
             setResizable(false);
 
-            btnFolder = new JButton("SELECT FILE");
-            btnFolder.addActionListener(new FileChooser());
-
             JPanel btnPanel = new JPanel();
             btnPanel.setLayout(new FlowLayout());
+            btnFolder = new JButton("SELECT FILE");
             btnStart = new JButton("START");
             btnStop = new JButton("STOP");
             btnPanel.add(btnFolder);
