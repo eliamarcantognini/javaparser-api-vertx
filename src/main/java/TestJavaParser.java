@@ -1,9 +1,16 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import dto.ClassInterfaceDTO;
 import dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -64,7 +71,7 @@ public class TestJavaParser {
 		view.addListener(new ViewListener());
 		ProjectAnalyzer projectAnalyzer;
 		projectAnalyzer = new ProjectAnalyzerImpl(Vertx.vertx());
-		testInterfaceReport(projectAnalyzer);
+		testClassReport(projectAnalyzer);
 	}
 
 	private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer){
@@ -90,10 +97,20 @@ public class TestJavaParser {
 		Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/reports/ClassReportImpl.java");
 		future.onSuccess(classReport -> {
 			System.out.println("Future Success:");
-			System.out.println(classReport.toString());
-			view.setText(classReport.toString());
-			view.setDTO(DTOs.createClassDTO(classReport));
-			System.out.println();
+//			System.out.println(classReport.toString());
+//			view.setText(classReport.toString());
+//			view.setDTO(DTOs.createClassDTO(classReport));
+			try {
+				ObjectMapper om = new ObjectMapper();
+				var json = om.writeValueAsString(DTOs.createClassDTO(classReport));
+//				System.out.println(json);
+				view.setText(json);
+				var obj = om.readValue(json, ClassInterfaceDTO.class);
+				view.setDTO(obj);
+//				System.out.println(obj);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 		});
 		future.onFailure(event ->{
 			System.out.println("Future Failure:");
