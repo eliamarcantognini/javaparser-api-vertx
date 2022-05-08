@@ -5,6 +5,8 @@ import dto.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public final class Trees {
+
+    private Trees(){}
     public static DefaultMutableTreeNode createClassOrInterfaceTreeNode(ClassInterfaceDTO dto){
         var root = new DefaultMutableTreeNode("");
         root.add(new DefaultMutableTreeNode(dto.name()));
