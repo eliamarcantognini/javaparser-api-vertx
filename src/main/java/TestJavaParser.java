@@ -98,18 +98,10 @@ public class TestJavaParser {
 		Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/reports/ClassReportImpl.java");
 		future.onSuccess(classReport -> {
 			System.out.println("Future Success:");
-//			System.out.println(classReport.toString());
-//			view.setText(classReport.toString());
-//			view.setDTO(DTOs.createClassDTO(classReport));
-			ObjectMapper om = new ObjectMapper();
-//				var json = om.writeValueAsString(DTOs.createClassDTO(classReport));
-//				System.out.println(json);
 			var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
 			view.setText(json);
-//				var obj = om.readValue(json, ClassInterfaceDTO.class);
 			var obj = DTOParser.parseClassInterfaceDTO(json);
 			view.setDTO(obj);
-//				System.out.println(obj);
 		});
 		future.onFailure(event ->{
 			System.out.println("Future Failure:");
