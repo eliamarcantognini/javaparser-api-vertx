@@ -11,6 +11,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import dto.ClassInterfaceDTO;
+import dto.DTOParser;
 import dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -100,17 +101,15 @@ public class TestJavaParser {
 //			System.out.println(classReport.toString());
 //			view.setText(classReport.toString());
 //			view.setDTO(DTOs.createClassDTO(classReport));
-			try {
-				ObjectMapper om = new ObjectMapper();
-				var json = om.writeValueAsString(DTOs.createClassDTO(classReport));
+			ObjectMapper om = new ObjectMapper();
+//				var json = om.writeValueAsString(DTOs.createClassDTO(classReport));
 //				System.out.println(json);
-				view.setText(json);
-				var obj = om.readValue(json, ClassInterfaceDTO.class);
-				view.setDTO(obj);
+			var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
+			view.setText(json);
+//				var obj = om.readValue(json, ClassInterfaceDTO.class);
+			var obj = DTOParser.parseClassInterfaceDTO(json);
+			view.setDTO(obj);
 //				System.out.println(obj);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
 		});
 		future.onFailure(event ->{
 			System.out.println("Future Failure:");
