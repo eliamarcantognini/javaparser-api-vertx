@@ -1,11 +1,8 @@
 package view;
 
 import dto.ClassInterfaceDTO;
-import dto.FieldDTO;
-import dto.MethodDTO;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
@@ -119,7 +116,9 @@ public class GUIView implements View {
     }
 
     public void setDTO(ClassInterfaceDTO dto) {
-        Trees.renderClassOrInterfaceTree(dto, frame);
+        Trees.createClassOrInterfaceTreeNode(dto);
+        JTree tree = new JTree(new DefaultTreeModel(Trees.createClassOrInterfaceTreeNode((dto))));
+        frame.getContentPane().add(tree, BorderLayout.CENTER);
 //        frame.renderTree(dto);
     }
 
