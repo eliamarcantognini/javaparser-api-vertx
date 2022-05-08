@@ -1,20 +1,15 @@
 package view;
 
-import dto.ClassInterfaceDTO;
-import dto.FieldDTO;
-import dto.MethodDTO;
+import dto.*;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import java.awt.*;
 
 public final class Trees {
-    public static void renderClassOrInterfaceTree(ClassInterfaceDTO dto, GUIView.VisualiserFrame frame){
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
+    public static DefaultMutableTreeNode createClassOrInterfaceTreeNode(ClassInterfaceDTO dto){
+        var root = new DefaultMutableTreeNode("");
         root.add(new DefaultMutableTreeNode(dto.name()));
         root.add(new DefaultMutableTreeNode(dto.path()));
-        DefaultMutableTreeNode methodsNode = new DefaultMutableTreeNode("Methods");
+        var methodsNode = new DefaultMutableTreeNode("Methods");
         for (MethodDTO m : dto.methods()) {
             if (m.modifiers() != null)
                 methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(10, m.toString().length() - 1)));
@@ -23,13 +18,38 @@ public final class Trees {
         }
         root.add(methodsNode);
         if (dto.fields() != null) {
-            DefaultMutableTreeNode fieldsNode = new DefaultMutableTreeNode("Fields");
+            var fieldsNode = new DefaultMutableTreeNode("Fields");
             for (FieldDTO f : dto.fields()) {
                 fieldsNode.add(new DefaultMutableTreeNode(f.toString().substring(9, f.toString().length() - 1)));
             }
             root.add(fieldsNode);
         }
-        JTree tree = new JTree(new DefaultTreeModel(root));
-        frame.getContentPane().add(tree, BorderLayout.CENTER);
+        return root;
+    }
+
+    public static DefaultMutableTreeNode createPackageTreeNode(PackageDTO dto){
+        var root = new DefaultMutableTreeNode("");
+        root.add(new DefaultMutableTreeNode(dto.name()));
+        root.add(new DefaultMutableTreeNode(dto.path()));
+        var interfaces = new DefaultMutableTreeNode("interfaces");
+        for (ClassInterfaceDTO c : dto.interfaces())
+            interfaces.add(createClassOrInterfaceTreeNode(c));
+        root.add(interfaces);
+        var classes = new DefaultMutableTreeNode("classes");
+        for (ClassInterfaceDTO c : dto.classes())
+            classes.add(createClassOrInterfaceTreeNode(c));
+        root.add(classes);
+
+        return root;
+    }
+
+    public static DefaultMutableTreeNode createProjectTreeNode(ProjectDTO dto){
+        var root = new DefaultMutableTreeNode("");
+        root.add(new DefaultMutableTreeNode(dto.mainClass().name()));
+        var packages = new DefaultMutableTreeNode("packages");
+        for (PackageDTO p : dto.packages())
+            packages.add(createPackageTreeNode(p));
+
+        return root;
     }
 }
