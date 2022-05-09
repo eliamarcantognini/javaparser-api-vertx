@@ -49,7 +49,7 @@ public interface ProjectAnalyzer {
 	 * executing the callback each time a project element is found 
 	 * 
 	 * @param srcProjectFolderName
-	 * @param callback
+	 * @param topic
 	 */
-	void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback);
+	void analyzeProject(String srcProjectFolderName, String topic);
 }

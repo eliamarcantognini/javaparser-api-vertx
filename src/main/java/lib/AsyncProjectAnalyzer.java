@@ -61,7 +61,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     }
 
     @Override
-    public void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback) {
+    public void analyzeProject(String srcProjectFolderName, String topic) {
 
     }
 
