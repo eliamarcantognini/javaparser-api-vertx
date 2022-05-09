@@ -34,7 +34,7 @@ public class ViewListener{
         File f = new java.io.File(".");
         chooser.setCurrentDirectory(f);
         chooser.setDialogTitle(TITLE);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         chooser.setFileFilter(new FileNameExtensionFilter("Java File", "java"));
         chooser.setAcceptAllFileFilterUsed(false);
 
