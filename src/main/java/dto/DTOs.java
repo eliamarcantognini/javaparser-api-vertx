@@ -32,7 +32,7 @@ public final class DTOs {
      * @return a {@link PackageDTO}
      */
     public static PackageDTO createPackageDTO(PackageReport report) {
-        return new PackageDTO(report.getName(), report.getSourceFullPath(), createClassDTOs(report.getClassesReport()), createInterfaceDTOs(report.getInterfaceReports()));
+        return new PackageDTO(report.getName(), report.getSourceFullPath(), createClassDTOs(report.getClassesReports()), createInterfaceDTOs(report.getInterfaceReports()));
     }
 
     /**
