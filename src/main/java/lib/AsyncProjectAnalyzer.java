@@ -13,11 +13,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
-public class ProjectAnalyzerImpl implements ProjectAnalyzer {
+public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private final Vertx vertx;
 
-    public ProjectAnalyzerImpl(final Vertx vertx) {
+    public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
     }
 
