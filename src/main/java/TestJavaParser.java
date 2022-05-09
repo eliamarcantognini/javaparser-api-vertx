@@ -23,7 +23,7 @@ public class TestJavaParser {
     }
 
     private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer) {
-        Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/lib.reports/interfaces/InterfaceReport.java");
+        Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/lib/reports/interfaces/InterfaceReport.java");
         future.onSuccess(interfaceReport -> {
             var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
             view.setText(json);
@@ -34,7 +34,7 @@ public class TestJavaParser {
     }
 
     private static void testClassReport(ProjectAnalyzer projectAnalyzer) {
-        Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/lib.reports/ClassReportImpl.java");
+        Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/lib/reports/ClassReportImpl.java");
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
             view.setText(json);
@@ -45,7 +45,7 @@ public class TestJavaParser {
     }
 
     private static void testPackageReport(ProjectAnalyzer projectAnalyzer) {
-        Future<PackageReport> future = projectAnalyzer.getPackageReport("src/main/java/lib.reports");
+        Future<PackageReport> future = projectAnalyzer.getPackageReport("src/main/java/lib/reports");
         future.onSuccess(packageReport -> {
             var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
             view.setText(json);
@@ -56,7 +56,7 @@ public class TestJavaParser {
     }
 
     private static void testProjectReport(ProjectAnalyzer projectAnalyzer) {
-        Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib.reports");
+        Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib/reports");
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
             view.setText(json);
