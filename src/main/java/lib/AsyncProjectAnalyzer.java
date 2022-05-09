@@ -108,6 +108,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                         set.set(true);
                     }
                 }));
+                promise.complete(p);
             }
 
             @Override
