@@ -2,11 +2,7 @@ package lib.reports.interfaces;
 
 import java.util.List;
 
-public interface PackageReport {
-
-	String getFullClassName();
-	
-	String getSrcFullFileName();
+public interface PackageReport extends Report{
 
 	List<ClassReport> getClassesReport();
 
