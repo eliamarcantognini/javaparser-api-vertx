@@ -15,18 +15,42 @@ public final class DTOs {
     private DTOs() {
     }
 
+    /**
+     * Create a {@link ProjectDTO} from a {@link ProjectReport}
+     *
+     * @param report the {@link ProjectReport}
+     * @return a {@link ProjectDTO}
+     */
     public static ProjectDTO createProjectDTO(ProjectReport report) {
         return new ProjectDTO(createClassDTO(report.getMainClass()), createPackageDTOs(report.getAllProjects()));
     }
 
+    /**
+     * Create a {@link PackageDTO} from a {@link PackageReport}
+     *
+     * @param report the {@link PackageReport}
+     * @return a {@link PackageDTO}
+     */
     public static PackageDTO createPackageDTO(PackageReport report) {
         return new PackageDTO(report.getFullClassName(), report.getSrcFullFileName(), createClassDTOs(report.getClassesReport()), createInterfaceDTOs(report.getInterfaceReports()));
     }
 
+    /**
+     * Create a {@link ClassInterfaceDTO} from a {@link InterfaceReport}
+     *
+     * @param report the {@link InterfaceReport}
+     * @return a {@link ClassInterfaceDTO}
+     */
     public static ClassInterfaceDTO createInterfaceDTO(InterfaceReport report) {
         return new ClassInterfaceDTO(report.getName(), report.getSourceFullPath(), createMethodDTOs(report.getMethodsInfo(), false));
     }
 
+    /**
+     * Create a {@link ClassInterfaceDTO} from a {@link ClassReport}
+     *
+     * @param report the {@link ClassReport}
+     * @return a {@link ClassInterfaceDTO}
+     */
     public static ClassInterfaceDTO createClassDTO(ClassReport report) {
         return new ClassInterfaceDTO(report.getName(), report.getSourceFullPath(), createMethodDTOs(report.getMethodsInfo(), true), createFieldDTOs(report.getFieldsInfo()));
     }
