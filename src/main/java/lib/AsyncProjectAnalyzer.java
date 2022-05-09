@@ -1,14 +1,16 @@
+package lib;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import reports.*;
-import reports.interfaces.ClassReport;
-import reports.interfaces.InterfaceReport;
-import reports.interfaces.PackageReport;
-import reports.interfaces.ProjectReport;
-import visitors.ClassesVisitor;
-import visitors.InterfacesVisitor;
+import lib.reports.*;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.PackageReport;
+import lib.reports.interfaces.ProjectReport;
+import lib.visitors.ClassesVisitor;
+import lib.visitors.InterfacesVisitor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.function.Consumer;

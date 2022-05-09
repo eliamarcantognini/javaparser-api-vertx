@@ -1,6 +1,6 @@
-package reports.info.interfaces;
+package lib.reports.info.interfaces;
 
-import reports.interfaces.Report;
+import lib.reports.interfaces.Report;
 
 import java.util.Optional;
 
@@ -35,7 +35,7 @@ public interface MethodInfo {
     Optional<String> getModifiers();
 
     /**
-     * Get the full parent report, {@link reports.interfaces.ClassReport} or {@link reports.interfaces.InterfaceReport}
+     * Get the full parent report, {@link lib.reports.interfaces.ClassReport} or {@link lib.reports.interfaces.InterfaceReport}
      *
      * @return the parent report
      */

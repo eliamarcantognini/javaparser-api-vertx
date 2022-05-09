@@ -1,8 +1,10 @@
+package lib;
+
 import io.vertx.core.*;
-import reports.interfaces.ClassReport;
-import reports.interfaces.InterfaceReport;
-import reports.interfaces.PackageReport;
-import reports.interfaces.ProjectReport;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.PackageReport;
+import lib.reports.interfaces.ProjectReport;
 
 import java.util.function.*;
 

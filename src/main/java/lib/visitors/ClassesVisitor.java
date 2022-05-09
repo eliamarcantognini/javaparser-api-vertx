@@ -1,11 +1,9 @@
-package visitors;
+package lib.visitors;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import reports.interfaces.ClassReport;
-import reports.info.InfoBuilder;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.info.InfoBuilder;
 
 public class ClassesVisitor extends FileVisitor<ClassReport> {
 

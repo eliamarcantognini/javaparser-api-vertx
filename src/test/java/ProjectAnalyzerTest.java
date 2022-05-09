@@ -1,8 +1,10 @@
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import lib.AsyncProjectAnalyzer;
+import lib.ProjectAnalyzer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.InterfaceReport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +14,7 @@ public class ProjectAnalyzerTest {
 
     @BeforeEach
     void initProjectAnalyzer(){
-        projectAnalyzer = new ProjectAnalyzerImpl(Vertx.vertx());
+        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
     }
 
     @Test
