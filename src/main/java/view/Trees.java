@@ -6,6 +6,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public final class Trees {
 
+    private final static int CHARACTERS_TO_SUBSTRING_IN_METHODS = 10;
+    private final static int CHARACTERS_TO_SUBSTRING_IN_METHODS_MODS_PRESENTS = 17;
+    private final static int CHARACTERS_TO_SUBSTRING_IN_FIELDS = 9;
+
     private Trees() {
     }
 
@@ -22,14 +26,14 @@ public final class Trees {
         var methodsNode = new DefaultMutableTreeNode("Methods");
         for (MethodDTO m : dto.methods()) {
             if (m.modifiers() != null)
-                methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(10, m.toString().length() - 1)));
-            else methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(10, m.toString().length() - 17)));
+                methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - 1)));
+            else methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - CHARACTERS_TO_SUBSTRING_IN_METHODS_MODS_PRESENTS)));
         }
         root.add(methodsNode);
         if (dto.fields() != null) {
             var fieldsNode = new DefaultMutableTreeNode("Fields");
             for (FieldDTO f : dto.fields()) {
-                fieldsNode.add(new DefaultMutableTreeNode(f.toString().substring(9, f.toString().length() - 1)));
+                fieldsNode.add(new DefaultMutableTreeNode(f.toString().substring(CHARACTERS_TO_SUBSTRING_IN_FIELDS, f.toString().length() - 1)));
             }
             root.add(fieldsNode);
         }
