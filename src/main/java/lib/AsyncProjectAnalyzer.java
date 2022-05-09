@@ -2,23 +2,27 @@ package lib;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import io.vertx.core.*;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.impl.future.PromiseImpl;
-import lib.reports.*;
+import lib.reports.ClassReportImpl;
+import lib.reports.InterfaceReportImpl;
+import lib.reports.PackageReportImpl;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
 import lib.visitors.ClassesVisitor;
 import lib.visitors.InterfacesVisitor;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
@@ -36,7 +40,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             InterfaceReport interfaceReport = new InterfaceReportImpl();
             try {
                 //CompilationUnit cu = StaticJavaParser.parse(new File(srcInterfacePath));
-                interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath),interfaceReport);
+                interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath), interfaceReport);
                 ev.complete(interfaceReport);
             } catch (FileNotFoundException e) {
                 ev.fail("EXEPTION: getInterfaceReport has failed with message: " + e.getMessage());
@@ -50,7 +54,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             ClassesVisitor classVisitor = new ClassesVisitor();
             ClassReport classReport = new ClassReportImpl();
             try {
-                classVisitor.visit(this.getCompilationUnit(srcClassPath),classReport);
+                classVisitor.visit(this.getCompilationUnit(srcClassPath), classReport);
                 ev.complete(classReport);
             } catch (FileNotFoundException e) {
                 ev.fail("EXEPTION: getClassReport has failed with message: " + e.getMessage());
@@ -73,7 +77,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             public void start() throws Exception {
                 File folder = new File(srcPackagePath);
                 List<String> list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
-
                 list.forEach(path -> {
                     try {
                         CompilationUnit cu = getCompilationUnit(path);
@@ -86,11 +89,25 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                         throw new RuntimeException(e);
                     }
                 });
-
-//                classReports.forEach(f -> {
-////                    f.onComplete(res -> p.addClass(res));
-//                });
-
+                AtomicBoolean set = new AtomicBoolean(false);
+                classReports.forEach(f -> f.onSuccess(res -> {
+                    p.addClassReport(res);
+                    if (!set.get()) {
+                        var s = res.getName();
+                        var t = res.getSourceFullPath();
+                        p.setFullPath(t.substring(0, t.length() - s.length() - 1));
+                        set.set(true);
+                    }
+                }));
+                interfaceReports.forEach(f -> f.onSuccess(res -> {
+                    p.addInterfaceReport(res);
+                    if (!set.get()) {
+                        var s = res.getName();
+                        var t = res.getSourceFullPath();
+                        p.setFullPath(t.substring(0, t.length() - s.length() - 1));
+                        set.set(true);
+                    }
+                }));
             }
 
             @Override
@@ -115,4 +132,5 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     private CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
         return StaticJavaParser.parse(new File(path));
     }
+
 }
