@@ -11,6 +11,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import reports.interfaces.ClassReport;
 import reports.interfaces.InterfaceReport;
+import reports.interfaces.PackageReport;
+import reports.interfaces.ProjectReport;
 import view.GUIView;
 import view.ViewListener;
 
@@ -72,31 +74,48 @@ public class TestJavaParser {
 	private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer){
 		Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/reports/interfaces/InterfaceReport.java");
 		future.onSuccess(interfaceReport -> {
-			System.out.println("Prova1");
-			System.out.println(interfaceReport.toString());
-			view.setText(interfaceReport.toString());
-			view.renderTree(DTOs.createInterfaceDTO(interfaceReport));
+			var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
+			view.setText(json);
+			var obj = DTOParser.parseClassInterfaceDTO(json);
+			view.renderTree(obj);
 		});
-		future.onFailure(event ->{
-			System.out.println("Prova2");
-			System.out.println(event.toString());
-		});
-		future.onComplete(event -> {
-			System.out.println("Prova3");
-			System.out.println(event.toString());
-		});
-		System.out.println("Prova4 " + future.result());
+		futureOnFailureOnComplete(future);
 	}
 
 	private static void testClassReport(ProjectAnalyzer projectAnalyzer){
 		Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/reports/ClassReportImpl.java");
 		future.onSuccess(classReport -> {
-			System.out.println("Future Success:");
 			var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
 			view.setText(json);
 			var obj = DTOParser.parseClassInterfaceDTO(json);
 			view.renderTree(obj);
 		});
+		futureOnFailureOnComplete(future);
+	}
+
+	private static void testPackageReport(ProjectAnalyzer projectAnalyzer){
+		Future<PackageReport> future = projectAnalyzer.getPackageReport("src/main/java/reports");
+		future.onSuccess(packageReport -> {
+			var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
+			view.setText(json);
+			var obj = DTOParser.parsePackageDTO(json);
+			view.renderTree(obj);
+		});
+		futureOnFailureOnComplete(future);
+	}
+
+	private static void testProjectReport(ProjectAnalyzer projectAnalyzer){
+		Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/reports");
+		future.onSuccess(projectReport -> {
+			var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
+			view.setText(json);
+			var obj = DTOParser.parsePackageDTO(json);
+			view.renderTree(obj);
+		});
+		futureOnFailureOnComplete(future);
+	}
+
+	private static <T> void futureOnFailureOnComplete(Future<T> future){
 		future.onFailure(event ->{
 			System.out.println("Future Failure:");
 			System.out.println(event.toString());
@@ -108,9 +127,6 @@ public class TestJavaParser {
 			System.out.println();
 		});
 		System.out.println("Future Result Without \"on\" construct" + future.result());
-		//future.onSuccess(System.out::println);
-		//future.onFailure(System.out::println);
-		//future.onComplete(System.out::println);
 	}
 
 }
