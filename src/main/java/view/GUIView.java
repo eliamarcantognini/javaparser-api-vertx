@@ -90,7 +90,7 @@ public class GUIView implements View {
         var node = new DefaultMutableTreeNode();
         if (dto instanceof ProjectDTO)
             node = Trees.createProjectTreeNode((ProjectDTO) dto);
-        else if (dto.getClass() == PackageDTO.class)
+        else if (dto instanceof PackageDTO)
             node = Trees.createPackageTreeNode((PackageDTO) dto);
         else if (dto instanceof ClassInterfaceDTO)
             node = Trees.createClassOrInterfaceTreeNode((ClassInterfaceDTO) dto);
