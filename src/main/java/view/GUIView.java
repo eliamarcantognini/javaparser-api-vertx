@@ -46,6 +46,20 @@ public class GUIView implements View {
         this.btnFolder.addActionListener(e -> listener.eventPerformed(Commands.FOLDER));
     }
 
+
+    public <T> void renderTree(T dto) {
+        var node = new DefaultMutableTreeNode();
+        if (dto instanceof ProjectDTO) node = Trees.createProjectTreeNode((ProjectDTO) dto);
+        else if (dto instanceof PackageDTO) node = Trees.createPackageTreeNode((PackageDTO) dto);
+        else if (dto instanceof ClassInterfaceDTO) node = Trees.createClassOrInterfaceTreeNode((ClassInterfaceDTO) dto);
+        JTree tree = new JTree(new DefaultTreeModel(node));
+        frame.getContentPane().add(tree, BorderLayout.CENTER);
+    }
+
+    public void setText(String txt) {
+        frame.setText(txt);
+    }
+
     public class VisualiserFrame extends JFrame {
 
         public VisualiserFrame(int w, int h) {
@@ -86,19 +100,4 @@ public class GUIView implements View {
 
     }
 
-    public <T> void renderTree(T dto) {
-        var node = new DefaultMutableTreeNode();
-        if (dto instanceof ProjectDTO)
-            node = Trees.createProjectTreeNode((ProjectDTO) dto);
-        else if (dto instanceof PackageDTO)
-            node = Trees.createPackageTreeNode((PackageDTO) dto);
-        else if (dto instanceof ClassInterfaceDTO)
-            node = Trees.createClassOrInterfaceTreeNode((ClassInterfaceDTO) dto);
-        JTree tree = new JTree(new DefaultTreeModel(node));
-        frame.getContentPane().add(tree, BorderLayout.CENTER);
-    }
-
-    public void setText(String txt) {
-        frame.setText(txt);
-    }
 }
