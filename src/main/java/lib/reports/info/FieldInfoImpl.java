@@ -1,7 +1,7 @@
-package reports.info;
+package lib.reports.info;
 
-import reports.info.interfaces.FieldInfo;
-import reports.interfaces.Report;
+import lib.reports.info.interfaces.FieldInfo;
+import lib.reports.interfaces.Report;
 
 import java.util.Optional;
 

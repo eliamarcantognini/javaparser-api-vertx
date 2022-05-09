@@ -1,23 +1,25 @@
+package lib;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import reports.*;
-import reports.interfaces.ClassReport;
-import reports.interfaces.InterfaceReport;
-import reports.interfaces.PackageReport;
-import reports.interfaces.ProjectReport;
-import visitors.ClassesVisitor;
-import visitors.InterfacesVisitor;
+import lib.reports.*;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.PackageReport;
+import lib.reports.interfaces.ProjectReport;
+import lib.visitors.ClassesVisitor;
+import lib.visitors.InterfacesVisitor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
-public class ProjectAnalyzerImpl implements ProjectAnalyzer {
+public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private final Vertx vertx;
 
-    public ProjectAnalyzerImpl(final Vertx vertx) {
+    public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
     }
 
@@ -61,7 +63,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
     }
 
     @Override
-    public void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback) {
+    public void analyzeProject(String srcProjectFolderName, String topic) {
 
     }
 

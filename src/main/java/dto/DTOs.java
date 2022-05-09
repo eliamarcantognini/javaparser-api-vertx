@@ -1,11 +1,11 @@
 package dto;
 
-import reports.info.interfaces.FieldInfo;
-import reports.info.interfaces.MethodInfo;
-import reports.interfaces.ClassReport;
-import reports.interfaces.InterfaceReport;
-import reports.interfaces.PackageReport;
-import reports.interfaces.ProjectReport;
+import lib.reports.info.interfaces.FieldInfo;
+import lib.reports.info.interfaces.MethodInfo;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.PackageReport;
+import lib.reports.interfaces.ProjectReport;
 
 import java.util.ArrayList;
 import java.util.List;

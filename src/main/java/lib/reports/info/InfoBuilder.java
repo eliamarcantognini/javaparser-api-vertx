@@ -1,8 +1,8 @@
-package reports.info;
+package lib.reports.info;
 
-import reports.info.interfaces.FieldInfo;
-import reports.info.interfaces.MethodInfo;
-import reports.interfaces.Report;
+import lib.reports.info.interfaces.FieldInfo;
+import lib.reports.info.interfaces.MethodInfo;
+import lib.reports.interfaces.Report;
 
 /**
  * Builder Pattern used to create {@link MethodInfo} and {@link FieldInfo}
@@ -17,7 +17,7 @@ public class InfoBuilder {
     private String type;
 
     /**
-     * Set the full parent report, {@link reports.interfaces.ClassReport} or {@link reports.interfaces.InterfaceReport}
+     * Set the full parent report, {@link lib.reports.interfaces.ClassReport} or {@link lib.reports.interfaces.InterfaceReport}
      *
      * @param report the report
      * @return the builder

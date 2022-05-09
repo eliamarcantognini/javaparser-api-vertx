@@ -1,7 +1,7 @@
-package reports;
+package lib.reports;
 
-import reports.info.interfaces.MethodInfo;
-import reports.interfaces.InterfaceReport;
+import lib.reports.info.interfaces.MethodInfo;
+import lib.reports.interfaces.InterfaceReport;
 
 import java.util.LinkedList;
 import java.util.List;

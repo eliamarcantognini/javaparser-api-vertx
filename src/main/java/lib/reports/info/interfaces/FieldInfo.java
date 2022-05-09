@@ -1,6 +1,6 @@
-package reports.info.interfaces;
+package lib.reports.info.interfaces;
 
-import reports.interfaces.Report;
+import lib.reports.interfaces.Report;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public interface FieldInfo {
     Optional<String> getFieldModifiers();
 
     /**
-     * Get the full parent {@link reports.interfaces.ClassReport}
+     * Get the full parent {@link lib.reports.interfaces.ClassReport}
      *
      * @return the parent report
      */

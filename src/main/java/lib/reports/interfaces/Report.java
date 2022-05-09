@@ -1,4 +1,4 @@
-package reports.interfaces;
+package lib.reports.interfaces;
 
 public interface Report {
     /**
