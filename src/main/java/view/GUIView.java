@@ -65,7 +65,7 @@ public class GUIView implements View {
         public VisualiserFrame(int w, int h) {
             setTitle("JavaParser GUI");
             setSize(w, h);
-            setResizable(false);
+            setResizable(true);
 
             JPanel btnPanel = new JPanel();
             btnPanel.setLayout(new FlowLayout());
