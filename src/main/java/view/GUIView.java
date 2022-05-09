@@ -1,16 +1,15 @@
 package view;
 
 import dto.ClassInterfaceDTO;
+import dto.PackageDTO;
+import dto.ProjectDTO;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
-/**
- * Simulation view
- *
- * @author aricci
- */
+
 public class GUIView implements View {
 
     private JButton btnFolder;
@@ -29,11 +28,6 @@ public class GUIView implements View {
     public GUIView(int w, int h) {
         frame = new VisualiserFrame(w, h);
     }
-
-//    @Override
-//    public void display(final List<Body> bodies, final double vt, final long iter, final Boundary bounds) {
-//        this.frame.display(bodies, vt, iter, bounds);
-//    }
 
     @Override
     public void setStopEnabled(final Boolean enabled) {
@@ -90,36 +84,18 @@ public class GUIView implements View {
             txtPane.setText(text);
         }
 
-//        public void renderTree(ClassInterfaceDTO dto) {
-//            DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
-//            root.add(new DefaultMutableTreeNode(dto.name()));
-//            root.add(new DefaultMutableTreeNode(dto.path()));
-//            DefaultMutableTreeNode methodsNode = new DefaultMutableTreeNode("Methods");
-//            for (MethodDTO m : dto.methods()) {
-//                if (m.modifiers() != null)
-//                    methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(10, m.toString().length() - 1)));
-//                else
-//                    methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(10, m.toString().length() - 17)));
-//            }
-//            root.add(methodsNode);
-//            if (dto.fields() != null) {
-//                DefaultMutableTreeNode fieldsNode = new DefaultMutableTreeNode("Fields");
-//                for (FieldDTO f : dto.fields()) {
-//                    fieldsNode.add(new DefaultMutableTreeNode(f.toString().substring(9, f.toString().length() - 1)));
-//                }
-//                root.add(fieldsNode);
-//            }
-//            JTree tree = new JTree(new DefaultTreeModel(root));
-//            getContentPane().add(tree, BorderLayout.CENTER);
-//        }
-
     }
 
-    public void setDTO(ClassInterfaceDTO dto) {
-        Trees.createClassOrInterfaceTreeNode(dto);
-        JTree tree = new JTree(new DefaultTreeModel(Trees.createClassOrInterfaceTreeNode((dto))));
+    public <T> void renderTree(T dto) {
+        var node = new DefaultMutableTreeNode();
+        if (dto instanceof ProjectDTO)
+            node = Trees.createProjectTreeNode((ProjectDTO) dto);
+        else if (dto.getClass() == PackageDTO.class)
+            node = Trees.createPackageTreeNode((PackageDTO) dto);
+        else if (dto instanceof ClassInterfaceDTO)
+            node = Trees.createClassOrInterfaceTreeNode((ClassInterfaceDTO) dto);
+        JTree tree = new JTree(new DefaultTreeModel(node));
         frame.getContentPane().add(tree, BorderLayout.CENTER);
-//        frame.renderTree(dto);
     }
 
     public void setText(String txt) {

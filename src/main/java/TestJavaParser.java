@@ -1,16 +1,10 @@
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import dto.ClassInterfaceDTO;
 import dto.DTOParser;
 import dto.DTOs;
 import io.vertx.core.Future;
@@ -81,7 +75,7 @@ public class TestJavaParser {
 			System.out.println("Prova1");
 			System.out.println(interfaceReport.toString());
 			view.setText(interfaceReport.toString());
-			view.setDTO(DTOs.createInterfaceDTO(interfaceReport));
+			view.renderTree(DTOs.createInterfaceDTO(interfaceReport));
 		});
 		future.onFailure(event ->{
 			System.out.println("Prova2");
@@ -101,7 +95,7 @@ public class TestJavaParser {
 			var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
 			view.setText(json);
 			var obj = DTOParser.parseClassInterfaceDTO(json);
-			view.setDTO(obj);
+			view.renderTree(obj);
 		});
 		future.onFailure(event ->{
 			System.out.println("Future Failure:");
