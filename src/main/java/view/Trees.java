@@ -50,11 +50,11 @@ public final class Trees {
         var root = new DefaultMutableTreeNode("");
         root.add(new DefaultMutableTreeNode(dto.name()));
         root.add(new DefaultMutableTreeNode(dto.path()));
-        var interfaces = new DefaultMutableTreeNode("interfaces");
+        var interfaces = new DefaultMutableTreeNode(dto.interfaces().isEmpty() ? "no interfaces" : "interfaces");
         for (ClassInterfaceDTO c : dto.interfaces())
             interfaces.add(createClassOrInterfaceTreeNode(c));
         root.add(interfaces);
-        var classes = new DefaultMutableTreeNode("classes");
+        var classes = new DefaultMutableTreeNode(dto.classes().isEmpty() ? "no classes" : "classes");
         for (ClassInterfaceDTO c : dto.classes())
             classes.add(createClassOrInterfaceTreeNode(c));
         root.add(classes);
