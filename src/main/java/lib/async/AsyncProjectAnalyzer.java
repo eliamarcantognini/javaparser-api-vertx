@@ -5,7 +5,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.*;
 import io.vertx.core.impl.future.PromiseImpl;
 import lib.ProjectAnalyzer;
-import lib.async.MyCompositeFuture;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
 import lib.reports.PackageReportImpl;
@@ -121,19 +120,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         return promise.future();
     }
 
-    private void checkCompletion(AtomicInteger completed, List<Future<ClassReport>> classReports, List<Future<InterfaceReport>> interfaceReports, Promise<PackageReport> ev, PackageReport packageReport) {
-        completed.getAndIncrement();
-        if (completed.get() == classReports.size() + interfaceReports.size()) ev.complete(packageReport);
-    }
-
-    private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
-        if (!set.get()) {
-            var s = sourceFullPath.split("\\.");
-            packageReport.setName(s[s.length - 2]);
-            packageReport.setFullPath(sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
-            set.set(true);
-        }
-    }
 
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
@@ -147,6 +133,20 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
         return StaticJavaParser.parse(new File(path));
+    }
+
+    private void checkCompletion(AtomicInteger completed, List<Future<ClassReport>> classReports, List<Future<InterfaceReport>> interfaceReports, Promise<PackageReport> ev, PackageReport packageReport) {
+        completed.getAndIncrement();
+        if (completed.get() == classReports.size() + interfaceReports.size()) ev.complete(packageReport);
+    }
+
+    private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
+        if (!set.get()) {
+            var s = sourceFullPath.split("\\.");
+            packageReport.setName(s[s.length - 2]);
+            packageReport.setFullPath(sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
+            set.set(true);
+        }
     }
 
 }
