@@ -39,7 +39,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                 interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath), interfaceReport);
                 ev.complete(interfaceReport);
             } catch (FileNotFoundException e) {
-                ev.fail("EXEPTION: getInterfaceReport has failed with message: " + e.getMessage());
+                ev.fail("EXCEPTION: getInterfaceReport has failed with message: " + e.getMessage());
             }
         });
     }
@@ -53,7 +53,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                 classVisitor.visit(this.getCompilationUnit(srcClassPath), classReport);
                 ev.complete(classReport);
             } catch (FileNotFoundException e) {
-                ev.fail("EXEPTION: getClassReport has failed with message: " + e.getMessage());
+                ev.fail("EXCEPTION: getClassReport has failed with message: " + e.getMessage());
             }
         });
     }
