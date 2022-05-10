@@ -2,10 +2,7 @@ package lib;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.impl.future.PromiseImpl;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
@@ -104,7 +101,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
             @Override
-            public void start() throws Exception {
+            public void start() {
                 AtomicInteger completed = new AtomicInteger(0);
                 final PackageReport packageReport = new PackageReportImpl();
                 final List<Future<ClassReport>> classReports = new ArrayList<>();
@@ -113,9 +110,10 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                 File folder = new File(srcPackagePath);
                 var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
                 list.forEach(path -> {
-                    CompilationUnit cu = null;
+                    CompilationUnit cu;
                     try {
                         cu = getCompilationUnit(path);
+                        System.out.println("Start visit of: " + cu.getType(0).asClassOrInterfaceDeclaration().getNameAsString() + "...");
                         if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
                             interfaceReports.add(getInterfaceReport(path));
                         else classReports.add(getClassReport(path));
@@ -125,11 +123,13 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                 });
                 AtomicBoolean set = new AtomicBoolean(false);
                 classReports.forEach(f -> f.onSuccess(res -> {
+                    System.out.println("End visit of: " + res.getName() +"!");
                     packageReport.addClassReport(res);
                     setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
                     checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
                 }));
                 interfaceReports.forEach(f -> f.onSuccess(res -> {
+                    System.out.println("End visit of: " + res.getName() +"!");
                     packageReport.addInterfaceReport(res);
                     setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
                     checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
