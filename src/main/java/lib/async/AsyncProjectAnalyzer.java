@@ -62,60 +62,8 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
         PackageReport packageReport = new PackageReportImpl();
         Promise<PackageReport> promise = new PromiseImpl<>();
-
-        Future<String> verticleID = this.vertx.deployVerticle(new AbstractVerticle() {
-
-            @Override
-            public void start() {
-                AtomicBoolean set = new AtomicBoolean(false);
-                final List<Future<ClassReport>> classReports = new ArrayList<>();
-                final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
-
-                File folder = new File(srcPackagePath);
-                var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
-                list.forEach(path -> {
-                    CompilationUnit cu;
-                    try {
-                        cu = getCompilationUnit(path);
-                        if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface()) {
-                            Future<InterfaceReport> f = getInterfaceReport(path);
-                            var futureCompose = f.compose(report -> {
-                                //LOGGER
-                                System.out.println("LOGGER-INTERFACE");
-                                packageReport.addInterfaceReport(report);
-                                setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
-                                return Future.succeededFuture(report);
-                            });
-                            interfaceReports.add(futureCompose);
-
-                        } else {
-                            Future<ClassReport> f = getClassReport(path);
-                            var futureCompose = f.compose(report -> {
-                                //LOGGER
-                                System.out.println("LOGGER-CLASS");
-                                packageReport.addClassReport(report);
-                                setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
-                                return Future.succeededFuture(report);
-                            });
-                            classReports.add(futureCompose);
-                        }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-                var classReportsFuture = MyCompositeFuture.join(classReports);
-                var interfaceReportsFuture = MyCompositeFuture.join(interfaceReports);
-                CompositeFuture.all(classReportsFuture, interfaceReportsFuture).onSuccess(r -> promise.complete(packageReport));
-
-
-            }
-
-            @Override
-            public void stop() throws Exception {
-                super.stop();
-            }
-        });
+        PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath);
+        Future<String> verticleID =  this.vertx.deployVerticle(vert);
 
         return promise.future();
     }
@@ -131,7 +79,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     }
 
-    private CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
+    CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
         return StaticJavaParser.parse(new File(path));
     }
 
@@ -140,7 +88,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         if (completed.get() == classReports.size() + interfaceReports.size()) ev.complete(packageReport);
     }
 
-    private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
+    void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
         if (!set.get()) {
             var s = sourceFullPath.split("\\.");
             packageReport.setName(s[s.length - 2]);
