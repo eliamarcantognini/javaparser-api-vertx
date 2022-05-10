@@ -2,9 +2,11 @@ package lib;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.future.PromiseImpl;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
 import lib.reports.PackageReportImpl;
@@ -61,108 +63,87 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
 
-        return this.vertx.executeBlocking(ev -> {
-            AtomicInteger completed = new AtomicInteger(0);
-            final PackageReport packageReport = new PackageReportImpl();
+//        return this.vertx.executeBlocking(ev -> {
+//            AtomicInteger completed = new AtomicInteger(0);
+//            final PackageReport packageReport = new PackageReportImpl();
+//            final List<Future<ClassReport>> classReports = new ArrayList<>();
+//            final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
+//
+//            File folder = new File(srcPackagePath);
+//            var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
+//            list.forEach(path -> {
+//                CompilationUnit cu = null;
+//                try {
+//                    cu = getCompilationUnit(path);
+//                    if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
+//                        interfaceReports.add(getInterfaceReport(path));
+//                    else classReports.add(getClassReport(path));
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//            AtomicBoolean set = new AtomicBoolean(false);
+//            classReports.forEach(f -> f.onSuccess(res -> {
+//                packageReport.addClassReport(res);
+//                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
+//                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
+//            }));
+//            interfaceReports.forEach(f -> f.onSuccess(res -> {
+//                packageReport.addInterfaceReport(res);
+//                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
+//                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
+//            }));
+//        });
+
+        PackageReport p = new PackageReportImpl();
+        Promise<PackageReport> promise = new PromiseImpl<>();
+
+        Future<String> verticleID = this.vertx.deployVerticle(new AbstractVerticle() {
+
             final List<Future<ClassReport>> classReports = new ArrayList<>();
             final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
-            File folder = new File(srcPackagePath);
-            var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
-            list.forEach(path -> {
-                CompilationUnit cu = null;
-                try {
-                    cu = getCompilationUnit(path);
-                    if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
-                        interfaceReports.add(getInterfaceReport(path));
-                    else classReports.add(getClassReport(path));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-            AtomicBoolean set = new AtomicBoolean(false);
-            classReports.forEach(f -> f.onSuccess(res -> {
-                packageReport.addClassReport(res);
-                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
-            }));
-            interfaceReports.forEach(f -> f.onSuccess(res -> {
-                packageReport.addInterfaceReport(res);
-                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
-            }));
+            @Override
+            public void start() throws Exception {
+                AtomicInteger completed = new AtomicInteger(0);
+                final PackageReport packageReport = new PackageReportImpl();
+                final List<Future<ClassReport>> classReports = new ArrayList<>();
+                final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
+
+                File folder = new File(srcPackagePath);
+                var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
+                list.forEach(path -> {
+                    CompilationUnit cu = null;
+                    try {
+                        cu = getCompilationUnit(path);
+                        if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
+                            interfaceReports.add(getInterfaceReport(path));
+                        else classReports.add(getClassReport(path));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
+                AtomicBoolean set = new AtomicBoolean(false);
+                classReports.forEach(f -> f.onSuccess(res -> {
+                    packageReport.addClassReport(res);
+                    setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
+                    checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
+                }));
+                interfaceReports.forEach(f -> f.onSuccess(res -> {
+                    packageReport.addInterfaceReport(res);
+                    setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
+                    checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
+                }));
+
+            }
+
+            @Override
+            public void stop() throws Exception {
+                super.stop();
+            }
         });
 
-//        PackageReport p = new PackageReportImpl();
-//        Promise<PackageReport> promise = new PromiseImpl<>();
-//
-//        Future<String> verticleID = this.vertx.deployVerticle(new AbstractVerticle() {
-//
-//            final List<CompletableFuture<ClassReport>> classReports = new ArrayList<>();
-//            final List<CompletableFuture<InterfaceReport>> interfaceReports = new ArrayList<>();
-//
-//            @Override
-//            public void start() throws Exception {
-//                File folder = new File(srcPackagePath);
-//                List<String> list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
-//                list.forEach(path -> {
-//                    try {
-//                        CompilationUnit cu = getCompilationUnit(path);
-//                        if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface()) {
-//                            interfaceReports.add(getInterfaceReport(path).toCompletionStage().toCompletableFuture());
-//                        } else {
-//                            classReports.add(getClassReport(path).toCompletionStage().toCompletableFuture());
-//                        }
-//                    } catch (FileNotFoundException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-
-//                  This works with Future<>
-//                AtomicBoolean set = new AtomicBoolean(false);
-//                classReports.forEach(f -> f.onSuccess(res -> {
-//                    p.addClassReport(res);
-//                    if (!set.get()) {
-//                        var s = res.getName();
-//                        var t = res.getSourceFullPath();
-//                        p.setFullPath(t.substring(0, t.length() - s.length() - 1));
-//                        set.set(true);
-//                    }
-//                }));
-//                interfaceReports.forEach(f -> f.onSuccess(res -> {
-//                    p.addInterfaceReport(res);
-//                    if (!set.get()) {
-//                        var s = res.getName();
-//                        var t = res.getSourceFullPath();
-//                        p.setFullPath(t.substring(0, t.length() - s.length() - 1));
-//                        set.set(true);
-//                    }
-//                }));
-//
-//                classReports.forEach(a -> {
-//                    try {
-//                        p.addClassReport(a.get(5000, TimeUnit.MILLISECONDS));
-//                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//                        e.printStackTrace();
-//                    }
-//                });
-//                interfaceReports.forEach(a -> {
-//                    try {
-//                        p.addInterfaceReport(a.get(5000, TimeUnit.MILLISECONDS));
-//                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//                        e.printStackTrace();
-//                    }
-//                });
-//                promise.complete(p);
-//            }
-//
-//            @Override
-//            public void stop() throws Exception {
-//                super.stop();
-//            }
-//        });
-//
-//        return promise.future();
+        return promise.future();
     }
 
     private void checkCompletion(AtomicInteger completed, List<Future<ClassReport>> classReports, List<Future<InterfaceReport>> interfaceReports, Promise<PackageReport> ev, PackageReport packageReport) {
