@@ -8,6 +8,7 @@ import lib.ProjectAnalyzer;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
 import lib.reports.PackageReportImpl;
+import lib.reports.ProjectReportImpl;
 import lib.reports.interfaces.*;
 import lib.visitors.ClassesVisitor;
 import lib.visitors.InterfacesVisitor;
@@ -71,7 +72,13 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
-        return null;
+
+        ProjectReport packageReport = new ProjectReportImpl();
+        Promise<ProjectReport> promise = new PromiseImpl<>();
+        ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath);
+        Future<String> verticleID =  this.vertx.deployVerticle(vert);
+
+        return promise.future();
     }
 
     @Override
