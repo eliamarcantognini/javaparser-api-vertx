@@ -20,7 +20,7 @@ public class ClassesVisitor extends FileVisitor<ClassReport> {
                 .modifiers(""+fd.getModifiers())
                 .report(collector);
         collector.addFieldInfo(builder.buildField());
-        this.testFieldDeclarationMethods(fd);
+//        this.testFieldDeclarationMethods(fd);
     }
 
     private void testMethodDeclarationMethods(MethodDeclaration md){
