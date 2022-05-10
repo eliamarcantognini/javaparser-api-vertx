@@ -3,6 +3,7 @@ package lib;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.*;
+import io.vertx.core.impl.future.CompositeFutureImpl;
 import io.vertx.core.impl.future.PromiseImpl;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
@@ -34,7 +35,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             InterfacesVisitor interfaceVisitor = new InterfacesVisitor();
             InterfaceReport interfaceReport = new InterfaceReportImpl();
             try {
-                //CompilationUnit cu = StaticJavaParser.parse(new File(srcInterfacePath));
                 interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath), interfaceReport);
                 ev.complete(interfaceReport);
             } catch (FileNotFoundException e) {
@@ -60,50 +60,14 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
 
-//        return this.vertx.executeBlocking(ev -> {
-//            AtomicInteger completed = new AtomicInteger(0);
-//            final PackageReport packageReport = new PackageReportImpl();
-//            final List<Future<ClassReport>> classReports = new ArrayList<>();
-//            final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
-//
-//            File folder = new File(srcPackagePath);
-//            var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
-//            list.forEach(path -> {
-//                CompilationUnit cu = null;
-//                try {
-//                    cu = getCompilationUnit(path);
-//                    if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
-//                        interfaceReports.add(getInterfaceReport(path));
-//                    else classReports.add(getClassReport(path));
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//            AtomicBoolean set = new AtomicBoolean(false);
-//            classReports.forEach(f -> f.onSuccess(res -> {
-//                packageReport.addClassReport(res);
-//                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-//                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
-//            }));
-//            interfaceReports.forEach(f -> f.onSuccess(res -> {
-//                packageReport.addInterfaceReport(res);
-//                setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-//                checkCompletion(completed, classReports, interfaceReports, ev, packageReport);
-//            }));
-//        });
-
-        PackageReport p = new PackageReportImpl();
+        PackageReport packageReport = new PackageReportImpl();
         Promise<PackageReport> promise = new PromiseImpl<>();
 
         Future<String> verticleID = this.vertx.deployVerticle(new AbstractVerticle() {
 
-            final List<Future<ClassReport>> classReports = new ArrayList<>();
-            final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
-
             @Override
             public void start() {
-                AtomicInteger completed = new AtomicInteger(0);
-                final PackageReport packageReport = new PackageReportImpl();
+                AtomicBoolean set = new AtomicBoolean(false);
                 final List<Future<ClassReport>> classReports = new ArrayList<>();
                 final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
@@ -113,27 +77,38 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
                     CompilationUnit cu;
                     try {
                         cu = getCompilationUnit(path);
-                        System.out.println("Start visit of: " + cu.getType(0).asClassOrInterfaceDeclaration().getNameAsString() + "...");
-                        if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface())
-                            interfaceReports.add(getInterfaceReport(path));
-                        else classReports.add(getClassReport(path));
+                        if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface()) {
+                            Future<InterfaceReport> f = getInterfaceReport(path);
+                            var futureCompose = f.compose(report -> {
+                                //LOGGER
+                                System.out.println("LOGGER-INTERFACE");
+                                packageReport.addInterfaceReport(report);
+                                setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
+                                return Future.succeededFuture(report);
+                            });
+                            interfaceReports.add(futureCompose);
+
+                        } else {
+                            Future<ClassReport> f = getClassReport(path);
+
+                            var futureCompose = f.compose(report -> {
+                                //LOGGER
+                                System.out.println("LOGGER-CLASS");
+                                packageReport.addClassReport(report);
+                                setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
+                                return Future.succeededFuture(report);
+                            });
+                            classReports.add(futureCompose);
+                        }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 });
-                AtomicBoolean set = new AtomicBoolean(false);
-                classReports.forEach(f -> f.onSuccess(res -> {
-                    System.out.println("End visit of: " + res.getName() +"!");
-                    packageReport.addClassReport(res);
-                    setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-                    checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
-                }));
-                interfaceReports.forEach(f -> f.onSuccess(res -> {
-                    System.out.println("End visit of: " + res.getName() +"!");
-                    packageReport.addInterfaceReport(res);
-                    setPackageNameAndPath(packageReport, set, res.getName(), res.getSourceFullPath(), res);
-                    checkCompletion(completed, classReports, interfaceReports, promise, packageReport);
-                }));
+
+                var classReportsFuture = MyCompositeFuture.join(classReports);
+                var interfaceReportsFuture = MyCompositeFuture.join(interfaceReports);
+                CompositeFuture.all(classReportsFuture, interfaceReportsFuture).onSuccess(r -> promise.complete(packageReport));
+
 
             }
 
@@ -153,7 +128,8 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
         if (!set.get()) {
-            packageReport.setName(sourceFullPath.split("\\.")[0]);
+            var s = sourceFullPath.split("\\.");
+            packageReport.setName(s[s.length - 2]);
             packageReport.setFullPath(sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
             set.set(true);
         }
@@ -173,4 +149,19 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         return StaticJavaParser.parse(new File(path));
     }
 
+}
+
+interface MyCompositeFuture extends CompositeFuture {
+
+    static <T> CompositeFuture join(List<Future<T>> futures) {
+        return CompositeFutureImpl.join(futures.toArray(new Future[0]));
+    }
+
+    static <T> CompositeFuture all(List<Future<T>> futures) {
+        return CompositeFutureImpl.all(futures.toArray(new Future[futures.size()]));
+    }
+
+    static <T1, T2> CompositeFuture all(Future<T1> f1, Future<T2> f2) {
+        return CompositeFutureImpl.all(f1, f2);
+    }
 }
