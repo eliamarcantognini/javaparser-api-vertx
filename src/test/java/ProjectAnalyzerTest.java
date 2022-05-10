@@ -1,6 +1,6 @@
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import lib.AsyncProjectAnalyzer;
+import lib.async.AsyncProjectAnalyzer;
 import lib.ProjectAnalyzer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

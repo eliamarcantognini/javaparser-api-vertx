@@ -1,10 +1,11 @@
-package lib;
+package lib.async;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import io.vertx.core.*;
-import io.vertx.core.impl.future.CompositeFutureImpl;
 import io.vertx.core.impl.future.PromiseImpl;
+import lib.ProjectAnalyzer;
+import lib.async.MyCompositeFuture;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
 import lib.reports.PackageReportImpl;
@@ -90,7 +91,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
                         } else {
                             Future<ClassReport> f = getClassReport(path);
-
                             var futureCompose = f.compose(report -> {
                                 //LOGGER
                                 System.out.println("LOGGER-CLASS");
@@ -151,17 +151,3 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
 }
 
-interface MyCompositeFuture extends CompositeFuture {
-
-    static <T> CompositeFuture join(List<Future<T>> futures) {
-        return CompositeFutureImpl.join(futures.toArray(new Future[0]));
-    }
-
-    static <T> CompositeFuture all(List<Future<T>> futures) {
-        return CompositeFutureImpl.all(futures.toArray(new Future[futures.size()]));
-    }
-
-    static <T1, T2> CompositeFuture all(Future<T1> f1, Future<T2> f2) {
-        return CompositeFutureImpl.all(f1, f2);
-    }
-}

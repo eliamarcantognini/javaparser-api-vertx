@@ -2,7 +2,7 @@ import dto.DTOParser;
 import dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import lib.AsyncProjectAnalyzer;
+import lib.async.AsyncProjectAnalyzer;
 import lib.ProjectAnalyzer;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
