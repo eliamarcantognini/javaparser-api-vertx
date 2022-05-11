@@ -58,4 +58,13 @@ public class PackageReportImpl implements PackageReport {
     public void setFullPath(String fullPath) {
         this.fullPath = fullPath;
     }
+
+    @Override
+    public String toString() {
+        return "ClassReport:\n"
+                + "\tPackage Name: " + this.getName() + "\n"
+                + "\tSource Full File Name: " + this.getSourceFullPath() + "\n"
+                + "\tClass Reports: \n" + this.classReports.toString() + "\n"
+                + "\tInterface Reports: \n" + this.interfaceReports.toString() + "\n";
+    }
 }
