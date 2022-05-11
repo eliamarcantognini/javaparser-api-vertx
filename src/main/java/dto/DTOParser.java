@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class DTOParser {
 
+    private DTOParser(){}
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
