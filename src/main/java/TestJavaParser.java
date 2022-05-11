@@ -9,26 +9,27 @@ import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
 import view.AnalyzerGUI;
+import view.StartGUI;
 import view.ViewListener;
 
 public class TestJavaParser {
-    static AnalyzerGUI view;
+    static StartGUI view;
 
     public static void main(String[] args) {
-        view = new AnalyzerGUI(1000, 1000);
-        view.addListener(new ViewListener());
-        ProjectAnalyzer projectAnalyzer;
-        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
-        testProjectReport(projectAnalyzer);
+        view = new StartGUI(new ViewListener());
+//        view.addListener(new ViewListener());
+//        ProjectAnalyzer projectAnalyzer;
+//        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
+//        testProjectReport(projectAnalyzer);
     }
 
     private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer) {
         Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/lib/reports/interfaces/InterfaceReport.java");
         future.onSuccess(interfaceReport -> {
             var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
-            view.setText(json);
+//            view.setText(json);
             var obj = DTOParser.parseClassInterfaceDTO(json);
-            view.renderTree(obj);
+//            view.renderTree(obj);
         });
         futureOnFailureOnComplete(future);
     }
@@ -37,9 +38,9 @@ public class TestJavaParser {
         Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/lib/reports/ClassReportImpl.java");
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
-            view.setText(json);
+//            view.setText(json);
             var obj = DTOParser.parseClassInterfaceDTO(json);
-            view.renderTree(obj);
+//            view.renderTree(obj);
         });
         futureOnFailureOnComplete(future);
     }
@@ -48,20 +49,20 @@ public class TestJavaParser {
         Future<PackageReport> future = projectAnalyzer.getPackageReport("src/main/java/lib/reports");
         future.onSuccess(packageReport -> {
             var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
-            view.setText(json);
+//            view.setText(json);
             var obj = DTOParser.parsePackageDTO(json);
-            view.renderTree(obj);
+//            view.renderTree(obj);
         });
         futureOnFailureOnComplete(future);
     }
 
-    private static void testProjectReport(ProjectAnalyzer projectAnalyzer) {
+    public static void testProjectReport(ProjectAnalyzer projectAnalyzer) {
         Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib");
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
-            view.setText(json);
+//            view.setText(json);
             var obj = DTOParser.parseProjectDTO(json);
-            view.renderTree(obj);
+//            view.renderTree(obj);
         });
         futureOnFailureOnComplete(future);
     }
