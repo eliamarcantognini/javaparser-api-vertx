@@ -16,27 +16,11 @@ public enum Commands {
      */
     STOP,
     /**
-     * Command to select getProjectReport API
-     */
-    PROJECT,
-    /**
-     * Command to select getPackageReport API
-     */
-    PACKAGE,
-    /**
-     * Command to select getClassReport API
-     */
-    CLASS,
-    /**
-     * Command to select getInterfaceReport API
-     */
-    INTERFACE,
-    /**
      * Command to select analyzeProject API
      */
     ANALYZE,
     /**
-     * Command to open filesystem view.
+     * Command to save output JSON
      */
-    FOLDER
+    SAVE,
 }
