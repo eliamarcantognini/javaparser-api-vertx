@@ -14,28 +14,50 @@ public class ViewListener{
 //    }
 
     public void eventPerformed(Commands code) {
-        switch (code) {
-            case START:
-//                controller.startParsing();
-                break;
-            case STOP:
-//                controller.stopParsing();
-                break;
-            case FOLDER:
-                getFilePath();
-//                controller.setFilePath(getFilePath());
-            default:
-                break;
+        switch (code){
+            case START -> start();
+            case STOP -> stop();
+            case PROJECT -> startGetProjectReport(getFilePath(JFileChooser.DIRECTORIES_ONLY));
+            case PACKAGE -> startGetPackageReport(getFilePath(JFileChooser.DIRECTORIES_ONLY));
+            case CLASS -> startGetClassReport(getFilePath(JFileChooser.FILES_ONLY));
+            case INTERFACE -> startGetInterfaceReport(getFilePath(JFileChooser.FILES_ONLY));
+            case ANALYZE -> startAnalyzeProject(getFilePath(JFileChooser.DIRECTORIES_ONLY));
         }
     }
 
-    private String getFilePath(){
+    private void start(){
+
+    }
+
+    private void stop(){
+
+    }
+
+    private void startGetProjectReport(String path){
+
+    }
+    private void startGetPackageReport(String path){
+
+    }
+    private void startGetClassReport(String path){
+
+    }
+    private void startGetInterfaceReport(String path){
+
+    }
+
+    private void startAnalyzeProject(String path){
+
+    }
+
+    private String getFilePath(int filter){
         JFileChooser chooser = new JFileChooser();
         File f = new java.io.File(".");
         chooser.setCurrentDirectory(f);
         chooser.setDialogTitle(TITLE);
-        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        chooser.setFileFilter(new FileNameExtensionFilter("Java File", "java"));
+        chooser.setFileSelectionMode(filter);
+        if (filter == JFileChooser.FILES_ONLY)
+            chooser.setFileFilter(new FileNameExtensionFilter("Java File", "java"));
         chooser.setAcceptAllFileFilterUsed(false);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
