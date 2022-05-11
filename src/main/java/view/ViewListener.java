@@ -21,7 +21,7 @@ public class ViewListener {
     }
 
     private void start() {
-
+        // controller.analyzeProject(path);
     }
 
     private void stop() {
@@ -29,10 +29,8 @@ public class ViewListener {
     }
 
     private void startAnalyzeProject(String path) {
-        var gui = new GUIView(800, 800);
+        var gui = new AnalyzerGUI(800, 800);
         // controller.setGUI(gui);
-        // controller.analyzeProject(path);
-
     }
 
     private String getFilePath() {

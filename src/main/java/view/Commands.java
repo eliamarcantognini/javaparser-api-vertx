@@ -4,7 +4,7 @@ package view;
  * Commands use to manage analyzing of a project.
  *
  * @see ViewListener
- * @see GUIView
+ * @see AnalyzerGUI
  */
 public enum Commands {
     /**

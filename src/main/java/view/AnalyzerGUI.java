@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
 
-public class GUIView implements View {
+public class AnalyzerGUI implements View {
 
     private JButton btnFolder;
     private JButton btnStart;
@@ -25,7 +25,7 @@ public class GUIView implements View {
      * @param w width
      * @param h height
      */
-    public GUIView(int w, int h) {
+    public AnalyzerGUI(int w, int h) {
         frame = new VisualiserFrame(w, h);
     }
 
@@ -67,7 +67,7 @@ public class GUIView implements View {
     private class VisualiserFrame extends JFrame {
 
         public VisualiserFrame(int w, int h) {
-            setTitle("JavaParser GUI");
+            setTitle("JavaParser Analyzer");
             setSize(w, h);
             setResizable(true);
 

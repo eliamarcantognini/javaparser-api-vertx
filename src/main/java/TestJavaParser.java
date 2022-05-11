@@ -8,14 +8,14 @@ import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-import view.GUIView;
+import view.AnalyzerGUI;
 import view.ViewListener;
 
 public class TestJavaParser {
-    static GUIView view;
+    static AnalyzerGUI view;
 
     public static void main(String[] args) {
-        view = new GUIView(1000, 1000);
+        view = new AnalyzerGUI(1000, 1000);
         view.addListener(new ViewListener());
         ProjectAnalyzer projectAnalyzer;
         projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
