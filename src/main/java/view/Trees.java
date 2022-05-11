@@ -20,9 +20,8 @@ public final class Trees {
      * @return a {@link DefaultMutableTreeNode} with all the data of the Class or the Interface
      */
     public static DefaultMutableTreeNode createClassOrInterfaceTreeNode(ClassInterfaceDTO dto) {
-        var root = new DefaultMutableTreeNode("");
-        root.add(new DefaultMutableTreeNode(dto.name()));
-        root.add(new DefaultMutableTreeNode(dto.path()));
+        var root = new DefaultMutableTreeNode(dto.name());
+        root.add(new DefaultMutableTreeNode("path: " + dto.path()));
         var methodsNode = new DefaultMutableTreeNode("Methods");
         for (MethodDTO m : dto.methods()) {
             if (m.modifiers() != null)
@@ -47,9 +46,8 @@ public final class Trees {
      * @return a {@link DefaultMutableTreeNode} with all the data of the Package
      */
     public static DefaultMutableTreeNode createPackageTreeNode(PackageDTO dto) {
-        var root = new DefaultMutableTreeNode("");
-        root.add(new DefaultMutableTreeNode(dto.name()));
-        root.add(new DefaultMutableTreeNode(dto.path()));
+        var root = new DefaultMutableTreeNode(dto.name());
+        root.add(new DefaultMutableTreeNode("path: " + dto.path()));
         var interfaces = new DefaultMutableTreeNode(dto.interfaces().isEmpty() ? "no interfaces" : "interfaces");
         for (ClassInterfaceDTO c : dto.interfaces())
             interfaces.add(createClassOrInterfaceTreeNode(c));
@@ -69,12 +67,11 @@ public final class Trees {
      * @return a {@link DefaultMutableTreeNode} with all the data of the Project
      */
     public static DefaultMutableTreeNode createProjectTreeNode(ProjectDTO dto) {
-        var root = new DefaultMutableTreeNode("");
-        root.add(new DefaultMutableTreeNode(dto.mainClass().name()));
-        var packages = new DefaultMutableTreeNode("packages");
+        var root = new DefaultMutableTreeNode("Project");
+        var packages = new DefaultMutableTreeNode(dto.packages().isEmpty() ? "no packages" : "packages");
         for (PackageDTO p : dto.packages())
             packages.add(createPackageTreeNode(p));
-
+        root.add(packages);
         return root;
     }
 }
