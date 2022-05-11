@@ -5,6 +5,7 @@ import dto.PackageDTO;
 import dto.ProjectDTO;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
@@ -12,26 +13,30 @@ import java.awt.*;
 
 public class AnalyzerGUI implements View {
 
-    private JButton btnFolder;
     private JButton btnStart;
     private JButton btnStop;
+    private JButton btnSave;
     private JTextPane txtPane;
 
     VisualiserFrame frame;
+    private final ViewListener listener;
+    private static final int HEIGHT_OFFSET = 30;
+    private static final int WIDTH_DIVISOR = 2;
 
     /**
-     * Creates a view of the specified size (in pixels)
-     *
-     * @param w width
-     * @param h height
+     * @param listener the listener for the view
      */
-    public AnalyzerGUI(int w, int h) {
+    public AnalyzerGUI(ViewListener listener) {
+        var h = Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT_OFFSET;
+        var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
         frame = new VisualiserFrame(w, h);
+        this.listener = listener;
     }
 
     @Override
     public void setStopEnabled(final Boolean enabled) {
         this.btnStop.setEnabled(enabled);
+        this.btnSave.setEnabled(enabled);
     }
 
     @Override
@@ -39,21 +44,16 @@ public class AnalyzerGUI implements View {
         this.btnStart.setEnabled(enabled);
     }
 
-    @Override
-    public void addListener(final ViewListener listener) {
-        this.btnStart.addActionListener(e -> listener.eventPerformed(Commands.START));
-        this.btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP));
-        this.btnFolder.addActionListener(e -> listener.eventPerformed(Commands.FOLDER));
-    }
-
-
     public <T> void renderTree(T dto) {
         var node = new DefaultMutableTreeNode();
         if (dto instanceof ProjectDTO) node = Trees.createProjectTreeNode((ProjectDTO) dto);
         else if (dto instanceof PackageDTO) node = Trees.createPackageTreeNode((PackageDTO) dto);
         else if (dto instanceof ClassInterfaceDTO) node = Trees.createClassOrInterfaceTreeNode((ClassInterfaceDTO) dto);
         JTree tree = new JTree(new DefaultTreeModel(node));
-        frame.getContentPane().add(tree, BorderLayout.CENTER);
+
+        JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+        frame.validate();
     }
 
     public void setText(String txt) {
@@ -67,35 +67,38 @@ public class AnalyzerGUI implements View {
     private class VisualiserFrame extends JFrame {
 
         public VisualiserFrame(int w, int h) {
-            setTitle("JavaParser Analyzer");
+            getContentPane().setLayout(new BorderLayout());
+            setTitle(Strings.TITLE);
             setSize(w, h);
             setResizable(true);
 
-            JPanel btnPanel = new JPanel();
-            btnPanel.setLayout(new FlowLayout());
-            btnFolder = new JButton("SELECT FILE");
-            btnStart = new JButton("START");
-            btnStop = new JButton("STOP");
-            btnPanel.add(btnFolder);
-            btnPanel.add(btnStart);
-            btnPanel.add(btnStop);
+            var btnPane = new JPanel();
+            btnStart = new JButton(Strings.START);
+            btnStop = new JButton(Strings.STOP);
+            btnSave = new JButton(Strings.SAVE);
+            btnStart.addActionListener(e -> listener.eventPerformed(Commands.START));
+            btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP));
+            btnStop.setEnabled(false);
+            btnSave.addActionListener(e -> listener.eventPerformed(Commands.SAVE));
+            btnSave.setEnabled(false);
+            btnPane.add(btnStart);
+            btnPane.add(btnStop);
+            btnPane.add(btnSave);
 
             txtPane = new JTextPane();
             txtPane.setEditable(false);
+            var txtScrollPane = new JScrollPane(txtPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            DefaultCaret caret = (DefaultCaret) txtPane.getCaret();
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+            var txtJPane = new JPanel();
+            txtJPane.setLayout(new BorderLayout());
+            txtJPane.add(txtScrollPane, BorderLayout.SOUTH);
 
-            getContentPane().setLayout(new BorderLayout());
-            getContentPane().add(btnPanel, BorderLayout.NORTH);
-            getContentPane().add(txtPane, BorderLayout.SOUTH);
+            getContentPane().add(btnPane, BorderLayout.NORTH);
+            getContentPane().add(txtJPane, BorderLayout.SOUTH);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             this.setVisible(true);
-        }
-
-        public void repaintView() {
-            setFocusable(true);
-            setFocusTraversalKeysEnabled(false);
-            requestFocusInWindow();
-            repaint();
         }
 
         void setText(final String text) {
