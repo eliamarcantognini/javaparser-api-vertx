@@ -19,7 +19,7 @@ public class TestJavaParser {
         view.addListener(new ViewListener());
         ProjectAnalyzer projectAnalyzer;
         projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
-        testPackageReport(projectAnalyzer);
+        testProjectReport(projectAnalyzer);
     }
 
     private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer) {
@@ -56,11 +56,11 @@ public class TestJavaParser {
     }
 
     private static void testProjectReport(ProjectAnalyzer projectAnalyzer) {
-        Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib/reports");
+        Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib");
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
             view.setText(json);
-            var obj = DTOParser.parsePackageDTO(json);
+            var obj = DTOParser.parseProjectDTO(json);
             view.renderTree(obj);
         });
         futureOnFailureOnComplete(future);

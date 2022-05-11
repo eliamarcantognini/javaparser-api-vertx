@@ -17,9 +17,7 @@ import lib.visitors.InterfacesVisitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
@@ -98,10 +96,9 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         }
     }
 
-    private void checkCompletion(AtomicInteger completed, List<Future<ClassReport>> classReports, List<Future<InterfaceReport>> interfaceReports, Promise<PackageReport> ev, PackageReport packageReport) {
-        completed.getAndIncrement();
-        if (completed.get() == classReports.size() + interfaceReports.size()) ev.complete(packageReport);
-    }
+//    public static void main(String[] args) {
+//        System.out.println("ciao");
+//    }
 
 }
 
