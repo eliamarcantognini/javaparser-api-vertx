@@ -60,9 +60,18 @@ public final class DTOParser {
      * @param dto the dto to be parsed
      * @return a JSON String
      */
-    public static String parseString(final Object dto) {
+    public static String parseStringToJSON(final Object dto) {
         try {
             return mapper.writeValueAsString(dto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String parseStringToPrettyJSON(final Object dto) {
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
