@@ -16,10 +16,4 @@ public interface View {
      */
     void setStartEnabled(final Boolean enabled);
 
-    /**
-     * Method called to set a {@link ViewListener} to respond to certain event.
-     *
-     * @param listener - the listener to notify when the event happen
-     */
-    void addListener(final ViewListener listener);
 }
