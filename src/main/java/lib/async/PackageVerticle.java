@@ -5,6 +5,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import lib.Printer;
 import lib.reports.PackageReportImpl;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
@@ -47,7 +48,7 @@ public class PackageVerticle extends AbstractVerticle {
                     Future<InterfaceReport> f = analyzer.getInterfaceReport(path);
                     var futureCompose = f.compose(report -> {
                         //LOGGER
-                        System.out.println("LOGGER-INTERFACE");
+                        Printer.printMessage("LOGGER-INTERFACE: " + report.hashCode());
                         packageReport.addInterfaceReport(report);
                         analyzer.setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
                         return Future.succeededFuture(report);
@@ -58,7 +59,7 @@ public class PackageVerticle extends AbstractVerticle {
                     Future<ClassReport> f = analyzer.getClassReport(path);
                     var futureCompose = f.compose(report -> {
                         //LOGGER
-                        System.out.println("LOGGER-CLASS");
+                        Printer.printMessage("LOGGER-CLASS: " + report.hashCode());
                         packageReport.addClassReport(report);
                         analyzer.setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
                         return Future.succeededFuture(report);
