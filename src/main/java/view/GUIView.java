@@ -60,7 +60,11 @@ public class GUIView implements View {
         frame.setText(txt);
     }
 
-    public class VisualiserFrame extends JFrame {
+    public void addText(String txt) {
+        frame.addText(txt);
+    }
+
+    private class VisualiserFrame extends JFrame {
 
         public VisualiserFrame(int w, int h) {
             setTitle("JavaParser GUI");
@@ -94,8 +98,12 @@ public class GUIView implements View {
             repaint();
         }
 
-        public void setText(final String text) {
+        void setText(final String text) {
             txtPane.setText(text);
+        }
+
+        void addText(final String text) {
+            txtPane.setText(txtPane.getText() + "\n" + text);
         }
 
     }
