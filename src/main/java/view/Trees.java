@@ -68,6 +68,10 @@ public final class Trees {
      */
     public static DefaultMutableTreeNode createProjectTreeNode(ProjectDTO dto) {
         var root = new DefaultMutableTreeNode("Project");
+        var mainClass = new DefaultMutableTreeNode(dto.mainClass().name().isBlank() ? "no Main Class" : "Main class");
+        if (!dto.mainClass().name().isBlank())
+            mainClass.add(createClassOrInterfaceTreeNode(dto.mainClass()));
+        root.add(mainClass);
         var packages = new DefaultMutableTreeNode(dto.packages().isEmpty() ? "no packages" : "packages");
         for (PackageDTO p : dto.packages())
             packages.add(createPackageTreeNode(p));
