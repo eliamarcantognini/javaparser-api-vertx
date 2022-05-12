@@ -3,6 +3,7 @@ package dto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.HexFormat;
 
 public final class DTOParser {
@@ -28,6 +29,21 @@ public final class DTOParser {
     }
 
     /**
+     * Create a {@link ProjectDTO} from bytes
+     *
+     * @param bytes the array of bytes
+     * @return a {@link ProjectDTO}
+     */
+    public static ProjectDTO parseProjectDTO(final byte[] bytes) {
+        try {
+            return mapper.readValue(bytes, ProjectDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ProjectDTO(null, null);
+    }
+
+    /**
      * Create a {@link PackageDTO} from JSON string
      *
      * @param string the JSON
@@ -43,6 +59,21 @@ public final class DTOParser {
     }
 
     /**
+     * Create a {@link PackageDTO} from bytes
+     *
+     * @param bytes the array of bytes
+     * @return a {@link PackageDTO}
+     */
+    public static PackageDTO parsePackageDTO(final byte[] bytes) {
+        try {
+            return mapper.readValue(bytes, PackageDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new PackageDTO("ParseError", "", null, null);
+    }
+
+    /**
      * Create a {@link ClassInterfaceDTO} from JSON string
      *
      * @param string the JSON
@@ -52,6 +83,21 @@ public final class DTOParser {
         try {
             return mapper.readValue(string, ClassInterfaceDTO.class);
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ClassInterfaceDTO("ParseError", "", null, null);
+    }
+
+    /**
+     * Create a {@link ClassInterfaceDTO} from bytes
+     *
+     * @param bytes the array of bytes
+     * @return a {@link ClassInterfaceDTO}
+     */
+    public static ClassInterfaceDTO parseClassInterfaceDTO(final byte[] bytes) {
+        try {
+            return mapper.readValue(bytes, ClassInterfaceDTO.class);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return new ClassInterfaceDTO("ParseError", "", null, null);
