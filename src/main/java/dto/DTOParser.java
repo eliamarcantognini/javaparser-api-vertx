@@ -69,6 +69,12 @@ public final class DTOParser {
         return "";
     }
 
+    /**
+     * Create a formatted JSON String which represents the object passed
+     *
+     * @param dto the dto to be parsed
+     * @return a formatted JSON String
+     */
     public static String parseStringToPrettyJSON(final Object dto) {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto);
