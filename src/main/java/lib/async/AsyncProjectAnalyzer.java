@@ -21,6 +21,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
+    // TODO: Add javadoc to fields or change them in enum
+    public final static String STOP_ANALYZING_PROJECT = "stop_analyzing_project";
+    public final static String PROJECT_REPORT_READY = "";
+
     private final Vertx vertx;
 
     public AsyncProjectAnalyzer(final Vertx vertx) {
@@ -95,10 +99,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             set.set(true);
         }
     }
-
-//    public static void main(String[] args) {
-//        System.out.println("ciao");
-//    }
 
 }
 
