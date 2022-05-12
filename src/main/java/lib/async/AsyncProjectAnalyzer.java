@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.future.PromiseImpl;
+import lib.Logger;
 import lib.ProjectAnalyzer;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
@@ -22,9 +23,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private final Vertx vertx;
+    private final Logger logger;
 
     public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
+        logger = message -> vertx.eventBus().publish("test", message);
     }
 
     @Override
@@ -34,6 +37,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             InterfaceReport interfaceReport = new InterfaceReportImpl();
             try {
                 interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath), interfaceReport);
+                logger.log(interfaceReport);
                 ev.complete(interfaceReport);
             } catch (FileNotFoundException e) {
                 ev.fail("EXCEPTION: getInterfaceReport has failed with message: " + e.getMessage());
@@ -48,6 +52,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             ClassReport classReport = new ClassReportImpl();
             try {
                 classVisitor.visit(this.getCompilationUnit(srcClassPath), classReport);
+                logger.log(classReport);
                 ev.complete(classReport);
             } catch (FileNotFoundException e) {
                 ev.fail("EXCEPTION: getClassReport has failed with message: " + e.getMessage());

@@ -14,13 +14,14 @@ import view.ViewListener;
 
 public class TestJavaParser {
     static StartGUI view;
+    static Vertx vertx = Vertx.vertx();
 
     public static void main(String[] args) {
         view = new StartGUI(new ViewListener());
 //        view.addListener(new ViewListener());
-//        ProjectAnalyzer projectAnalyzer;
-//        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
-//        testProjectReport(projectAnalyzer);
+        ProjectAnalyzer projectAnalyzer;
+        projectAnalyzer = new AsyncProjectAnalyzer(vertx);
+        testClassReport(projectAnalyzer);
     }
 
     private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer) {
@@ -36,6 +37,7 @@ public class TestJavaParser {
 
     private static void testClassReport(ProjectAnalyzer projectAnalyzer) {
         Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/lib/reports/ClassReportImpl.java");
+        vertx.eventBus().consumer("test", m -> System.out.println("Ho capito! + m: " + m.body()));
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
 //            view.setText(json);
