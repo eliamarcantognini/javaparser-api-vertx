@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.HexFormat;
+import java.util.LinkedList;
 
 public final class DTOParser {
 
@@ -25,7 +26,7 @@ public final class DTOParser {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return new ProjectDTO(null, null);
+        return new ProjectDTO(new ClassInterfaceDTO("", "", new LinkedList<>()), new LinkedList<>());
     }
 
     /**
@@ -40,7 +41,7 @@ public final class DTOParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ProjectDTO(null, null);
+        return new ProjectDTO(new ClassInterfaceDTO("", "", new LinkedList<>()), new LinkedList<>());
     }
 
     /**
@@ -55,7 +56,7 @@ public final class DTOParser {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return new PackageDTO("ParseError", "", null, null);
+        return new PackageDTO("ParseError", "", new LinkedList<>(), new LinkedList<>());
     }
 
     /**
@@ -70,7 +71,7 @@ public final class DTOParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new PackageDTO("ParseError", "", null, null);
+        return new PackageDTO("ParseError", "", new LinkedList<>(), new LinkedList<>());
     }
 
     /**
