@@ -3,9 +3,12 @@ package dto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.HexFormat;
+
 public final class DTOParser {
 
-    private DTOParser(){}
+    private DTOParser() {
+    }
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -83,5 +86,21 @@ public final class DTOParser {
         }
         return "";
     }
+
+    /**
+     * Create an array of bytes which represents the object passed
+     *
+     * @param dto the dto to be parsed
+     * @return an array of bytes
+     */
+    public static byte[] parseBytes(final Object dto) {
+        try {
+            return mapper.writeValueAsBytes(dto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return HexFormat.of().parseHex("ffffffffffffffff");
+    }
+
 
 }
