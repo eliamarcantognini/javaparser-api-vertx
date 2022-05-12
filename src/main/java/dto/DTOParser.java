@@ -86,7 +86,7 @@ public final class DTOParser {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return new ClassInterfaceDTO("ParseError", "", null, null);
+        return new ClassInterfaceDTO("ParseError", "", new LinkedList<>(), null);
     }
 
     /**
@@ -101,7 +101,7 @@ public final class DTOParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ClassInterfaceDTO("ParseError", "", null, null);
+        return new ClassInterfaceDTO("ParseError", "", new LinkedList<>(), null);
     }
 
     /**
