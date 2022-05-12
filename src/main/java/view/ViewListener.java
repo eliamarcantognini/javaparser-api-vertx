@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ViewListener {
     //    private final Controller controller;
-    private AnalyzerGUI view;
+    private AnalyzerGUI view; // Da trasferire nel controller
     private ProjectDTO dto;
     private static FileWriter file;
 
@@ -32,11 +32,10 @@ public class ViewListener {
     }
 
     private void start() {
-        // controller.analyzeProject(path);
+        // controller.startAnalyze(path);
         // TODO: Trasferire nel controller
         // Decommentare per testare la GUI
-        ProjectAnalyzer projectAnalyzer;
-        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
+        var projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
         var future = projectAnalyzer.getProjectReport("src/main/java/lib");
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
@@ -45,15 +44,17 @@ public class ViewListener {
             view.renderTree(dto);
         });
         //
-        view.setStartEnabled(false);
-        view.setStopEnabled(true);
+        view.setStartEnabled(false); // Nel controller
+        view.setStopEnabled(true); // Nel controller
     }
 
     private void stop() {
-        // controller.stop();
+        // controller.stopAnalysis();
     }
 
     private void save() {
+        // controller.saveResult()
+        // TODO: Trasferire nel controller il salvataggio del file
         try {
             file = new FileWriter(Strings.OUTPUT_PATH);
             file.write(DTOParser.parseStringToPrettyJSON(dto));
@@ -70,8 +71,8 @@ public class ViewListener {
     }
 
     private void startAnalyzeProject(String path) {
-        view = new AnalyzerGUI(this);
         // controller.setGUI(gui);
+        view = new AnalyzerGUI(this); // Nel controller
     }
 
     private String getFilePath() {
@@ -83,7 +84,7 @@ public class ViewListener {
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             // Delete the "." at the end of the path
-            String _f = f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 1);
+            var _f = f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 1);
             // Transfrom the absolute path in a relative path
             return chooser.getSelectedFile().getAbsolutePath().substring(_f.length());
         } else {
