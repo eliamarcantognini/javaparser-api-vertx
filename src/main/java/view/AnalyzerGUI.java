@@ -36,12 +36,16 @@ public class AnalyzerGUI implements View {
     @Override
     public void setStopEnabled(final Boolean enabled) {
         this.btnStop.setEnabled(enabled);
-        this.btnSave.setEnabled(enabled);
     }
 
     @Override
     public void setStartEnabled(final Boolean enabled) {
         this.btnStart.setEnabled(enabled);
+    }
+
+    @Override
+    public void setSaveEnabled(Boolean enabled) {
+        this.btnSave.setEnabled(enabled);
     }
 
     public <T> void renderTree(T dto) {
