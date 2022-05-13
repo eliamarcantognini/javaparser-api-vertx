@@ -93,9 +93,19 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     @Override
     public void analyzeProject(String srcProjectFolderName, String topic) {
+
+        this.vertx.eventBus().consumer(topic, m -> {
+            System.out.println("Request stop");
+            if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
+        });
+
         this.logger = message -> vertx.eventBus().publish(topic, message);
 
         this.getProjectReport(srcProjectFolderName);
+    }
+
+    private void stopLibrary() {
+        this.verticleIDs.forEach(this.vertx::undeploy);
     }
 
     CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
