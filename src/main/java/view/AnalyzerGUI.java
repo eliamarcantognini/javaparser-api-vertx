@@ -10,7 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
-// TODO: AnalyzerGUI class javadoc
+/**
+ *
+ */
 public class AnalyzerGUI implements View {
 
     private JButton btnStart;
@@ -116,8 +118,9 @@ public class AnalyzerGUI implements View {
             txtPane.setText(txtPane.getText() + "\n" + text);
         }
 
-        // TODO: Implemente something like "public void showError(final String s)" to notify to user that
-        //  saving isn't concluded in right way
+        public void showError(final String s) {
+            InfoDialog.showDialog(Strings.SOMETHING_WENT_WRONG, Strings.SAVE_ERROR, JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 

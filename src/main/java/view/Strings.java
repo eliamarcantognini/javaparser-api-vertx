@@ -8,5 +8,7 @@ public final class Strings {
     public static final String SAVE = "SAVE";
     public static final String VALID_PATH = "Select a valid path";
     public static final String PATH_ERROR = "PATH ERROR";
+    public static final String SAVE_ERROR = "SAVE ERROR";
     public final static String TITLE = "JavaParser Analyzer GUI";
+    public static final String SOMETHING_WENT_WRONG = "Something went wrong!";
 }
