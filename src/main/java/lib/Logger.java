@@ -14,17 +14,13 @@ public interface Logger {
 
     void log(String message);
 
-    //to-do chiedere i DTO per questi--------------------------------------------------
-
     default void log(MethodInfo method) {
-        log(DTOParser.parseString(method.toString()));
+        log(DTOParser.parseString(DTOs.createMethodDTO(method)));
     }
 
     default void log(FieldInfo field) {
-        log(DTOParser.parseString(field.toString()));
+        log(DTOParser.parseString(DTOs.createFieldDTO(field)));
     }
-
-    //--------------------------------------------------------------------------------
 
     default void log(InterfaceReport interfaceReport) {
         log(DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport)));
