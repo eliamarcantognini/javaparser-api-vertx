@@ -4,6 +4,13 @@ import utils.dto.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+/**
+ * Static class to manage and get {@link javax.swing.tree.DefaultMutableTreeNode} from DTO report
+ *
+ * @see ClassInterfaceDTO
+ * @see PackageDTO
+ * @see ProjectDTO
+ */
 public final class Trees {
 
     private final static int CHARACTERS_TO_SUBSTRING_IN_METHODS = 10;

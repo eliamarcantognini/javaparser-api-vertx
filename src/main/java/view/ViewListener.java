@@ -5,15 +5,33 @@ import view.GUI.PathChooserGUI;
 import view.utils.Commands;
 import view.utils.Strings;
 
+/**
+ * Listener handle commands arriving from view. Events are forwarded to an {@link AnalysisController}
+ *
+ * @see Commands
+ * @see AnalysisController
+ */
 public class ViewListener {
 
     private final AnalysisController analysisController;
     private View analyzerView;
 
+    /**
+     * Constructor of listener that forwards event to {@link AnalysisController}
+     *
+     * @param analysisController controller of the analysis
+     */
     public ViewListener(final AnalysisController analysisController) {
         this.analysisController = analysisController;
     }
 
+    /**
+     * Perform event sent.
+     *
+     * @param code event to perform
+     *
+     * @see Commands
+     */
     public void eventPerformed(Commands code) {
         switch (code) {
             case SELECT_PROJECT -> this.initAnalysis();
@@ -23,6 +41,13 @@ public class ViewListener {
         }
     }
 
+    /**
+     * Set the view that manage analysis
+     *
+     * @param view view that manage analysis
+     *
+     * @see view.GUI.AnalyzerGUI
+     */
     public void setViewToRunForAnalysis(final View view) {
         this.analysisController.setReportAnalysisView(view);
         this.analyzerView = view;
