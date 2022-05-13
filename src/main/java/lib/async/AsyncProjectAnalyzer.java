@@ -91,7 +91,9 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     @Override
     public void analyzeProject(String srcProjectFolderName, String topic) {
+        this.logger = message -> vertx.eventBus().publish(topic, message);
 
+        this.getProjectReport(srcProjectFolderName);
     }
 
     CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
