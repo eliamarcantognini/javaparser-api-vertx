@@ -1,7 +1,7 @@
 package lib;
 
-import dto.DTOParser;
-import dto.DTOs;
+import utils.dto.DTOParser;
+import utils.dto.DTOs;
 import lib.reports.info.interfaces.FieldInfo;
 import lib.reports.info.interfaces.MethodInfo;
 import lib.reports.interfaces.ClassReport;
