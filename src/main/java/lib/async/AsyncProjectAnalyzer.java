@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     // TODO: Add javadoc to fields or change them in enum
-    public final static String STOP_ANALYZING_PROJECT = "stop_analyzing_project";
+    public final static String STOP_ANALYZING_PROJECT = ">>STOP<<";
     public final static String PROJECT_REPORT_READY = "";
     public static final String CHANNEL_DEFAULT = "default";
 
