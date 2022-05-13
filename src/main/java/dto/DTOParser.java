@@ -13,6 +13,7 @@ public final class DTOParser {
     private DTOParser() {
     }
 
+    private static final String HEX_INT_ERROR = "ffffffffffffffff";
     private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -147,7 +148,7 @@ public final class DTOParser {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return HexFormat.of().parseHex("ffffffffffffffff");
+        return HexFormat.of().parseHex(HEX_INT_ERROR);
     }
 
 
