@@ -111,7 +111,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     public void analyzeProject(String srcProjectFolderName, String topic) {
 
         this.vertx.eventBus().consumer(topic, m -> {
-            System.out.println("Request stop");
             if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
         });
 
