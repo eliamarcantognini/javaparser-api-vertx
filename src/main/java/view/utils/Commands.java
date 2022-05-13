@@ -1,13 +1,13 @@
 package view.utils;
 
-import view.GUI.AnalyzerGUI;
+import view.GUI.TreeGUI;
 import view.ViewListener;
 
 /**
  * Commands use to manage analyzing of a project.
  *
  * @see ViewListener
- * @see AnalyzerGUI
+ * @see TreeGUI
  */
 public enum Commands {
 

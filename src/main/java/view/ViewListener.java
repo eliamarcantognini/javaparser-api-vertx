@@ -2,6 +2,7 @@ package view;
 
 import controller.AnalysisController;
 import view.GUI.PathChooserGUI;
+import view.GUI.TreeGUI;
 import view.utils.Commands;
 import view.utils.Strings;
 
@@ -46,7 +47,7 @@ public class ViewListener {
      *
      * @param view view that manage analysis
      *
-     * @see view.GUI.AnalyzerGUI
+     * @see TreeGUI
      */
     public void setViewToRunForAnalysis(final View view) {
         this.analysisController.setView(view);
