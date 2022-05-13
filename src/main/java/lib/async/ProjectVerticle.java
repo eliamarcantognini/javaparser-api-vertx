@@ -78,5 +78,6 @@ public class ProjectVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
+        promise.fail("FAIL: Library stopped");
     }
 }
