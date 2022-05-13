@@ -10,6 +10,9 @@ import lib.reports.interfaces.ProjectReport;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create DTO from report
+ */
 public interface DTOs {
 
     /**
@@ -52,6 +55,26 @@ public interface DTOs {
         return new ClassInterfaceDTO(report.getName(), report.getSourceFullPath(), createMethodDTOs(report.getMethodsInfo(), true), createFieldDTOs(report.getFieldsInfo()));
     }
 
+    /**
+     * Create a {@link MethodDTO} from a {@link MethodInfo}
+     *
+     * @param method the {@link MethodInfo}
+     * @return a {@link MethodDTO}
+     */
+    static MethodDTO createMethodDTO(MethodInfo method) {
+        return new MethodDTO(method.getName(), method.getSrcBeginLine(), method.getEndBeginLine(), method.getModifiers().orElse(""));
+    }
+
+    /**
+     * Create a {@link FieldDTO} from a {@link FieldInfo}
+     *
+     * @param field the {@link FieldInfo}
+     * @return a {@link FieldDTO}
+     */
+    static FieldDTO createFieldDTO(FieldInfo field) {
+        return new FieldDTO(field.getFieldName(), field.getFieldType(), field.getFieldModifiers().orElse(""));
+    }
+
     private static List<PackageDTO> createPackageDTOs(List<PackageReport> reports) {
         List<PackageDTO> packageDTOs = new ArrayList<>();
         for (PackageReport r : reports)
@@ -72,6 +95,7 @@ public interface DTOs {
             classDTOs.add(createClassDTO(r));
         return classDTOs;
     }
+
 
     private static List<MethodDTO> createMethodDTOs(List<MethodInfo> methods, boolean attachModifiers) {
         List<MethodDTO> methodDTOs = new ArrayList<>();
