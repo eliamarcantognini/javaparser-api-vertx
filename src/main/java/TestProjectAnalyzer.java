@@ -18,7 +18,7 @@ public class TestProjectAnalyzer {
 
     public static void main(String[] args) {
         ProjectAnalyzer projectAnalyzer;
-        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
+        projectAnalyzer = new AsyncProjectAnalyzer(vertx);
         // Select which getter of project analyzer test
          testInterfaceReport(projectAnalyzer, INTERFACE);
          testClassReport(projectAnalyzer, CLASS);
@@ -27,6 +27,7 @@ public class TestProjectAnalyzer {
     }
 
     private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer, final String interfaceToAnalyze) {
+        vertx.eventBus().consumer("default", m -> System.out.println(m.body()));
         Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport(interfaceToAnalyze);
         future.onSuccess(interfaceReport -> {
             var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
@@ -38,6 +39,7 @@ public class TestProjectAnalyzer {
     }
 
     private static void testClassReport(ProjectAnalyzer projectAnalyzer, final String classToAnalyze) {
+        vertx.eventBus().consumer("default", m -> System.out.println(m.body()));
         Future<ClassReport> future = projectAnalyzer.getClassReport(classToAnalyze);
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
@@ -60,6 +62,7 @@ public class TestProjectAnalyzer {
     }
 
     public static void testProjectReport(ProjectAnalyzer projectAnalyzer, final String projectToAnalyze) {
+        vertx.eventBus().consumer("default", m -> System.out.println(m.body()));
         Future<ProjectReport> future = projectAnalyzer.getProjectReport(projectToAnalyze);
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
