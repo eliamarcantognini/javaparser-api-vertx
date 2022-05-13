@@ -10,6 +10,9 @@ import lib.reports.interfaces.ProjectReport;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create DTO from report
+ */
 public interface DTOs {
 
     /**
