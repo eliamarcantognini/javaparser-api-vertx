@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
+// TODO: PackageVerticle javadoc
 public class PackageVerticle extends AbstractVerticle {
 
     private final Promise<PackageReport> promise;
