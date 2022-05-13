@@ -29,17 +29,17 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     public static final String CHANNEL_DEFAULT = "default";
 
     private final Vertx vertx;
-    private final Logger logger;
+    private Logger logger;
 
     public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
-        logger = message -> vertx.eventBus().publish("test", message);
+        logger = message -> vertx.eventBus().publish(CHANNEL_DEFAULT, message);
     }
 
     @Override
     public Future<InterfaceReport> getInterfaceReport(String srcInterfacePath) {
         return this.vertx.executeBlocking(ev -> {
-            InterfacesVisitor interfaceVisitor = new InterfacesVisitor();
+            InterfacesVisitor interfaceVisitor = new InterfacesVisitor(logger);
             InterfaceReport interfaceReport = new InterfaceReportImpl();
             try {
                 interfaceVisitor.visit(this.getCompilationUnit(srcInterfacePath), interfaceReport);
@@ -54,7 +54,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<ClassReport> getClassReport(String srcClassPath) {
         return this.vertx.executeBlocking(ev -> {
-            ClassesVisitor classVisitor = new ClassesVisitor();
+            ClassesVisitor classVisitor = new ClassesVisitor(logger);
             ClassReport classReport = new ClassReportImpl();
             try {
                 classVisitor.visit(this.getCompilationUnit(srcClassPath), classReport);
@@ -71,7 +71,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
         PackageReport packageReport = new PackageReportImpl();
         Promise<PackageReport> promise = new PromiseImpl<>();
-        PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath);
+        PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
         Future<String> verticleID = this.vertx.deployVerticle(vert);
 
         return promise.future();
@@ -83,7 +83,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
         ProjectReport packageReport = new ProjectReportImpl();
         Promise<ProjectReport> promise = new PromiseImpl<>();
-        ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath);
+        ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
         Future<String> verticleID = this.vertx.deployVerticle(vert);
 
         return promise.future();
