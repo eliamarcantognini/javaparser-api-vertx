@@ -11,6 +11,8 @@ import lib.reports.interfaces.ProjectReport;
 
 public class TestProjectAnalyzer {
 
+    private static Vertx vertx = Vertx.vertx();
+
     private final static String INTERFACE = "";
     private final static String CLASS = "";
     private final static String PACKAGE = "";
@@ -51,6 +53,7 @@ public class TestProjectAnalyzer {
     }
 
     private static void testPackageReport(ProjectAnalyzer projectAnalyzer, final String packageToAnalyze) {
+        vertx.eventBus().consumer("default", m -> System.out.println(m.body()));
         Future<PackageReport> future = projectAnalyzer.getPackageReport(packageToAnalyze);
         future.onSuccess(packageReport -> {
             var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
