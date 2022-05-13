@@ -1,5 +1,5 @@
-import dto.DTOParser;
-import dto.DTOs;
+import utils.dto.DTOParser;
+import utils.dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lib.ProjectAnalyzer;

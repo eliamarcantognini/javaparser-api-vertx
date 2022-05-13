@@ -1,7 +1,7 @@
 package view.GUI;
 
-import view.Commands;
-import view.Strings;
+import view.utils.Commands;
+import view.utils.Strings;
 import view.ViewListener;
 
 import javax.swing.*;

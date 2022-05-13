@@ -1,6 +1,7 @@
-package view;
+package view.utils;
 
 import view.GUI.AnalyzerGUI;
+import view.ViewListener;
 
 /**
  * Commands use to manage analyzing of a project.

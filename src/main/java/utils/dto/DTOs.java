@@ -1,4 +1,4 @@
-package dto;
+package utils.dto;
 
 import lib.reports.info.interfaces.FieldInfo;
 import lib.reports.info.interfaces.MethodInfo;

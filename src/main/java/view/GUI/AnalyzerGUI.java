@@ -1,9 +1,11 @@
 package view.GUI;
 
-import dto.ClassInterfaceDTO;
-import dto.PackageDTO;
-import dto.ProjectDTO;
+import utils.dto.ClassInterfaceDTO;
+import utils.dto.PackageDTO;
+import utils.dto.ProjectDTO;
 import view.*;
+import view.utils.Commands;
+import view.utils.Strings;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;

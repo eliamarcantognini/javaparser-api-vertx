@@ -1,6 +1,6 @@
 package view.GUI;
 
-import dto.*;
+import utils.dto.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -22,7 +22,7 @@ public final class Trees {
     public static DefaultMutableTreeNode createClassOrInterfaceTreeNode(ClassInterfaceDTO dto) {
         var root = new DefaultMutableTreeNode(dto.name());
         root.add(new DefaultMutableTreeNode("path: " + dto.path()));
-        var methodsNode = new DefaultMutableTreeNode("Methods");
+        var methodsNode = new DefaultMutableTreeNode(dto.methods().isEmpty() ? "no methods" : "methods");
         for (MethodDTO m : dto.methods()) {
             if (m.modifiers() != null)
                 methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - 1)));
@@ -30,7 +30,7 @@ public final class Trees {
         }
         root.add(methodsNode);
         if (dto.fields() != null) {
-            var fieldsNode = new DefaultMutableTreeNode("Fields");
+            var fieldsNode = new DefaultMutableTreeNode(dto.fields().isEmpty() ? "no fields" : "fields");
             for (FieldDTO f : dto.fields()) {
                 fieldsNode.add(new DefaultMutableTreeNode(f.toString().substring(CHARACTERS_TO_SUBSTRING_IN_FIELDS, f.toString().length() - 1)));
             }
