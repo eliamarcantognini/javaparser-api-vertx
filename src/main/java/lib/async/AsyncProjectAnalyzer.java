@@ -18,6 +18,8 @@ import lib.visitors.InterfacesVisitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 // TODO: AsyncProjectAnalyzer class javadoc
@@ -30,10 +32,12 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private final Vertx vertx;
     private Logger logger;
+    private final List<String> verticleIDs;
 
     public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
         logger = message -> vertx.eventBus().publish(CHANNEL_DEFAULT, message);
+        this.verticleIDs = new ArrayList<>();
     }
 
     @Override
@@ -69,10 +73,9 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
 
-        PackageReport packageReport = new PackageReportImpl();
         Promise<PackageReport> promise = new PromiseImpl<>();
         PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
-        Future<String> verticleID = this.vertx.deployVerticle(vert);
+        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));;
 
         return promise.future();
     }
@@ -81,10 +84,9 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
 
-        ProjectReport packageReport = new ProjectReportImpl();
         Promise<ProjectReport> promise = new PromiseImpl<>();
         ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
-        Future<String> verticleID = this.vertx.deployVerticle(vert);
+        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
 
         return promise.future();
     }
