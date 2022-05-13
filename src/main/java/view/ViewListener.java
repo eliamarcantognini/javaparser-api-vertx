@@ -71,8 +71,11 @@ public class ViewListener {
     }
 
     private void startAnalyzeProject(String path) {
+        view = new AnalyzerGUI(this);
         // controller.setGUI(gui);
-        view = new AnalyzerGUI(this); // Nel controller
+        if (path.isBlank())
+            InfoDialog.showDialog(Strings.VALID_PATH, Strings.PATH_ERROR, JOptionPane.ERROR_MESSAGE);
+        // controller.startAnalyzeProject(path)
     }
 
     private String getFilePath() {
@@ -81,13 +84,16 @@ public class ViewListener {
         chooser.setCurrentDirectory(f);
         chooser.setDialogTitle(Strings.CHOOSER);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        var choice = chooser.showOpenDialog(null);
+        if ( choice == JFileChooser.APPROVE_OPTION) {
             // Delete the "." at the end of the path
             var _f = f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 1);
-            // Transfrom the absolute path in a relative path
+            // Transform the absolute path in usable path
             return chooser.getSelectedFile().getAbsolutePath().substring(_f.length());
+        } else if (choice == JFileChooser.CANCEL_OPTION) {
+            // Add
         } else {
+            InfoDialog.showDialog(Strings.VALID_PATH, Strings.PATH_ERROR, JOptionPane.ERROR_MESSAGE);
             getFilePath();
         }
         return "";
