@@ -10,14 +10,13 @@ import lib.Logger;
 import lib.ProjectAnalyzer;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
-import lib.reports.PackageReportImpl;
-import lib.reports.ProjectReportImpl;
 import lib.reports.interfaces.*;
 import lib.visitors.ClassesVisitor;
 import lib.visitors.InterfacesVisitor;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Asynchronous project analyzer to get {@link lib.reports} about java sources.
@@ -34,8 +33,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     /**
      * Message to sent to {@link Vertx#eventBus()} to stop project analysis
      */
-    public final static String STOP_ANALYZING_PROJECT = "stop_analyzing_project";
-    // TODO:
+    public final static String STOP_ANALYZING_PROJECT = ">>STOP<<";
     public final static String PROJECT_REPORT_READY = "";
     /**
      * Topic where messages are sent if no channel for {@link Vertx#eventBus()}
@@ -45,6 +43,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private final Vertx vertx;
     private Logger logger;
+    private final List<String> verticleIDs;
 
     /**
      * Constructor of class
@@ -54,6 +53,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
         logger = message -> vertx.eventBus().publish(CHANNEL_DEFAULT, message);
+        this.verticleIDs = new ArrayList<>();
     }
 
     @Override
@@ -89,10 +89,9 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
 
-        PackageReport packageReport = new PackageReportImpl();
         Promise<PackageReport> promise = new PromiseImpl<>();
         PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
-        Future<String> verticleID = this.vertx.deployVerticle(vert);
+        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));;
 
         return promise.future();
     }
@@ -101,19 +100,28 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
 
-        ProjectReport packageReport = new ProjectReportImpl();
         Promise<ProjectReport> promise = new PromiseImpl<>();
         ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
-        Future<String> verticleID = this.vertx.deployVerticle(vert);
+        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
 
         return promise.future();
     }
 
     @Override
     public void analyzeProject(String srcProjectFolderName, String topic) {
+
+        this.vertx.eventBus().consumer(topic, m -> {
+            System.out.println("Request stop");
+            if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
+        });
+
         this.logger = message -> vertx.eventBus().publish(topic, message);
 
         this.getProjectReport(srcProjectFolderName);
+    }
+
+    private void stopLibrary() {
+        this.verticleIDs.forEach(this.vertx::undeploy);
     }
 
     /**

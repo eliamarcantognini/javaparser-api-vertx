@@ -30,6 +30,7 @@ public class StartGUI extends JFrame {
         btn.addActionListener(e -> listener.eventPerformed(Commands.SELECT_PROJECT));
         add(btn);
         setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 }
