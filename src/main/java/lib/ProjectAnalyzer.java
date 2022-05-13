@@ -8,6 +8,7 @@ import lib.reports.interfaces.ProjectReport;
 
 import java.util.function.*;
 
+// TODO: ProjectAnalyzer interface javadoc
 public interface ProjectAnalyzer {
 
 	/**
