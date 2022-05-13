@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO: AsyncProjectAnalyzer class javadoc
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     // TODO: Add javadoc to fields or change them in enum
