@@ -1,4 +1,4 @@
-package view;
+package view.utils;
 
 public final class Strings {
     public final static String CHOOSER = "SELECT PROJECT FOLDER";

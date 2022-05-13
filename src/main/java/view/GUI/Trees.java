@@ -1,6 +1,6 @@
 package view.GUI;
 
-import dto.*;
+import utils.dto.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

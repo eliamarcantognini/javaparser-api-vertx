@@ -1,18 +1,17 @@
 package controller;
 
-import dto.DTOParser;
-import dto.DTOs;
-import dto.ProjectDTO;
+import utils.dto.DTOParser;
+import utils.dto.DTOs;
+import utils.dto.ProjectDTO;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import lib.Printer;
+import utils.Printer;
 import lib.ProjectAnalyzer;
 import lib.async.AsyncProjectAnalyzer;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-import view.GUI.AnalyzerGUI;
 import view.View;
 
 import java.io.FileWriter;

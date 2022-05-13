@@ -1,6 +1,6 @@
 package view.GUI;
 
-import view.Strings;
+import view.utils.Strings;
 
 import javax.swing.*;
 import java.io.File;

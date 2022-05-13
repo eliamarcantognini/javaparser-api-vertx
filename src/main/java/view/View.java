@@ -1,5 +1,9 @@
 package view;
 
+import utils.dto.ClassInterfaceDTO;
+import utils.dto.PackageDTO;
+import utils.dto.ProjectDTO;
+
 public interface View {
 
     /**
@@ -47,7 +51,7 @@ public interface View {
      * Render the DTO in a Tree structure
      *
      * @param dto the report
-     * @param <T> a {@link dto.ClassInterfaceDTO} or {@link dto.PackageDTO} or {@link dto.ProjectDTO}
+     * @param <T> a {@link ClassInterfaceDTO} or {@link PackageDTO} or {@link ProjectDTO}
      */
     <T> void renderTree(T dto);
 
