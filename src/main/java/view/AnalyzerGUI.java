@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
-
+// TODO: AnalyzerGUI class javadoc
 public class AnalyzerGUI implements View {
 
     private JButton btnStart;
@@ -27,10 +27,13 @@ public class AnalyzerGUI implements View {
      * @param listener the listener for the view
      */
     public AnalyzerGUI(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public void startAnalyzerGUI(){
         var h = Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT_OFFSET;
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
         frame = new VisualiserFrame(w, h);
-        this.listener = listener;
     }
 
     @Override
@@ -112,6 +115,9 @@ public class AnalyzerGUI implements View {
         void addText(final String text) {
             txtPane.setText(txtPane.getText() + "\n" + text);
         }
+
+        // TODO: Implemente something like "public void showError(final String s)" to notify to user that
+        //  saving isn't concluded in right way
 
     }
 
