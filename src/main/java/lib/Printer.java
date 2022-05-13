@@ -3,6 +3,7 @@ package lib;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+// TODO: This class will be deleted?
 public interface Printer {
 
     static void printMessage(Object s) {

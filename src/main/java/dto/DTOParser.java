@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HexFormat;
 import java.util.LinkedList;
 
+// TODO: DTOParser class javadoc
 public final class DTOParser {
 
     private DTOParser() {
