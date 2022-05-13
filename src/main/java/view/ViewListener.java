@@ -1,78 +1,47 @@
 package view;
 
-import dto.DTOParser;
-import dto.DTOs;
-import dto.ProjectDTO;
-import io.vertx.core.Vertx;
-import lib.ProjectAnalyzer;
-import lib.async.AsyncProjectAnalyzer;
-
+import controller.AnalysisController;
 import javax.swing.*;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class ViewListener {
-    //    private final Controller controller;
-    private AnalyzerGUI view; // Da trasferire nel controller
-    private ProjectDTO dto;
-    private static FileWriter file;
 
-//    public ViewListener(final Controller controller) {
-//        this.controller = controller;
-//    }
+    private final AnalysisController analysisController;
+    private AnalyzerGUI analyzerGUIToLaunchForAnalysis;
+
+    public ViewListener(final AnalysisController analysisController) {
+        this.analysisController = analysisController;
+    }
 
     public void eventPerformed(Commands code) {
         switch (code) {
-            case START -> start();
-            case STOP -> stop();
-            case SAVE -> save();
-            case ANALYZE -> startAnalyzeProject(getFilePath());
+            case ANALYZE -> this.initAnalysis();
+            case START -> this.start();
+            case STOP -> this.stop();
+            case SAVE -> this.saveProjectReport();
         }
+    }
+
+    public void setViewToRunForAnalysis(final AnalyzerGUI analyzerGUI) {
+        this.analysisController.setReportAnalysisView(analyzerGUI);
+        this.analyzerGUIToLaunchForAnalysis = analyzerGUI;
+    }
+
+    private void initAnalysis(){
+        this.analysisController.setPathProjectToAnalyze(this.getFilePath());
+        this.analyzerGUIToLaunchForAnalysis.startAnalyzerGUI();
     }
 
     private void start() {
-        // controller.startAnalyze(path);
-        // TODO: Trasferire nel controller
-        // Decommentare per testare la GUI
-        var projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
-        var future = projectAnalyzer.getProjectReport("src/main/java/lib");
-        future.onSuccess(projectReport -> {
-            var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
-            view.setText(json);
-            dto = DTOParser.parseProjectDTO(json);
-            view.renderTree(dto);
-        });
-        //
-        view.setStartEnabled(false); // Nel controller
-        view.setStopEnabled(true); // Nel controller
+        this.analysisController.startAnalysisProject();
     }
 
     private void stop() {
-        // controller.stopAnalysis();
+        this.analysisController.stopAnalysisProject();
     }
 
-    private void save() {
-        // controller.saveResult()
-        // TODO: Trasferire nel controller il salvataggio del file
-        try {
-            file = new FileWriter(Strings.OUTPUT_PATH);
-            file.write(DTOParser.parseStringToPrettyJSON(dto));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void startAnalyzeProject(String path) {
-        // controller.setGUI(gui);
-        view = new AnalyzerGUI(this); // Nel controller
+    private void saveProjectReport() {
+        this.analysisController.saveProjectReportToFile();
     }
 
     private String getFilePath() {
@@ -92,4 +61,5 @@ public class ViewListener {
         }
         return "";
     }
+
 }
