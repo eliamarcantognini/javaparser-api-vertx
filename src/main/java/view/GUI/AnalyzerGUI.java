@@ -1,8 +1,9 @@
-package view;
+package view.GUI;
 
 import dto.ClassInterfaceDTO;
 import dto.PackageDTO;
 import dto.ProjectDTO;
+import view.*;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -32,7 +33,7 @@ public class AnalyzerGUI implements View {
         this.listener = listener;
     }
 
-    public void startAnalyzerGUI(){
+    public void launch(){
         var h = Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT_OFFSET;
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
         frame = new VisualiserFrame(w, h);
@@ -65,12 +66,12 @@ public class AnalyzerGUI implements View {
         frame.validate();
     }
 
-    public void setText(String txt) {
-        frame.setText(txt);
+    public void printText(String txt) {
+        frame.addText(txt);
     }
 
-    public void addText(String txt) {
-        frame.addText(txt);
+    public void showError(final String message, final String title) {
+        InfoDialog.showDialog(message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     private class VisualiserFrame extends JFrame {
@@ -118,9 +119,6 @@ public class AnalyzerGUI implements View {
             txtPane.setText(txtPane.getText() + "\n" + text);
         }
 
-        public void showError(final String s) {
-            InfoDialog.showDialog(Strings.SOMETHING_WENT_WRONG, Strings.SAVE_ERROR, JOptionPane.ERROR_MESSAGE);
-        }
 
     }
 

@@ -12,9 +12,8 @@ import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-import view.AnalyzerGUI;
-import view.StartGUI;
-import view.Strings;
+import view.GUI.AnalyzerGUI;
+import view.View;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class AnalysisController {
     private final static String VERTX_CHANNEL_TOPIC = "new_find";
 
 //    private final StartGUI startGUI;
-    private AnalyzerGUI reportAnalysisView;
+    private View reportAnalysisView;
     private final ProjectAnalyzer projectAnalyzer;
     private final Vertx vertx;
     private ProjectDTO dto;
@@ -38,7 +37,7 @@ public class AnalysisController {
         this.projectAnalyzer = new AsyncProjectAnalyzer(this.vertx);
     }
 
-    public void setReportAnalysisView(AnalyzerGUI reportAnalysisView){
+    public void setReportAnalysisView(View reportAnalysisView){
         this.reportAnalysisView = reportAnalysisView;
     }
 
@@ -71,9 +70,7 @@ public class AnalysisController {
     // TODO: Could be useful have this method public? If yes, it can be called with parameters
     private void initializeEventBus(){
         this.vertx.eventBus()
-                .localConsumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> {
-                    this.reportAnalysisView.setText("" + message.body());
-                });
+                .localConsumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> this.reportAnalysisView.printText("" + message.body()));
         // TODO: Decide what effectively arrives in the bus and set view relatively
     }
 
@@ -94,7 +91,7 @@ public class AnalysisController {
         future.onSuccess(projectReport -> {
             Printer.printMessage("Future end successfully");
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
-            this.reportAnalysisView.setText(json);
+            this.reportAnalysisView.printText(json);
             this.dto = DTOParser.parseProjectDTO(json);
             this.reportAnalysisView.renderTree(this.dto);
         });
@@ -108,7 +105,7 @@ public class AnalysisController {
         Future<PackageReport> future = projectAnalyzer.getPackageReport(pathToAnalyze);
         future.onSuccess(packageReport -> {
             var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
-            this.reportAnalysisView.setText(json);
+            this.reportAnalysisView.printText(json);
             // this.dto = DTOParser.parseProjectDTO(json);
             this.reportAnalysisView.renderTree(DTOParser.parsePackageDTO(json));
         });
@@ -118,7 +115,7 @@ public class AnalysisController {
         Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport(pathToAnalyze);
         future.onSuccess(interfaceReport -> {
             var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
-            this.reportAnalysisView.setText(json);
+            this.reportAnalysisView.printText(json);
             //this.dto = DTOParser.parseClassInterfaceDTO(json);
             this.reportAnalysisView.renderTree(DTOParser.parseClassInterfaceDTO(json));
         });
@@ -128,7 +125,7 @@ public class AnalysisController {
         Future<ClassReport> future = projectAnalyzer.getClassReport(pathToAnalyze);
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
-            this.reportAnalysisView.setText(json);
+            this.reportAnalysisView.printText(json);
             //this.dto = DTOParser.parseClassInterfaceDTO(json);
             this.reportAnalysisView.renderTree(DTOParser.parseClassInterfaceDTO(json));
         });

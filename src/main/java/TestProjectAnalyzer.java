@@ -1,4 +1,3 @@
-import controller.AnalysisController;
 import dto.DTOParser;
 import dto.DTOs;
 import io.vertx.core.Future;
@@ -9,8 +8,6 @@ import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-import view.StartGUI;
-import view.ViewListener;
 
 public class TestProjectAnalyzer {
 

@@ -1,5 +1,7 @@
 package view;
 
+import view.GUI.AnalyzerGUI;
+
 /**
  * Commands use to manage analyzing of a project.
  *

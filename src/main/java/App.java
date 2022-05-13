@@ -1,6 +1,6 @@
 import controller.AnalysisController;
-import view.AnalyzerGUI;
-import view.StartGUI;
+import view.GUI.AnalyzerGUI;
+import view.GUI.StartGUI;
 import view.ViewListener;
 
 public class App {

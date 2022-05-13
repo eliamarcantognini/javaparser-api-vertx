@@ -1,4 +1,8 @@
-package view;
+package view.GUI;
+
+import view.Commands;
+import view.Strings;
+import view.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;

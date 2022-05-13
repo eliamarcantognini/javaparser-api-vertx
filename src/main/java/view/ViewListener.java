@@ -1,13 +1,12 @@
 package view;
 
 import controller.AnalysisController;
-import javax.swing.*;
-import java.io.File;
+import view.GUI.PathChooserGUI;
 
 public class ViewListener {
 
     private final AnalysisController analysisController;
-    private AnalyzerGUI analyzerGUIToLaunchForAnalysis;
+    private View analyzerView;
 
     public ViewListener(final AnalysisController analysisController) {
         this.analysisController = analysisController;
@@ -22,18 +21,18 @@ public class ViewListener {
         }
     }
 
-    public void setViewToRunForAnalysis(final AnalyzerGUI analyzerGUI) {
-        this.analysisController.setReportAnalysisView(analyzerGUI);
-        this.analyzerGUIToLaunchForAnalysis = analyzerGUI;
+    public void setViewToRunForAnalysis(final View view) {
+        this.analysisController.setReportAnalysisView(view);
+        this.analyzerView = view;
     }
 
-    private void initAnalysis(){
-        var p = this.getFilePath();
-        if (p.isBlank())
-            InfoDialog.showDialog(Strings.VALID_PATH, Strings.PATH_ERROR, JOptionPane.ERROR_MESSAGE);
-        else {
+    private void initAnalysis() {
+        var p = PathChooserGUI.getFolderPath();
+        if (p.isBlank()) {
+            analyzerView.showError(Strings.VALID_PATH, Strings.PATH_ERROR);
+        } else {
             this.analysisController.setPathProjectToAnalyze(p);
-            this.analyzerGUIToLaunchForAnalysis.startAnalyzerGUI();
+            this.analyzerView.launch();
         }
     }
 
@@ -47,22 +46,6 @@ public class ViewListener {
 
     private void saveProjectReport() {
         this.analysisController.saveProjectReportToFile();
-    }
-
-    private String getFilePath() {
-        JFileChooser chooser = new JFileChooser();
-        File f = new java.io.File(".");
-        chooser.setCurrentDirectory(f);
-        chooser.setDialogTitle(Strings.CHOOSER);
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        var choice = chooser.showOpenDialog(null);
-        if (choice == JFileChooser.APPROVE_OPTION) {
-            // Delete the "." at the end of the path
-            var _f = f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 1);
-            // Transfrom the absolute path in a relative path
-            return chooser.getSelectedFile().getAbsolutePath().substring(_f.length());
-        }
-        return "";
     }
 
 }
