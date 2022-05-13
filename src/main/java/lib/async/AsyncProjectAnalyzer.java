@@ -95,8 +95,8 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
         if (!set.get()) {
             var s = sourceFullPath.split("\\.");
-            packageReport.setName(s[s.length - 2]);
-            packageReport.setFullPath(sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
+            packageReport.setName(s.length == 1 ? "" : (s[s.length - 2]));
+            packageReport.setFullPath(s.length == 1 ? "" : sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
             set.set(true);
         }
     }
