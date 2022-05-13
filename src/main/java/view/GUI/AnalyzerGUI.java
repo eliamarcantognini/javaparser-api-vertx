@@ -14,27 +14,35 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
 /**
- *
+ * Analysis GUI
  */
 public class AnalyzerGUI implements View {
 
+    private static final int HEIGHT_OFFSET = 30;
+    private static final int WIDTH_DIVISOR = 2;
+
+    private VisualiserFrame frame;
     private JButton btnStart;
     private JButton btnStop;
     private JButton btnSave;
     private JTextPane txtPane;
 
-    VisualiserFrame frame;
     private final ViewListener listener;
-    private static final int HEIGHT_OFFSET = 30;
-    private static final int WIDTH_DIVISOR = 2;
 
     /**
+     * Constructor of the GUI
+     *
      * @param listener the listener for the view
      */
     public AnalyzerGUI(ViewListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Launch GUI
+     *
+     * @see VisualiserFrame
+     */
     public void launch(){
         var h = Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT_OFFSET;
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
@@ -56,6 +64,15 @@ public class AnalyzerGUI implements View {
         this.btnSave.setEnabled(enabled);
     }
 
+    /**
+     * Set render tree in view to display dto passed as parameter
+     *
+     * @param dto the report to show with a render tree
+     * @param <T> DTO report type
+     *
+     * @see utils.dto.DTOs
+     * @see utils.dto.DTOParser
+     */
     public <T> void renderTree(T dto) {
         var node = new DefaultMutableTreeNode();
         if (dto instanceof ProjectDTO) node = Trees.createProjectTreeNode((ProjectDTO) dto);
@@ -68,10 +85,23 @@ public class AnalyzerGUI implements View {
         frame.validate();
     }
 
-    public void printText(String txt) {
-        frame.addText(txt);
+    /**
+     * Print in view text passed as parameter
+     *
+     * @param textToPrint text to print in the view
+     */
+    public void printText(String textToPrint) {
+        frame.addText(textToPrint);
     }
 
+    /**
+     * Display a dialog to show the message error passed as parameter
+     *
+     * @param message message to display in dialog
+     * @param title   title of the dialog
+     *
+     * @see InfoDialog#showDialog(String, String, int)
+     */
     public void showError(final String message, final String title) {
         InfoDialog.showDialog(message, title, JOptionPane.ERROR_MESSAGE);
     }
