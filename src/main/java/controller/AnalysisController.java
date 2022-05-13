@@ -48,16 +48,16 @@ public class AnalysisController {
         this.view.setStartEnabled(false);
         this.view.setStopEnabled(true);
         this.view.setSaveEnabled(true);
-        // this.initializeEventBus();
+        this.initializeEventBus();
         // this.projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
 //        this.testProjectReportWithoutBus(this.pathProjectToAnalyze);
         //this.testPackageReportWithoutBus(this.pathProjectToAnalyze);
         //this.testClassReportWithoutBus(this.pathProjectToAnalyze);
         //this.testInterfaceReportWithoutBus(this.pathProjectToAnalyze);
-        projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, "default");
-        vertx.eventBus().consumer("default", m -> {
+        projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
+        vertx.eventBus().consumer(AnalysisController.VERTX_CHANNEL_TOPIC, m -> {
             if (m.body().toString().contains(">>proj<<")) {
-                    view.renderTree(DTOParser.parseProjectDTO(m.body().toString().substring(8)));
+                view.renderTree(DTOParser.parseProjectDTO(m.body().toString().substring(8)));
             }
         });
     }
