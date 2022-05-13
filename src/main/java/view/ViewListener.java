@@ -49,7 +49,7 @@ public class ViewListener {
      * @see view.GUI.AnalyzerGUI
      */
     public void setViewToRunForAnalysis(final View view) {
-        this.analysisController.setReportAnalysisView(view);
+        this.analysisController.setView(view);
         this.analyzerView = view;
     }
 

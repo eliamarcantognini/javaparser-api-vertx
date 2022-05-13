@@ -35,6 +35,6 @@ public interface Logger {
     }
 
     default void log(ProjectReport projectReport) {
-        log(DTOParser.parseString(DTOs.createProjectDTO(projectReport)));
+        log(DTOParser.parseString(">>project<<" + DTOs.createProjectDTO(projectReport)));
     }
 }
