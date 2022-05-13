@@ -15,10 +15,10 @@ public class ViewListener {
 
     public void eventPerformed(Commands code) {
         switch (code) {
-            case ANALYZE -> this.initAnalysis();
-            case START -> this.start();
-            case STOP -> this.stop();
-            case SAVE -> this.saveProjectReport();
+            case SELECT_PROJECT -> this.initAnalysis();
+            case START_ANALYSIS -> this.start();
+            case STOP_ANALYSIS -> this.stop();
+            case SAVE_REPORT_INSIDE_FILE -> this.saveProjectReport();
         }
     }
 

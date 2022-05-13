@@ -7,20 +7,24 @@ package view;
  * @see AnalyzerGUI
  */
 public enum Commands {
-    /**
-     * Command to start analyze project.
-     */
-    START,
-    /**
-     * Command to stop analyze project.
-     */
-    STOP,
+
     /**
      * Command to select analyzeProject API
      */
-    ANALYZE,
+    SELECT_PROJECT,
+
+    /**
+     * Command to start analyze project.
+     */
+    START_ANALYSIS,
+
+    /**
+     * Command to stop analyze project.
+     */
+    STOP_ANALYSIS,
+
     /**
      * Command to save output JSON
      */
-    SAVE,
+    SAVE_REPORT_INSIDE_FILE,
 }

@@ -83,10 +83,10 @@ public class AnalyzerGUI implements View {
             btnStart = new JButton(Strings.START);
             btnStop = new JButton(Strings.STOP);
             btnSave = new JButton(Strings.SAVE);
-            btnStart.addActionListener(e -> listener.eventPerformed(Commands.START));
-            btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP));
+            btnStart.addActionListener(e -> listener.eventPerformed(Commands.START_ANALYSIS));
+            btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP_ANALYSIS));
             btnStop.setEnabled(false);
-            btnSave.addActionListener(e -> listener.eventPerformed(Commands.SAVE));
+            btnSave.addActionListener(e -> listener.eventPerformed(Commands.SAVE_REPORT_INSIDE_FILE));
             btnSave.setEnabled(false);
             btnPane.add(btnStart);
             btnPane.add(btnStop);
