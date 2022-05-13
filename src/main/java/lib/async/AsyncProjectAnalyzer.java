@@ -18,19 +18,39 @@ import lib.visitors.InterfacesVisitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-// TODO: AsyncProjectAnalyzer class javadoc
+/**
+ * Asynchronous project analyzer to get {@link lib.reports} about java sources.
+ *
+ * @see com.github.javaparser
+ * @see io.vertx
+ * @see lib.reports
+ * @see lib.Logger
+ * @see lib.ProjectAnalyzer
+ * @see lib.visitors
+ */
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
-    // TODO: Add javadoc to fields or change them in enum
+    /**
+     * Message to sent to {@link Vertx#eventBus()} to stop project analysis
+     */
     public final static String STOP_ANALYZING_PROJECT = "stop_analyzing_project";
+    // TODO:
     public final static String PROJECT_REPORT_READY = "";
+    /**
+     * Topic where messages are sent if no channel for {@link Vertx#eventBus()}
+     * hasn't been specified yet
+     */
     public static final String CHANNEL_DEFAULT = "default";
 
     private final Vertx vertx;
     private Logger logger;
 
+    /**
+     * Constructor of class
+     *
+     * @param vertx vertx used for asynchronous processes
+     */
     public AsyncProjectAnalyzer(final Vertx vertx) {
         this.vertx = vertx;
         logger = message -> vertx.eventBus().publish(CHANNEL_DEFAULT, message);
@@ -96,6 +116,14 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         this.getProjectReport(srcProjectFolderName);
     }
 
+    /**
+     * Get compilation unit of file passed. Throw an error if file not exists
+     *
+     * @param path path of file to parse
+     * @return compilation unit of file parsed
+     *
+     * @throws FileNotFoundException if path passed not correspond to any file
+     */
     CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
         return StaticJavaParser.parse(new File(path));
     }
