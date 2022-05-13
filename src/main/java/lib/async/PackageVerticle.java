@@ -5,7 +5,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import utils.Printer;
+import lib.Logger;
 import lib.reports.PackageReportImpl;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
@@ -26,11 +26,13 @@ public class PackageVerticle extends AbstractVerticle {
     private final PackageReport packageReport = new PackageReportImpl();
     private final AsyncProjectAnalyzer analyzer;
     private final String srcPackagePath;
+    private final Logger logger;
 
-    public PackageVerticle(AsyncProjectAnalyzer analyzer, Promise<PackageReport> promise, String srcPackagePath) {
+    public PackageVerticle(AsyncProjectAnalyzer analyzer, Promise<PackageReport> promise, String srcPackagePath, Logger logger) {
         this.analyzer = analyzer;
         this.promise = promise;
         this.srcPackagePath = srcPackagePath;
+        this.logger = logger;
     }
 
     @Override
@@ -50,8 +52,6 @@ public class PackageVerticle extends AbstractVerticle {
                 if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface()) {
                     Future<InterfaceReport> f = analyzer.getInterfaceReport(path);
                     var futureCompose = f.compose(report -> {
-                        //LOGGER
-                        Printer.printMessage("LOGGER-INTERFACE: " + report.hashCode());
                         packageReport.addInterfaceReport(report);
                         setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath());
                         return Future.succeededFuture(report);
@@ -60,8 +60,6 @@ public class PackageVerticle extends AbstractVerticle {
                 } else {
                     Future<ClassReport> f = analyzer.getClassReport(path);
                     var futureCompose = f.compose(report -> {
-                        //LOGGER
-                        Printer.printMessage("LOGGER-CLASS: " + report.hashCode());
                         packageReport.addClassReport(report);
                         setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath());
                         return Future.succeededFuture(report);
@@ -75,7 +73,10 @@ public class PackageVerticle extends AbstractVerticle {
 
         var classReportsFuture = MyCompositeFuture.join(classReports);
         var interfaceReportsFuture = MyCompositeFuture.join(interfaceReports);
-        CompositeFuture.all(classReportsFuture, interfaceReportsFuture).onSuccess(r -> promise.complete(packageReport));
+        CompositeFuture.all(classReportsFuture, interfaceReportsFuture).onSuccess(r -> {
+            logger.log(packageReport);
+            promise.complete(packageReport);
+        });
 
     }
 

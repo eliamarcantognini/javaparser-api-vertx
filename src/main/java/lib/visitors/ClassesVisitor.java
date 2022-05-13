@@ -2,13 +2,15 @@ package lib.visitors;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import lib.Logger;
+import lib.reports.info.interfaces.FieldInfo;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.info.InfoBuilder;
 
 public class ClassesVisitor extends FileVisitor<ClassReport> {
 
-    public ClassesVisitor() {
-        super(true);
+    public ClassesVisitor(Logger logger) {
+        super(true, logger);
     }
 
     public void visit(FieldDeclaration fd, ClassReport collector) {
@@ -19,7 +21,9 @@ public class ClassesVisitor extends FileVisitor<ClassReport> {
                 .type(""+fd.getElementType())
                 .modifiers(""+fd.getModifiers())
                 .report(collector);
-        collector.addFieldInfo(builder.buildField());
+        FieldInfo field = builder.buildField();
+        logger.log(field);
+        collector.addFieldInfo(field);
 //        this.testFieldDeclarationMethods(fd);
     }
 

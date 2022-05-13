@@ -3,14 +3,19 @@ package lib.visitors;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import lib.Logger;
 import lib.reports.info.InfoBuilder;
+import lib.reports.info.interfaces.MethodInfo;
 import lib.reports.interfaces.InterfaceReport;
 
 public class FileVisitor<T extends InterfaceReport> extends VoidVisitorAdapter<T> {
 
     private final boolean attachModifiers;
 
-    public FileVisitor(boolean attachModifiers) {
+    protected Logger logger;
+
+    public FileVisitor(boolean attachModifiers, Logger logger) {
+        this.logger = logger;
         this.attachModifiers = attachModifiers;
     }
 
@@ -38,7 +43,9 @@ public class FileVisitor<T extends InterfaceReport> extends VoidVisitorAdapter<T
         } else {
             builder.beginLine(-1).endLine(-1);
         }
-        collector.addMethodInfo(builder.buildMethod());
+        MethodInfo method = builder.buildMethod();
+        logger.log(method);
+        collector.addMethodInfo(method);
     }
 
 }

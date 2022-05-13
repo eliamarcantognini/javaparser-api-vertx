@@ -1,12 +1,13 @@
 package lib.visitors;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
+import lib.Logger;
 import lib.reports.interfaces.InterfaceReport;
 
 public class InterfacesVisitor extends FileVisitor<InterfaceReport> {
 
-    public InterfacesVisitor() {
-        super(false);
+    public InterfacesVisitor(Logger logger) {
+        super(false, logger);
     }
 
     private void testMethodDeclarationMethods(MethodDeclaration md){

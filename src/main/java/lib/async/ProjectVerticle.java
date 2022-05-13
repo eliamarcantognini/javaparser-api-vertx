@@ -3,6 +3,7 @@ package lib.async;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import lib.Logger;
 import utils.Printer;
 import lib.reports.ProjectReportImpl;
 import lib.reports.interfaces.PackageReport;
@@ -15,15 +16,20 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ProjectVerticle extends AbstractVerticle {
+
+    private static final String NO_MAIN_CLASS_MESSAGE = "Main class not found in this project";
+
     private final Promise<ProjectReport> promise;
     private final ProjectReport projectReport = new ProjectReportImpl();
     private final AsyncProjectAnalyzer analyzer;
     private final String projectPath;
+    private final Logger logger;
 
-    public ProjectVerticle(AsyncProjectAnalyzer analyzer, Promise<ProjectReport> promise, String projectPath) {
+    public ProjectVerticle(AsyncProjectAnalyzer analyzer, Promise<ProjectReport> promise, String projectPath, Logger logger) {
         this.analyzer = analyzer;
         this.promise = promise;
         this.projectPath = projectPath;
+        this.logger = logger;
     }
 
     @Override
@@ -41,12 +47,7 @@ public class ProjectVerticle extends AbstractVerticle {
 
         list.forEach(path -> {
             Future<PackageReport> f = analyzer.getPackageReport(path);
-
-            Printer.printMessage("Analizzo il package: " + path);
             var futureCompose = f.compose(report -> {
-                //LOGGER
-                Printer.printMessage("LOGGER PACKAGE: " + report.hashCode());
-//                Printer.printMessage("LOGGER PACKAGE: " + report);
                 projectReport.addPackageReport(report);
 
                 // With stream often doesn't take the main class. Why?
@@ -68,7 +69,8 @@ public class ProjectVerticle extends AbstractVerticle {
         });
 
         MyCompositeFuture.join(packageReports).onSuccess(r -> {
-            //LOGGER EMPTY MAIN CLASS projectReport.getMainClass().getName().isBlank()
+            if (projectReport.getMainClass().getName().isBlank()) logger.log(NO_MAIN_CLASS_MESSAGE);
+            logger.log(projectReport);
             promise.complete(projectReport);
         });
     }
