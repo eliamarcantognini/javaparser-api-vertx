@@ -15,6 +15,8 @@ public class PackageReportImpl implements PackageReport {
     List<InterfaceReport> interfaceReports;
 
     public PackageReportImpl() {
+        this.name = "";
+        this.fullPath = "";
         this.classReports = new LinkedList<>();
         this.interfaceReports = new LinkedList<>();
     }

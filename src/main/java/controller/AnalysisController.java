@@ -77,12 +77,16 @@ public class AnalysisController {
     // TODO: In Javadoc say where it saved or allow to specify file with parameter
     public void saveProjectReportToFile(){
         try {
-            new FileWriter(AnalysisController.OUTPUT_PATH).write(DTOParser.parseStringToPrettyJSON(dto));
+            var writer = new FileWriter(AnalysisController.OUTPUT_PATH);
+            writer.write(DTOParser.parseStringToPrettyJSON(dto));
+            writer.flush();
+            writer.close();
         } catch (IOException e){
             // TODO: Decide where print this
             System.out.println(e.getMessage());
             //this.reportAnalysisView.showError(e.getStackTrace());
         }
+
     }
 
     // TODO: Delete test before upload to Virtuale
