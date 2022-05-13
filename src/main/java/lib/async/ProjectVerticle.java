@@ -3,8 +3,7 @@ package lib.async;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import lib.Printer;
-import lib.reports.ClassReportImpl;
+import utils.Printer;
 import lib.reports.ProjectReportImpl;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
@@ -50,13 +49,17 @@ public class ProjectVerticle extends AbstractVerticle {
 //                Printer.printMessage("LOGGER PACKAGE: " + report);
                 projectReport.addPackageReport(report);
 
-                var opt = report.getClassesReports()
-                        .stream()
-                        .filter(c -> c.getMethodsInfo()
-                                .stream()
-                                .anyMatch(m -> m.getName().equals("main")))
-                        .findFirst();
-                projectReport.setMainClass(opt.orElseGet(ClassReportImpl::new));
+                // With stream often doesn't take the main class. Why?
+//                var opt = report.getClassesReports()
+//                        .stream()
+//                        .filter(c -> c.getMethodsInfo()
+//                                .stream()
+//                                .anyMatch(m -> m.getName().equals("main")))
+//                        .findFirst();
+//                projectReport.setMainClass(opt.orElseGet(ClassReportImpl::new));
+                report.getClassesReports().forEach(c -> c.getMethodsInfo().forEach(m -> {
+                    if (m.getName().equals("main")) projectReport.setMainClass(c);
+                }));
 
                 return Future.succeededFuture(report);
 
