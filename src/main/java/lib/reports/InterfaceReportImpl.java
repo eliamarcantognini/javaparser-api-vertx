@@ -13,6 +13,8 @@ public class InterfaceReportImpl implements InterfaceReport {
     private final List<MethodInfo> methodsInfo;
 
     public InterfaceReportImpl(){
+        this.interfaceName = "";
+        this.interfaceFullPath = "";
         this.methodsInfo = new LinkedList<>();
     }
 

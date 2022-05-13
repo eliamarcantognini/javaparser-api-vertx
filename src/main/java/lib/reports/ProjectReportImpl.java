@@ -13,6 +13,7 @@ public class ProjectReportImpl implements ProjectReport {
     private ClassReport mainClass;
 
     public ProjectReportImpl() {
+        this.mainClass = new ClassReportImpl();
         this.packageReports = new LinkedList<>();
     }
 
