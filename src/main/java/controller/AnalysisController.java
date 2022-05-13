@@ -49,6 +49,7 @@ public class AnalysisController {
     public void startAnalysisProject(){
         this.reportAnalysisView.setStartEnabled(false);
         this.reportAnalysisView.setStopEnabled(true);
+        this.reportAnalysisView.setSaveEnabled(true);
         // this.initializeEventBus();
         // this.projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
         this.testProjectReportWithoutBus(this.pathProjectToAnalyze);
