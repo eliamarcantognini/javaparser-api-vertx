@@ -56,8 +56,8 @@ public class AnalysisController {
         //this.testInterfaceReportWithoutBus(this.pathProjectToAnalyze);
         projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
         vertx.eventBus().consumer(AnalysisController.VERTX_CHANNEL_TOPIC, m -> {
-            if (m.body().toString().contains(">>proj<<")) {
-                view.renderTree(DTOParser.parseProjectDTO(m.body().toString().substring(8)));
+            if (m.body().toString().contains("PROJECT")) {
+                view.renderTree(DTOParser.parseProjectDTO(m.body().toString().substring(10)));
             }
         });
     }
