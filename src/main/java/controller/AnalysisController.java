@@ -21,6 +21,7 @@ import java.io.IOException;
 
 public class AnalysisController {
 
+    private final static String OUTPUT_PATH = "./output.json";
     private final static String VERTX_CHANNEL_TOPIC = "new_find";
 
 //    private final StartGUI startGUI;
@@ -79,7 +80,7 @@ public class AnalysisController {
     // TODO: In Javadoc say where it saved or allow to specify file with parameter
     public void saveProjectReportToFile(){
         try {
-            new FileWriter(Strings.OUTPUT_PATH).write(DTOParser.parseStringToPrettyJSON(dto));
+            new FileWriter(AnalysisController.OUTPUT_PATH).write(DTOParser.parseStringToPrettyJSON(dto));
         } catch (IOException e){
             // TODO: Decide where print this
             System.out.println(e.getMessage());
