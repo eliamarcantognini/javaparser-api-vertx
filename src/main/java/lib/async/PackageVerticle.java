@@ -5,7 +5,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import lib.Printer;
+import utils.Printer;
 import lib.reports.PackageReportImpl;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
@@ -45,24 +45,25 @@ public class PackageVerticle extends AbstractVerticle {
             CompilationUnit cu;
             try {
                 cu = analyzer.getCompilationUnit(path);
+                packageReport.setName("");
+                packageReport.setFullPath("");
                 if (cu.getType(0).asClassOrInterfaceDeclaration().isInterface()) {
                     Future<InterfaceReport> f = analyzer.getInterfaceReport(path);
                     var futureCompose = f.compose(report -> {
                         //LOGGER
                         Printer.printMessage("LOGGER-INTERFACE: " + report.hashCode());
                         packageReport.addInterfaceReport(report);
-                        analyzer.setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
+                        setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath());
                         return Future.succeededFuture(report);
                     });
                     interfaceReports.add(futureCompose);
-
                 } else {
                     Future<ClassReport> f = analyzer.getClassReport(path);
                     var futureCompose = f.compose(report -> {
                         //LOGGER
                         Printer.printMessage("LOGGER-CLASS: " + report.hashCode());
                         packageReport.addClassReport(report);
-                        analyzer.setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath(), report);
+                        setPackageNameAndPath(packageReport, set, report.getName(), report.getSourceFullPath());
                         return Future.succeededFuture(report);
                     });
                     classReports.add(futureCompose);
@@ -81,6 +82,16 @@ public class PackageVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
+    }
+
+    private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath) {
+        if (!set.get()) {
+//            Printer.printMessage("SRCPATH: " + sourceFullPath);
+            var s = sourceFullPath.split("\\.");
+            packageReport.setName(s.length == 1 ? "." : (s[s.length - 2]));
+            packageReport.setFullPath(s.length == 1 ? "" : sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
+            set.set(true);
+        }
     }
 
 }
