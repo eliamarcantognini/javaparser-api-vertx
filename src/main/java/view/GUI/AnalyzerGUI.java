@@ -108,7 +108,7 @@ public class AnalyzerGUI implements View {
 
             getContentPane().add(btnPane, BorderLayout.NORTH);
             getContentPane().add(txtJPane, BorderLayout.SOUTH);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
             this.setVisible(true);
         }
