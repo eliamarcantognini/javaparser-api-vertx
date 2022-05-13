@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.HexFormat;
 import java.util.LinkedList;
 
-// TODO: DTOParser class javadoc
+/**
+ * Static class which parse DTOs from/to byte[] and JSON
+ */
 public final class DTOParser {
 
     private DTOParser() {
@@ -107,6 +109,66 @@ public final class DTOParser {
     }
 
     /**
+     * Create a {@link MethodDTO} from JSON string
+     *
+     * @param string the JSON
+     * @return a {@link MethodDTO}
+     */
+    public static MethodDTO parseMethodDTO(final String string) {
+        try {
+            return mapper.readValue(string, MethodDTO.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new MethodDTO("ParseError", -1, -1);
+    }
+
+    /**
+     * Create a {@link MethodDTO} from bytes
+     *
+     * @param bytes the array of bytes
+     * @return a {@link MethodDTO}
+     */
+    public static MethodDTO parseMethodDTO(final byte[] bytes) {
+        try {
+            return mapper.readValue(bytes, MethodDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new MethodDTO("ParseError", -1, -1);
+    }
+
+    /**
+     * Create a {@link FieldDTO} from JSON string
+     *
+     * @param string the JSON
+     * @return a {@link FieldDTO}
+     */
+    public static FieldDTO parseFieldDTO(final String string) {
+        try {
+            return mapper.readValue(string, FieldDTO.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new FieldDTO("ParseError", "", "");
+    }
+
+    /**
+     * Create a {@link FieldDTO} from bytes
+     *
+     * @param bytes the array of bytes
+     * @return a {@link FieldDTO}
+     */
+    public static FieldDTO parseFieldDTO(final byte[] bytes) {
+        try {
+            return mapper.readValue(bytes, FieldDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new FieldDTO("ParseError", "", "");
+    }
+
+    /**
      * Create a JSON String which represents the object passed
      *
      * @param dto the dto to be parsed
@@ -150,6 +212,5 @@ public final class DTOParser {
         }
         return HexFormat.of().parseHex(HEX_INT_ERROR);
     }
-
 
 }
