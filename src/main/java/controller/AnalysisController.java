@@ -72,7 +72,7 @@ public class AnalysisController {
     // TODO: Could be useful have this method public? If yes, it can be called with parameters
     private void initializeEventBus(){
         this.vertx.eventBus()
-                .localConsumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> this.view.printText("" + message.body()));
+                .consumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> this.view.printText(message.body().toString()));
         // TODO: Decide what effectively arrives in the bus and set view relatively
     }
 
