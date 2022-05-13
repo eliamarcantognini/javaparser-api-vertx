@@ -83,6 +83,7 @@ public class PackageVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
+        promise.fail("FAIL: Library stopped");
     }
 
     private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath) {
