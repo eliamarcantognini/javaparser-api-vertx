@@ -1,8 +1,9 @@
-package view;
+package view.GUI;
 
 import dto.ClassInterfaceDTO;
 import dto.PackageDTO;
 import dto.ProjectDTO;
+import view.*;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -10,7 +11,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
-
+/**
+ *
+ */
 public class AnalyzerGUI implements View {
 
     private JButton btnStart;
@@ -27,10 +30,13 @@ public class AnalyzerGUI implements View {
      * @param listener the listener for the view
      */
     public AnalyzerGUI(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public void launch(){
         var h = Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT_OFFSET;
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
         frame = new VisualiserFrame(w, h);
-        this.listener = listener;
     }
 
     @Override
@@ -60,12 +66,12 @@ public class AnalyzerGUI implements View {
         frame.validate();
     }
 
-    public void setText(String txt) {
-        frame.setText(txt);
+    public void printText(String txt) {
+        frame.addText(txt);
     }
 
-    public void addText(String txt) {
-        frame.addText(txt);
+    public void showError(final String message, final String title) {
+        InfoDialog.showDialog(message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     private class VisualiserFrame extends JFrame {
@@ -80,10 +86,10 @@ public class AnalyzerGUI implements View {
             btnStart = new JButton(Strings.START);
             btnStop = new JButton(Strings.STOP);
             btnSave = new JButton(Strings.SAVE);
-            btnStart.addActionListener(e -> listener.eventPerformed(Commands.START));
-            btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP));
+            btnStart.addActionListener(e -> listener.eventPerformed(Commands.START_ANALYSIS));
+            btnStop.addActionListener(e -> listener.eventPerformed(Commands.STOP_ANALYSIS));
             btnStop.setEnabled(false);
-            btnSave.addActionListener(e -> listener.eventPerformed(Commands.SAVE));
+            btnSave.addActionListener(e -> listener.eventPerformed(Commands.SAVE_REPORT_INSIDE_FILE));
             btnSave.setEnabled(false);
             btnPane.add(btnStart);
             btnPane.add(btnStop);
@@ -112,6 +118,7 @@ public class AnalyzerGUI implements View {
         void addText(final String text) {
             txtPane.setText(txtPane.getText() + "\n" + text);
         }
+
 
     }
 

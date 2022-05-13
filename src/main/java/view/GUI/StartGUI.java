@@ -1,4 +1,8 @@
-package view;
+package view.GUI;
+
+import view.Commands;
+import view.Strings;
+import view.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +16,7 @@ public class StartGUI extends JFrame {
         setSize(w, h);
         setResizable(true);
         var btn = new JButton(Strings.SELECT_PROJECT);
-        btn.addActionListener(e -> listener.eventPerformed(Commands.ANALYZE));
+        btn.addActionListener(e -> listener.eventPerformed(Commands.SELECT_PROJECT));
         add(btn);
         setVisible(true);
     }

@@ -23,4 +23,32 @@ public interface View {
      */
     void setSaveEnabled(final Boolean enabled);
 
+    /**
+     * Launch the View
+     */
+    void launch();
+
+    /**
+     * Display an error message
+     *
+     * @param message message to display
+     * @param title   title of the view
+     */
+    void showError(final String message, final String title);
+
+    /**
+     * Print the text
+     *
+     * @param text the text to print
+     */
+    void printText(String text);
+
+    /**
+     * Render the DTO in a Tree structure
+     *
+     * @param dto the report
+     * @param <T> a {@link dto.ClassInterfaceDTO} or {@link dto.PackageDTO} or {@link dto.ProjectDTO}
+     */
+    <T> void renderTree(T dto);
+
 }

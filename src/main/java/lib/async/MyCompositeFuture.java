@@ -6,6 +6,7 @@ import io.vertx.core.impl.future.CompositeFutureImpl;
 
 import java.util.List;
 
+// TODO: javadoc
 public interface MyCompositeFuture extends CompositeFuture {
 
     static <T> CompositeFuture join(List<Future<T>> futures) {

@@ -20,7 +20,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO: AsyncProjectAnalyzer class javadoc
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
+
+    // TODO: Add javadoc to fields or change them in enum
+    public final static String STOP_ANALYZING_PROJECT = "stop_analyzing_project";
+    public final static String PROJECT_REPORT_READY = "";
 
     private final Vertx vertx;
     private final Logger logger;
@@ -95,15 +100,11 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath, Report res) {
         if (!set.get()) {
             var s = sourceFullPath.split("\\.");
-            packageReport.setName(s[s.length - 2]);
-            packageReport.setFullPath(sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
+            packageReport.setName(s.length == 1 ? "" : (s[s.length - 2]));
+            packageReport.setFullPath(s.length == 1 ? "" : sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
             set.set(true);
         }
     }
-
-//    public static void main(String[] args) {
-//        System.out.println("ciao");
-//    }
 
 }
 

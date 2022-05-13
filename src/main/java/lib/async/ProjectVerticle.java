@@ -33,7 +33,12 @@ public class ProjectVerticle extends AbstractVerticle {
         final File folder = new File(projectPath);
 
         if (!folder.isDirectory()) promise.fail("Path is not a directory");
-        var list = Stream.concat(Stream.of(folder.toString()), Stream.of(Objects.requireNonNull(folder.listFiles())).filter(File::isDirectory).map(File::getPath)).toList();
+        var list = Stream
+                .concat(Stream.of(folder.toString()),
+                        Stream.of(Objects.requireNonNull(folder.listFiles()))
+                                .filter(File::isDirectory)
+                                .map(File::getPath))
+                .toList();
 
         list.forEach(path -> {
             Future<PackageReport> f = analyzer.getPackageReport(path);
@@ -42,13 +47,15 @@ public class ProjectVerticle extends AbstractVerticle {
             var futureCompose = f.compose(report -> {
                 //LOGGER
                 Printer.printMessage("LOGGER PACKAGE: " + report.hashCode());
+//                Printer.printMessage("LOGGER PACKAGE: " + report);
                 projectReport.addPackageReport(report);
 
-                var opt = report.getClassesReports().stream().filter(
-                        c -> c.getMethodsInfo().stream().anyMatch(
-                            m -> m.getName().equals("main")
-                            )
-                        ).findFirst();
+                var opt = report.getClassesReports()
+                        .stream()
+                        .filter(c -> c.getMethodsInfo()
+                                .stream()
+                                .anyMatch(m -> m.getName().equals("main")))
+                        .findFirst();
                 projectReport.setMainClass(opt.orElseGet(ClassReportImpl::new));
 
                 return Future.succeededFuture(report);

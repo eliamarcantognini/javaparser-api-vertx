@@ -8,6 +8,7 @@ import lib.reports.interfaces.ProjectReport;
 
 import java.util.function.*;
 
+// TODO: ProjectAnalyzer interface javadoc
 public interface ProjectAnalyzer {
 
 	/**
@@ -49,7 +50,7 @@ public interface ProjectAnalyzer {
 	/**
 	 * Async function that analyze a project given the full path of the project folder,
 	 * executing the callback each time a project element is found 
-	 * 
+	 * // TODO: specify what mean callback
 	 * @param srcProjectFolderName
 	 * @param topic
 	 */

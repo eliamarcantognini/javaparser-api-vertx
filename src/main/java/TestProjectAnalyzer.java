@@ -2,30 +2,32 @@ import dto.DTOParser;
 import dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import lib.async.AsyncProjectAnalyzer;
 import lib.ProjectAnalyzer;
+import lib.async.AsyncProjectAnalyzer;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-import view.AnalyzerGUI;
-import view.StartGUI;
-import view.ViewListener;
 
-public class TestJavaParser {
-    static StartGUI view;
-    static Vertx vertx = Vertx.vertx();
+public class TestProjectAnalyzer {
+
+    private final static String INTERFACE = "";
+    private final static String CLASS = "";
+    private final static String PACKAGE = "";
+    private final static String PROJECT = "";
 
     public static void main(String[] args) {
-        view = new StartGUI(new ViewListener());
-//        view.addListener(new ViewListener());
         ProjectAnalyzer projectAnalyzer;
-        projectAnalyzer = new AsyncProjectAnalyzer(vertx);
-        testClassReport(projectAnalyzer);
+        projectAnalyzer = new AsyncProjectAnalyzer(Vertx.vertx());
+        // Select which getter of project analyzer test
+         testInterfaceReport(projectAnalyzer, INTERFACE);
+         testClassReport(projectAnalyzer, CLASS);
+         testPackageReport(projectAnalyzer, PACKAGE);
+         testProjectReport(projectAnalyzer, PROJECT);
     }
 
-    private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer) {
-        Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport("src/main/java/lib/reports/interfaces/InterfaceReport.java");
+    private static void testInterfaceReport(ProjectAnalyzer projectAnalyzer, final String interfaceToAnalyze) {
+        Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport(interfaceToAnalyze);
         future.onSuccess(interfaceReport -> {
             var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
 //            view.setText(json);
@@ -35,9 +37,8 @@ public class TestJavaParser {
         futureOnFailureOnComplete(future);
     }
 
-    private static void testClassReport(ProjectAnalyzer projectAnalyzer) {
-        Future<ClassReport> future = projectAnalyzer.getClassReport("src/main/java/lib/reports/ClassReportImpl.java");
-        vertx.eventBus().consumer("test", m -> System.out.println("Ho capito! + m: " + m.body()));
+    private static void testClassReport(ProjectAnalyzer projectAnalyzer, final String classToAnalyze) {
+        Future<ClassReport> future = projectAnalyzer.getClassReport(classToAnalyze);
         future.onSuccess(classReport -> {
             var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
 //            view.setText(json);
@@ -47,8 +48,8 @@ public class TestJavaParser {
         futureOnFailureOnComplete(future);
     }
 
-    private static void testPackageReport(ProjectAnalyzer projectAnalyzer) {
-        Future<PackageReport> future = projectAnalyzer.getPackageReport("src/main/java/lib/reports");
+    private static void testPackageReport(ProjectAnalyzer projectAnalyzer, final String packageToAnalyze) {
+        Future<PackageReport> future = projectAnalyzer.getPackageReport(packageToAnalyze);
         future.onSuccess(packageReport -> {
             var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
 //            view.setText(json);
@@ -58,8 +59,8 @@ public class TestJavaParser {
         futureOnFailureOnComplete(future);
     }
 
-    public static void testProjectReport(ProjectAnalyzer projectAnalyzer) {
-        Future<ProjectReport> future = projectAnalyzer.getProjectReport("src/main/java/lib");
+    public static void testProjectReport(ProjectAnalyzer projectAnalyzer, final String projectToAnalyze) {
+        Future<ProjectReport> future = projectAnalyzer.getProjectReport(projectToAnalyze);
         future.onSuccess(projectReport -> {
             var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
 //            view.setText(json);
