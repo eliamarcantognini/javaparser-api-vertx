@@ -118,7 +118,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
         });
         this.logger = message -> vertx.eventBus().publish(topic, message);
-        this.getProjectReport(srcProjectFolderName);
+        this.getProjectReport(srcProjectFolderName).onFailure(res -> logger.logError(res.getMessage()));
     }
 
     private void stopLibrary() {
