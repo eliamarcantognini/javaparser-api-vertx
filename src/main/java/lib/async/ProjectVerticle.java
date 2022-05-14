@@ -4,7 +4,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import lib.Logger;
-import utils.Printer;
 import lib.reports.ProjectReportImpl;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
@@ -15,6 +14,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * Class that manage project analysis. It extends from {@link AbstractVerticle} and when the verticle
+ * is deployed start the analysis with parameter passed in constructor.
+ *
+ * @see io.vertx.core.AbstractVerticle
+ */
 public class ProjectVerticle extends AbstractVerticle {
 
     private static final String NO_MAIN_CLASS_MESSAGE = "Main class not found in this project";
@@ -25,6 +30,14 @@ public class ProjectVerticle extends AbstractVerticle {
     private final String projectPath;
     private final Logger logger;
 
+    /**
+     * Class constructor
+     *
+     * @param analyzer analyzer to use
+     * @param promise promise where {@link ProjectReport} where will be present
+     * @param projectPath path to project to analyze
+     * @param logger logger used to send message during analysis
+     */
     public ProjectVerticle(AsyncProjectAnalyzer analyzer, Promise<ProjectReport> promise, String projectPath, Logger logger) {
         this.analyzer = analyzer;
         this.promise = promise;
@@ -49,15 +62,6 @@ public class ProjectVerticle extends AbstractVerticle {
             Future<PackageReport> f = analyzer.getPackageReport(path);
             var futureCompose = f.compose(report -> {
                 projectReport.addPackageReport(report);
-
-                // With stream often doesn't take the main class. Why?
-//                var opt = report.getClassesReports()
-//                        .stream()
-//                        .filter(c -> c.getMethodsInfo()
-//                                .stream()
-//                                .anyMatch(m -> m.getName().equals("main")))
-//                        .findFirst();
-//                projectReport.setMainClass(opt.orElseGet(ClassReportImpl::new));
                 report.getClassesReports().forEach(c -> c.getMethodsInfo().forEach(m -> {
                     if (m.getName().equals("main")) projectReport.setMainClass(c);
                 }));
