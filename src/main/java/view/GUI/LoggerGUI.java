@@ -1,18 +1,13 @@
 package view.GUI;
 
-import utils.dto.ClassInterfaceDTO;
-import utils.dto.PackageDTO;
-import utils.dto.ProjectDTO;
-import view.ViewListener;
-import view.utils.Commands;
 import view.utils.Strings;
-
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
+/**
+ * //TODO: complete javadoc
+ */
 public class LoggerGUI {
 
     private static final int HEIGHT_DIVISOR = 3;

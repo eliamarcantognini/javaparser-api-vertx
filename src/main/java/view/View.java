@@ -4,6 +4,9 @@ import utils.dto.ClassInterfaceDTO;
 import utils.dto.PackageDTO;
 import utils.dto.ProjectDTO;
 
+/**
+ * //TODO: complete javadoc
+ */
 public interface View {
 
     /**
