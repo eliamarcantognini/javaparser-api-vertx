@@ -88,8 +88,13 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
         Promise<PackageReport> promise = new PromiseImpl<>();
-        PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
-        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
+        if (!new File(srcPackagePath).isDirectory()){
+            promise.fail("Package path is not a directory");
+        } else {
+            PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
+            this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
+            promise.future().onFailure(res -> logger.logError(res.getMessage()));
+        }
         return promise.future();
     }
 
@@ -97,8 +102,13 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
         Promise<ProjectReport> promise = new PromiseImpl<>();
-        ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
-        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
+        if (!new File(srcProjectFolderPath).isDirectory()){
+            promise.fail("Package path is not a directory");
+        } else {
+            ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
+            this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
+            promise.future().onFailure(res -> logger.logError(res.getMessage()));
+        }
         return promise.future();
     }
 
