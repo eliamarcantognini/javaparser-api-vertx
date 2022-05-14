@@ -1,9 +1,9 @@
 package controller;
 
 import io.vertx.core.Vertx;
-import lib.async.AsyncProjectAnalyzer;
-import lib.ProjectAnalyzer;
 import lib.Logger;
+import lib.ProjectAnalyzer;
+import lib.async.AsyncProjectAnalyzer;
 import utils.dto.DTOParser;
 import utils.dto.PackageDTO;
 import utils.dto.ProjectDTO;
@@ -39,7 +39,7 @@ public class AnalysisController {
     /**
      * Constructor of class
      */
-    public AnalysisController(){
+    public AnalysisController() {
         this.vertx = Vertx.vertx();
         this.projectAnalyzer = new AsyncProjectAnalyzer(this.vertx);
     }
@@ -49,7 +49,7 @@ public class AnalysisController {
      *
      * @param view view where display analysis results
      */
-    public void setView(View view){
+    public void setView(View view) {
         this.view = view;
     }
 
@@ -58,15 +58,15 @@ public class AnalysisController {
      *
      * @param pathProjectToAnalyze path to project to analyze
      */
-    public void setPathProjectToAnalyze(final String pathProjectToAnalyze){
+    public void setPathProjectToAnalyze(final String pathProjectToAnalyze) {
         this.pathProjectToAnalyze = pathProjectToAnalyze;
     }
 
     /**
      * Start project analysis for project passed in {@link #setPathProjectToAnalyze(String)}
      */
-    public void startAnalysisProject(){
-        this.setViewButtonsAtStarts();
+    public void startAnalysisProject() {
+        this.setViewBehaviourAtStarts();
         this.initializeEventBus();
         this.projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
     }
@@ -74,64 +74,57 @@ public class AnalysisController {
     /**
      * Stop project analysis
      */
-    public void stopAnalysisProject(){
+    public void stopAnalysisProject() {
         this.view.setStopEnabled(false);
-        this.vertx.eventBus()
-                .publish(AnalysisController.VERTX_CHANNEL_TOPIC,
-                        AsyncProjectAnalyzer.STOP_ANALYZING_PROJECT);
+        this.vertx.eventBus().publish(AnalysisController.VERTX_CHANNEL_TOPIC, AsyncProjectAnalyzer.STOP_ANALYZING_PROJECT);
     }
 
     /**
      * Save project report got from analysis in file named "output.json
      */
-    public void saveProjectReportToFile(){
+    public void saveProjectReportToFile() {
         try {
             var writer = new FileWriter(AnalysisController.OUTPUT_PATH);
             writer.write(DTOParser.parseStringToPrettyJSON(projectDTO));
             writer.flush();
             writer.close();
-        } catch (IOException e){
-            this.view.showError(Strings.SOMETHING_WENT_WRONG,Strings.SAVE_ERROR);
+        } catch (IOException e) {
+            this.view.showError(Strings.SOMETHING_WENT_WRONG, Strings.SAVE_ERROR);
         }
 
     }
 
-    private void initializeEventBus(){
-        this.vertx.eventBus()
-                .consumer(AnalysisController.VERTX_CHANNEL_TOPIC,
-                        message -> this.manageMessage(message.body().toString()));
+    private void initializeEventBus() {
+        this.vertx.eventBus().consumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> this.manageMessage(message.body().toString()));
     }
 
-    private void setViewButtonsAtStarts() {
+    private void setViewBehaviourAtStarts() {
         this.view.setStartEnabled(false);
+        this.view.setSaveEnabled(false);
         this.view.setStopEnabled(true);
-        this.view.setSaveEnabled(true);
     }
 
     private void manageMessage(final String message) {
-        if(message.startsWith(Logger.CodeElementFound.PROJECT.getCode())){
-            this.projectDTO = DTOParser.parseProjectDTO(message
-                    .substring(Logger.CodeElementFound.PROJECT.getCode().length()));
+
+        if (message.startsWith(Logger.CodeElementFound.PROJECT.getCode())) {
+            this.projectDTO = DTOParser.parseProjectDTO(message.substring(Logger.CodeElementFound.PROJECT.getCode().length()));
+            this.view.setSaveEnabled(true);
+            this.view.setStopEnabled(false);
             this.view.renderTree(projectDTO);
-        } else if(message.startsWith(Logger.CodeElementFound.PACKAGE.getCode())){
-            PackageDTO packageFound = DTOParser.parsePackageDTO(message
-                    .substring(Logger.CodeElementFound.PACKAGE.getCode().length()));
+        } else if (message.startsWith(Logger.CodeElementFound.PACKAGE.getCode())) {
+            PackageDTO packageFound = DTOParser.parsePackageDTO(message.substring(Logger.CodeElementFound.PACKAGE.getCode().length()));
             this.view.printText("Found package " + packageFound.name() + "at path " + packageFound.path());
-        } else if(message.startsWith(Logger.CodeElementFound.CLASS.getCode())){
-            var classFound = DTOParser.parseClassInterfaceDTO(message
-                    .substring(Logger.CodeElementFound.CLASS.getCode().length()));
+        } else if (message.startsWith(Logger.CodeElementFound.CLASS.getCode())) {
+            var classFound = DTOParser.parseClassInterfaceDTO(message.substring(Logger.CodeElementFound.CLASS.getCode().length()));
             this.view.printText("Found class " + classFound.name() + " at path " + classFound.path());
-        } else if(message.startsWith(Logger.CodeElementFound.INTERFACE.getCode())){
-            var interfaceFound = DTOParser.parseClassInterfaceDTO(message
-                    .substring(Logger.CodeElementFound.INTERFACE.getCode().length()));
+        } else if (message.startsWith(Logger.CodeElementFound.INTERFACE.getCode())) {
+            var interfaceFound = DTOParser.parseClassInterfaceDTO(message.substring(Logger.CodeElementFound.INTERFACE.getCode().length()));
             this.view.printText("Found interface " + interfaceFound.name() + " at path " + interfaceFound.path());
-        } else if(message.startsWith(Logger.CodeElementFound.METHOD.getCode())){
-            var methodFound = DTOParser.parseMethodDTO(message
-                    .substring(Logger.CodeElementFound.METHOD.getCode().length()));
+        } else if (message.startsWith(Logger.CodeElementFound.METHOD.getCode())) {
+            var methodFound = DTOParser.parseMethodDTO(message.substring(Logger.CodeElementFound.METHOD.getCode().length()));
             this.view.printText("Found method " + methodFound.name());
-        } else if(message.startsWith(Logger.CodeElementFound.FIELD.getCode())){
-            var fieldFound = DTOParser.parseFieldDTO(message
-                    .substring(Logger.CodeElementFound.FIELD.getCode().length()));
+        } else if (message.startsWith(Logger.CodeElementFound.FIELD.getCode())) {
+            var fieldFound = DTOParser.parseFieldDTO(message.substring(Logger.CodeElementFound.FIELD.getCode().length()));
             this.view.printText("Found field " + fieldFound.name());
         }
     }
