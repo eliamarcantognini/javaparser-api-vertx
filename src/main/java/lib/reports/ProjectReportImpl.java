@@ -3,15 +3,20 @@ package lib.reports;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.PackageReport;
 import lib.reports.interfaces.ProjectReport;
-
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class to manage report about project. Implements {@link ProjectReport}
+ */
 public class ProjectReportImpl implements ProjectReport {
 
     private final List<PackageReport> packageReports;
     private ClassReport mainClass;
 
+    /**
+     * Class constructor
+     */
     public ProjectReportImpl() {
         this.mainClass = new ClassReportImpl();
         this.packageReports = new LinkedList<>();
