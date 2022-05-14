@@ -3,10 +3,12 @@ package lib.reports;
 import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 import lib.reports.interfaces.PackageReport;
-
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class to manage report about package. Implements {@link PackageReport}
+ */
 public class PackageReportImpl implements PackageReport {
 
     private String name;
@@ -14,6 +16,9 @@ public class PackageReportImpl implements PackageReport {
     List<ClassReport> classReports;
     List<InterfaceReport> interfaceReports;
 
+    /**
+     * Class constructor. Initialize all information as empty
+     */
     public PackageReportImpl() {
         this.name = "";
         this.fullPath = "";
