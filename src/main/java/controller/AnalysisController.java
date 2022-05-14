@@ -126,6 +126,9 @@ public class AnalysisController {
         } else if (message.startsWith(Logger.CodeElementFound.FIELD.getCode())) {
             var fieldFound = DTOParser.parseFieldDTO(message.substring(Logger.CodeElementFound.FIELD.getCode().length()));
             this.view.printText("Found field " + fieldFound.name());
+        } else if (message.startsWith(Logger.CodeElementFound.ERROR.getCode())) {
+            this.view.printText("Error: " + message.substring(Logger.CodeElementFound.ERROR.getCode().length()));
+            this.view.showError(message.substring(Logger.CodeElementFound.ERROR.getCode().length()), "ERROR");
         }
     }
 }
