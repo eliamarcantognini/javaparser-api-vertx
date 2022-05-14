@@ -92,7 +92,7 @@ public class TreeGUI implements View {
      * @param textToPrint text to print in the view
      */
     public void printText(String textToPrint) {
-        loggerGUI.printText(textToPrint);
+        SwingUtilities.invokeLater(() -> loggerGUI.printText(textToPrint));
     }
 
     /**
@@ -103,7 +103,7 @@ public class TreeGUI implements View {
      * @see InfoDialog#showDialog(String, String, int)
      */
     public void showError(final String message, final String title) {
-        InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE);
+        SwingUtilities.invokeLater(() -> InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE));
     }
 
     private class VisualiserFrame extends JFrame {
