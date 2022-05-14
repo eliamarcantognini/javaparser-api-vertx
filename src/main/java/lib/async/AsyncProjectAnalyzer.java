@@ -34,7 +34,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
      * Message to sent to {@link Vertx#eventBus()} to stop project analysis
      */
     public final static String STOP_ANALYZING_PROJECT = ">>STOP<<";
-    public final static String PROJECT_REPORT_READY = "";
     /**
      * Topic where messages are sent if no channel for {@link Vertx#eventBus()}
      * hasn't been specified yet
@@ -88,34 +87,27 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
-
         Promise<PackageReport> promise = new PromiseImpl<>();
         PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
-        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));;
-
+        this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
         return promise.future();
     }
 
 
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
-
         Promise<ProjectReport> promise = new PromiseImpl<>();
         ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
         this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
-
         return promise.future();
     }
 
     @Override
     public void analyzeProject(String srcProjectFolderName, String topic) {
-
         this.vertx.eventBus().consumer(topic, m -> {
             if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
         });
-
         this.logger = message -> vertx.eventBus().publish(topic, message);
-
         this.getProjectReport(srcProjectFolderName);
     }
 
