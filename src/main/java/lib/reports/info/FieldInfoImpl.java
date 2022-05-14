@@ -2,9 +2,13 @@ package lib.reports.info;
 
 import lib.reports.info.interfaces.FieldInfo;
 import lib.reports.interfaces.Report;
-
 import java.util.Optional;
 
+/**
+ * Class that implements {@link FieldInfo}
+ *
+ * @see com.github.javaparser.ast.nodeTypes.NodeWithModifiers
+ */
 public class FieldInfoImpl implements FieldInfo {
 
     private final String fieldName;
@@ -12,6 +16,14 @@ public class FieldInfoImpl implements FieldInfo {
     private final String fieldModifiers;
     private final Report parentClassReport;
 
+    /**
+     * Class constructor. Build info with data passed as parameters
+     *
+     * @param fieldName field name
+     * @param fieldType field type
+     * @param fieldModifiers field modifiers
+     * @param parentClassReport field parent class report
+     */
     public FieldInfoImpl(String fieldName, String fieldType, String fieldModifiers, Report parentClassReport){
         this.fieldName = fieldName;
         this.fieldType = fieldType;
