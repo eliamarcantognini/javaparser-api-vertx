@@ -89,6 +89,10 @@ public interface Logger {
         log(createMessage(CodeElementFound.PROJECT.getCode(), DTOParser.parseString(DTOs.createProjectDTO(projectReport))));
     }
 
+    default void logError(String errorMessage) {
+        log(createMessage(CodeElementFound.ERROR.getCode(), errorMessage));
+    }
+
     private String createMessage(String id, String json) {
         return id + json;
     }
@@ -102,7 +106,8 @@ public interface Logger {
         CLASS("CLASS_REPORT:"),
         INTERFACE("INTERFACE_REPORT:"),
         PACKAGE("PACKAGE_REPORT:"),
-        PROJECT("PROJECT_REPORT:");
+        PROJECT("PROJECT_REPORT:"),
+        ERROR("ERROR:");
 
         private final String code;
 
