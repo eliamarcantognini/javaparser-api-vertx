@@ -6,8 +6,6 @@ import java.util.Optional;
 
 /**
  * Class that implements {@link FieldInfo}
- *
- * @see com.github.javaparser.ast.nodeTypes.NodeWithModifiers
  */
 public class FieldInfoImpl implements FieldInfo {
 
@@ -23,6 +21,8 @@ public class FieldInfoImpl implements FieldInfo {
      * @param fieldType field type
      * @param fieldModifiers field modifiers
      * @param parentClassReport field parent class report
+     *
+     * @see com.github.javaparser.ast.nodeTypes.NodeWithModifiers
      */
     public FieldInfoImpl(String fieldName, String fieldType, String fieldModifiers, Report parentClassReport){
         this.fieldName = fieldName;
