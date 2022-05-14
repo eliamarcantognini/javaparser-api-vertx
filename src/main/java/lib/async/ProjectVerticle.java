@@ -54,7 +54,6 @@ public class ProjectVerticle extends AbstractVerticle {
         final List<Future<PackageReport>> packageReports = new ArrayList<>();
         final File folder = new File(projectPath);
 
-        if (!folder.isDirectory()) promise.fail("Path is not a directory");
         var list = Stream
                 .concat(Stream.of(folder.toString()),
                         Stream.of(Objects.requireNonNull(folder.listFiles()))
@@ -78,8 +77,9 @@ public class ProjectVerticle extends AbstractVerticle {
 
         MyCompositeFuture.join(packageReports).onSuccess(r -> {
             if (projectReport.getMainClass().getName().isBlank()) logger.log(NO_MAIN_CLASS_MESSAGE);
-            logger.log(projectReport);
-            promise.complete(projectReport);
+            if (promise.tryComplete(projectReport)) {
+                logger.log(projectReport);
+            }
         });
     }
 
@@ -91,6 +91,6 @@ public class ProjectVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
-        promise.fail("FAIL: Library stopped");
+        promise.tryFail("Library stopped");
     }
 }

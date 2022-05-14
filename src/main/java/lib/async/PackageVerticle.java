@@ -60,6 +60,12 @@ public class PackageVerticle extends AbstractVerticle {
         final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
         File folder = new File(srcPackagePath);
+
+//        if (!folder.isDirectory()){
+//            promise.fail("Package path is not a directory");
+//            return;
+//        }
+
         List<String> list = Stream.of(Objects.requireNonNull(
                 folder.listFiles((dir, name) -> name.endsWith(".java"))))
                 .map(File::getPath)
@@ -95,8 +101,9 @@ public class PackageVerticle extends AbstractVerticle {
         var classReportsFuture = MyCompositeFuture.join(classReports);
         var interfaceReportsFuture = MyCompositeFuture.join(interfaceReports);
         CompositeFuture.all(classReportsFuture, interfaceReportsFuture).onSuccess(r -> {
-            logger.log(packageReport);
-            promise.complete(packageReport);
+            if (promise.tryComplete(packageReport)) {
+                logger.log(packageReport);
+            }
         });
 
     }
@@ -109,7 +116,7 @@ public class PackageVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
-        promise.fail("FAIL: Library stopped");
+        promise.tryFail("Library stopped");
     }
 
     private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath) {
