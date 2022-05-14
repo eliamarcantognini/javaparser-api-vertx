@@ -1,67 +1,73 @@
 package controller;
 
-import utils.dto.DTOParser;
-import utils.dto.DTOs;
-import utils.dto.ProjectDTO;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import utils.Printer;
-import lib.ProjectAnalyzer;
 import lib.async.AsyncProjectAnalyzer;
-import lib.reports.interfaces.ClassReport;
-import lib.reports.interfaces.InterfaceReport;
-import lib.reports.interfaces.PackageReport;
-import lib.reports.interfaces.ProjectReport;
+import lib.ProjectAnalyzer;
+import lib.Logger;
+import utils.dto.DTOParser;
+import utils.dto.PackageDTO;
+import utils.dto.ProjectDTO;
 import view.View;
+import view.utils.Strings;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Controller to manage application about project analysis
+ *
+ * @see AsyncProjectAnalyzer
+ * @see utils.dto
+ */
 public class AnalysisController {
 
     private final static String OUTPUT_PATH = "./output.json";
     private final static String VERTX_CHANNEL_TOPIC = "new_find";
 
-//    private final StartGUI startGUI;
-    private View view;
     private final ProjectAnalyzer projectAnalyzer;
     private final Vertx vertx;
-    private ProjectDTO dto;
+    private ProjectDTO projectDTO;
+    private View view;
     private String pathProjectToAnalyze;
 
-//    public AnalysisController(final StartGUI startGUI){
+    /**
+     * Constructor of class
+     */
     public AnalysisController(){
-//        this.startGUI = startGUI;
         this.vertx = Vertx.vertx();
         this.projectAnalyzer = new AsyncProjectAnalyzer(this.vertx);
     }
 
+    /**
+     * Set the view where display analysis results
+     *
+     * @param view view where display analysis results
+     */
     public void setView(View view){
         this.view = view;
     }
 
+    /**
+     * Set path to project to analyze
+     *
+     * @param pathProjectToAnalyze path to project to analyze
+     */
     public void setPathProjectToAnalyze(final String pathProjectToAnalyze){
         this.pathProjectToAnalyze = pathProjectToAnalyze;
     }
 
+    /**
+     * Start project analysis for project passed in {@link #setPathProjectToAnalyze(String)}
+     */
     public void startAnalysisProject(){
-        this.view.setStartEnabled(false);
-        this.view.setStopEnabled(true);
-        this.view.setSaveEnabled(true);
+        this.setViewButtonsAtStarts();
         this.initializeEventBus();
-        // this.projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
-//        this.testProjectReportWithoutBus(this.pathProjectToAnalyze);
-        //this.testPackageReportWithoutBus(this.pathProjectToAnalyze);
-        //this.testClassReportWithoutBus(this.pathProjectToAnalyze);
-        //this.testInterfaceReportWithoutBus(this.pathProjectToAnalyze);
-        projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
-        vertx.eventBus().consumer(AnalysisController.VERTX_CHANNEL_TOPIC, m -> {
-            if (m.body().toString().contains("PROJECT")) {
-                view.renderTree(DTOParser.parseProjectDTO(m.body().toString().substring(10)));
-            }
-        });
+        this.projectAnalyzer.analyzeProject(this.pathProjectToAnalyze, AnalysisController.VERTX_CHANNEL_TOPIC);
     }
 
+    /**
+     * Stop project analysis
+     */
     public void stopAnalysisProject(){
         this.view.setStopEnabled(false);
         this.vertx.eventBus()
@@ -69,71 +75,58 @@ public class AnalysisController {
                         AsyncProjectAnalyzer.STOP_ANALYZING_PROJECT);
     }
 
-    // TODO: Could be useful have this method public? If yes, it can be called with parameters
-    private void initializeEventBus(){
-        this.vertx.eventBus()
-                .consumer(AnalysisController.VERTX_CHANNEL_TOPIC, message -> this.view.printText(message.body().toString()));
-        // TODO: Decide what effectively arrives in the bus and set view relatively
-    }
-
-    // TODO: In Javadoc say where it saved or allow to specify file with parameter
+    /**
+     * Save project report got from analysis in file named "output.json
+     */
     public void saveProjectReportToFile(){
         try {
             var writer = new FileWriter(AnalysisController.OUTPUT_PATH);
-            writer.write(DTOParser.parseStringToPrettyJSON(dto));
+            writer.write(DTOParser.parseStringToPrettyJSON(projectDTO));
             writer.flush();
             writer.close();
         } catch (IOException e){
-            // TODO: Decide where print this
-            System.out.println(e.getMessage());
-            //this.reportAnalysisView.showError(e.getStackTrace());
+            this.view.showError(Strings.SOMETHING_WENT_WRONG,Strings.SAVE_ERROR);
         }
 
     }
 
-    // TODO: Delete test before upload to Virtuale
-    private void testProjectReportWithoutBus(final String pathToAnalyze) {
-        Future<ProjectReport> future = projectAnalyzer.getProjectReport(pathToAnalyze);
-        future.onSuccess(projectReport -> {
-            Printer.printMessage("Future end successfully");
-            var json = DTOParser.parseString(DTOs.createProjectDTO(projectReport));
-            this.view.printText(json);
-            this.dto = DTOParser.parseProjectDTO(json);
-            this.view.renderTree(this.dto);
-        });
-        future.onFailure(failure -> {
-           Printer.printMessage("Future fail");
-           Printer.printMessage(failure.toString());
-        });
+    private void initializeEventBus(){
+        this.vertx.eventBus()
+                .consumer(AnalysisController.VERTX_CHANNEL_TOPIC,
+                        message -> this.manageMessage(message.body().toString()));
     }
 
-    private void testPackageReportWithoutBus(final String pathToAnalyze) {
-        Future<PackageReport> future = projectAnalyzer.getPackageReport(pathToAnalyze);
-        future.onSuccess(packageReport -> {
-            var json = DTOParser.parseString(DTOs.createPackageDTO(packageReport));
-            this.view.printText(json);
-            // this.dto = DTOParser.parseProjectDTO(json);
-            this.view.renderTree(DTOParser.parsePackageDTO(json));
-        });
+    private void setViewButtonsAtStarts() {
+        this.view.setStartEnabled(false);
+        this.view.setStopEnabled(true);
+        this.view.setSaveEnabled(true);
     }
 
-    private void testInterfaceReportWithoutBus(final String pathToAnalyze) {
-        Future<InterfaceReport> future = projectAnalyzer.getInterfaceReport(pathToAnalyze);
-        future.onSuccess(interfaceReport -> {
-            var json = DTOParser.parseString(DTOs.createInterfaceDTO(interfaceReport));
-            this.view.printText(json);
-            //this.dto = DTOParser.parseClassInterfaceDTO(json);
-            this.view.renderTree(DTOParser.parseClassInterfaceDTO(json));
-        });
-    }
-
-    private void testClassReportWithoutBus(final String pathToAnalyze) {
-        Future<ClassReport> future = projectAnalyzer.getClassReport(pathToAnalyze);
-        future.onSuccess(classReport -> {
-            var json = DTOParser.parseString(DTOs.createClassDTO(classReport));
-            this.view.printText(json);
-            //this.dto = DTOParser.parseClassInterfaceDTO(json);
-            this.view.renderTree(DTOParser.parseClassInterfaceDTO(json));
-        });
+    private void manageMessage(final String message) {
+        if(message.startsWith(Logger.CodeElementFound.PROJECT.getCode())){
+            this.projectDTO = DTOParser.parseProjectDTO(message
+                    .substring(Logger.CodeElementFound.PROJECT.getCode().length()));
+            this.view.renderTree(projectDTO);
+        } else if(message.startsWith(Logger.CodeElementFound.PACKAGE.getCode())){
+            PackageDTO packageFound = DTOParser.parsePackageDTO(message
+                    .substring(Logger.CodeElementFound.PACKAGE.getCode().length()));
+            this.view.printText("Found package " + packageFound.name() + "at path " + packageFound.path());
+        } else if(message.startsWith(Logger.CodeElementFound.CLASS.getCode())){
+            var classFound = DTOParser.parseClassInterfaceDTO(message
+                    .substring(Logger.CodeElementFound.CLASS.getCode().length()));
+            this.view.printText("Found class " + classFound.name() + " at path " + classFound.path());
+        } else if(message.startsWith(Logger.CodeElementFound.INTERFACE.getCode())){
+            var interfaceFound = DTOParser.parseClassInterfaceDTO(message
+                    .substring(Logger.CodeElementFound.INTERFACE.getCode().length()));
+            this.view.printText("Found interface " + interfaceFound.name() + " at path " + interfaceFound.path());
+        } else if(message.startsWith(Logger.CodeElementFound.METHOD.getCode())){
+            var methodFound = DTOParser.parseMethodDTO(message
+                    .substring(Logger.CodeElementFound.METHOD.getCode().length()));
+            this.view.printText("Found method " + methodFound.name());
+        } else if(message.startsWith(Logger.CodeElementFound.FIELD.getCode())){
+            var fieldFound = DTOParser.parseFieldDTO(message
+                    .substring(Logger.CodeElementFound.FIELD.getCode().length()));
+            this.view.printText("Found field " + fieldFound.name());
+        }
     }
 }
