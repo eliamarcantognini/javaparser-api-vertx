@@ -1,9 +1,11 @@
 package lib.reports.interfaces;
 
 import lib.reports.info.interfaces.FieldInfo;
-
 import java.util.List;
 
+/**
+ * Interface for class report that extends from {@link InterfaceReport}
+ */
 public interface ClassReport extends InterfaceReport {
 
     /**
