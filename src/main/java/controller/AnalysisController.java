@@ -113,7 +113,7 @@ public class AnalysisController {
             this.view.renderTree(projectDTO);
         } else if (message.startsWith(Logger.CodeElementFound.PACKAGE.getCode())) {
             PackageDTO packageFound = DTOParser.parsePackageDTO(message.substring(Logger.CodeElementFound.PACKAGE.getCode().length()));
-            this.view.printText("Found package " + packageFound.name() + "at path " + packageFound.path());
+            this.view.printText("Found package " + packageFound.name() + " at path " + packageFound.path());
         } else if (message.startsWith(Logger.CodeElementFound.CLASS.getCode())) {
             var classFound = DTOParser.parseClassInterfaceDTO(message.substring(Logger.CodeElementFound.CLASS.getCode().length()));
             this.view.printText("Found class " + classFound.name() + " at path " + classFound.path());
