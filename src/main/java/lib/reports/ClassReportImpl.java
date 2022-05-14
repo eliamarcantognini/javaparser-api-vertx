@@ -3,10 +3,12 @@ package lib.reports;
 import lib.reports.info.interfaces.FieldInfo;
 import lib.reports.info.interfaces.MethodInfo;
 import lib.reports.interfaces.ClassReport;
-
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class to manage report about class. Implements {@link ClassReport}
+ */
 public class ClassReportImpl implements ClassReport {
 
     private String fullClassName;
@@ -14,6 +16,9 @@ public class ClassReportImpl implements ClassReport {
     private final List<MethodInfo> methodsInfo;
     private final List<FieldInfo> fieldsInfo;
 
+    /**
+     * Class constructor. Initialize all information as empty
+     */
     public ClassReportImpl() {
         this.fullClassName = "";
         this.srcFullFileName = "";
