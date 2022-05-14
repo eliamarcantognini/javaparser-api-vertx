@@ -6,7 +6,7 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
 /**
- * //TODO: complete javadoc
+ * GUI used to display the log sent by the library.
  */
 public class LoggerGUI {
 

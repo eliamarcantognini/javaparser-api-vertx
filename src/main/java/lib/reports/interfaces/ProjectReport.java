@@ -3,7 +3,7 @@ package lib.reports.interfaces;
 import java.util.List;
 
 /**
- * Interface for project report
+ * Interface for project report. It does not extend Report because in this case there is not a name and path to set.
  */
 public interface ProjectReport {
 
