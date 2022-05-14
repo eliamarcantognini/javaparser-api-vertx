@@ -103,7 +103,7 @@ public class TreeGUI implements View {
      * @see InfoDialog#showDialog(String, String, int)
      */
     public void showError(final String message, final String title) {
-        InfoDialog.showDialog(message, title, JOptionPane.ERROR_MESSAGE);
+        InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE);
     }
 
     private class VisualiserFrame extends JFrame {
