@@ -21,7 +21,13 @@ import java.io.IOException;
  */
 public class AnalysisController {
 
+    /**
+     * File where analysis will be saved
+     */
     private final static String OUTPUT_PATH = "./output.json";
+    /**
+     * Channel of vertx eventBus where analysis messages are exchanged
+     */
     private final static String VERTX_CHANNEL_TOPIC = "new_find";
 
     private final ProjectAnalyzer projectAnalyzer;
