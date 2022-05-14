@@ -1,6 +1,10 @@
 package lib.reports.interfaces;
 
+/**
+ * Interface for report
+ */
 public interface Report {
+
     /**
      * Get the name of the item (class/interface)
      *
