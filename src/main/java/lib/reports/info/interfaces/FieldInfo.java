@@ -1,9 +1,13 @@
 package lib.reports.info.interfaces;
 
 import lib.reports.interfaces.Report;
-
 import java.util.Optional;
 
+/**
+ * Interface to wrap information about classes fields
+ *
+ * @see lib.reports.interfaces.ClassReport
+ */
 public interface FieldInfo {
 
     /**
