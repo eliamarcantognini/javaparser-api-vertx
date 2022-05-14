@@ -123,6 +123,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     private void stopLibrary() {
         this.verticleIDs.forEach(this.vertx::undeploy);
+        this.verticleIDs.clear();
     }
 
     /**
