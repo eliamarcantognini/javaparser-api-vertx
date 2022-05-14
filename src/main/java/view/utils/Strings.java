@@ -40,6 +40,9 @@ public final class Strings {
      * Main windows name
      */
     public final static String TITLE = "JavaParser Analyzer GUI";
+    /**
+     * Title of logger
+     */
     public final static String LOGGER_TITLE = "Logger";
     /**
      * Error message that something went wrong
