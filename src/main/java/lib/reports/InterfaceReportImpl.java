@@ -1,17 +1,24 @@
 package lib.reports;
 
 import lib.reports.info.interfaces.MethodInfo;
+import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class to manage report about interface. Implements {@link InterfaceReport}
+ */
 public class InterfaceReportImpl implements InterfaceReport {
 
+    private final List<MethodInfo> methodsInfo;
     private String interfaceName;
     private String interfaceFullPath;
-    private final List<MethodInfo> methodsInfo;
 
+    /**
+     * Class constructor. Initialize all information as empty
+     */
     public InterfaceReportImpl(){
         this.interfaceName = "";
         this.interfaceFullPath = "";
