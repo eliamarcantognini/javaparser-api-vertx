@@ -44,5 +44,5 @@ public interface MethodInfo {
      *
      * @return the parent report
      */
-    Report getParent();
+    Report getParentClassOrInterfaceReport();
 }
