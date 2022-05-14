@@ -49,6 +49,10 @@ public class PackageVerticle extends AbstractVerticle {
         this.packageReport = new PackageReportImpl();
     }
 
+    /**
+     * Start execution of the verticle. Analyze the package found at the path set in the constructor and complete the Future also
+     * passed in the Constructor with the results of the analysis as a {@link PackageReport}.
+     */
     @Override
     public void start() {
         AtomicBoolean set = new AtomicBoolean(false);
@@ -97,6 +101,11 @@ public class PackageVerticle extends AbstractVerticle {
 
     }
 
+    /**
+     * Stop the verticle execution and set the Promise as failed with an explication message.
+     *
+     * @throws Exception - Throws an execution if Vertx fail to stop this verticle. Check Vertx documentation for more information.
+     */
     @Override
     public void stop() throws Exception {
         super.stop();

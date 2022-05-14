@@ -22,6 +22,13 @@ public class ClassesVisitor extends FileVisitor<ClassReport> {
         super(true, logger);
     }
 
+    /**
+     * Visit a node representing a field of the class and save its information inside the {@link ClassReport}. It use a {@link InfoBuilder}
+     * to construct the {@link FieldInfo} to be saved inside the collector.
+     *
+     * @param fd - {@link FieldDeclaration} that contains the field information
+     * @param collector - {@link ClassReport} where save the field information
+     */
     public void visit(FieldDeclaration fd, ClassReport collector) {
         super.visit(fd, collector);
         InfoBuilder builder = new InfoBuilder()

@@ -45,6 +45,10 @@ public class ProjectVerticle extends AbstractVerticle {
         this.logger = logger;
     }
 
+    /**
+     * Start execution of the verticle. Analyze the project found at the path set in the constructor and complete the Future also
+     * passed in the Constructor with the results of the analysis as a {@link ProjectReport}.
+     */
     @Override
     public void start() {
         final List<Future<PackageReport>> packageReports = new ArrayList<>();
@@ -79,6 +83,11 @@ public class ProjectVerticle extends AbstractVerticle {
         });
     }
 
+    /**
+     * Stop the verticle execution and set the Promise as failed with an explication message.
+     *
+     * @throws Exception - Throws an execution if Vertx fail to stop this verticle. Check Vertx documentation for more information.
+     */
     @Override
     public void stop() throws Exception {
         super.stop();
