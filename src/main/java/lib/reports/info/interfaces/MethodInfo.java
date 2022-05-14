@@ -1,9 +1,14 @@
 package lib.reports.info.interfaces;
 
 import lib.reports.interfaces.Report;
-
 import java.util.Optional;
 
+/**
+ * Interface to wrap information about classes and interfaces methods
+ *
+ * @see lib.reports.interfaces.ClassReport
+ * @see lib.reports.interfaces.InterfaceReport
+ */
 public interface MethodInfo {
 
     /**
