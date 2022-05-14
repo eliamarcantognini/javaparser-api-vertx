@@ -19,20 +19,34 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-// TODO: PackageVerticle javadoc
+/**
+ * Class that manage package analysis. It extends from {@link AbstractVerticle} and when the verticle
+ * is deployed start the analysis with parameter passed in constructor.
+ *
+ * @see io.vertx.core.AbstractVerticle
+ */
 public class PackageVerticle extends AbstractVerticle {
 
     private final Promise<PackageReport> promise;
-    private final PackageReport packageReport = new PackageReportImpl();
+    private final PackageReport packageReport;
     private final AsyncProjectAnalyzer analyzer;
     private final String srcPackagePath;
     private final Logger logger;
 
+    /**
+     * Class constructor
+     *
+     * @param analyzer analyzer to use
+     * @param promise promise where {@link PackageReport} where will be present
+     * @param srcPackagePath path to package to analyze
+     * @param logger logger used to send message during analysis
+     */
     public PackageVerticle(AsyncProjectAnalyzer analyzer, Promise<PackageReport> promise, String srcPackagePath, Logger logger) {
         this.analyzer = analyzer;
         this.promise = promise;
         this.srcPackagePath = srcPackagePath;
         this.logger = logger;
+        this.packageReport = new PackageReportImpl();
     }
 
     @Override
@@ -42,7 +56,10 @@ public class PackageVerticle extends AbstractVerticle {
         final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
         File folder = new File(srcPackagePath);
-        var list = Stream.of(Objects.requireNonNull(folder.listFiles((dir, name) -> name.endsWith(".java")))).map(File::getPath).toList();
+        List<String> list = Stream.of(Objects.requireNonNull(
+                folder.listFiles((dir, name) -> name.endsWith(".java"))))
+                .map(File::getPath)
+                .toList();
         list.forEach(path -> {
             CompilationUnit cu;
             try {
@@ -88,7 +105,6 @@ public class PackageVerticle extends AbstractVerticle {
 
     private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath) {
         if (!set.get()) {
-//            Printer.printMessage("SRCPATH: " + sourceFullPath);
             var s = sourceFullPath.split("\\.");
             packageReport.setName(s.length == 1 ? "." : (s[s.length - 2]));
             packageReport.setFullPath(s.length == 1 ? "" : sourceFullPath.substring(0, sourceFullPath.length() - name.length() - 1));
