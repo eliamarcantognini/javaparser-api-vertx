@@ -110,13 +110,14 @@ public class TreeGUI implements View {
      */
     public void showError(final String message, final String title) {
         if (!error) {
-            var j = new JOptionPane();
-            var o = j.createDialog(frame, title);
-            j.setMessage(message);
-            o.addWindowListener(new MyWindowListener());
-            o.setVisible(true);
+            SwingUtilities.invokeLater(() -> {
+                var j = new JOptionPane();
+                var o = j.createDialog(frame, title);
+                j.setMessage(message);
+                o.addWindowListener(new MyWindowListener());
+                o.setVisible(true);
+            });
         }
-//        SwingUtilities.invokeLater(() -> InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE));
     }
 
     public static void setError(boolean enabled) {
@@ -152,32 +153,19 @@ public class TreeGUI implements View {
     }
 
     private static class MyWindowListener implements WindowListener {
-
         @Override
         public void windowOpened(WindowEvent e) {
             setError(true);
         }
-
-
         @Override
         public void windowClosed(WindowEvent e) {
             setError(false);
         }
-
-        public void windowClosing(WindowEvent e) {
-        }
-
-        public void windowIconified(WindowEvent e) {
-        }
-
-        public void windowDeiconified(WindowEvent e) {
-        }
-
-        public void windowActivated(WindowEvent e) {
-        }
-
-        public void windowDeactivated(WindowEvent e) {
-        }
+        public void windowClosing(WindowEvent e) {}
+        public void windowIconified(WindowEvent e) {}
+        public void windowDeiconified(WindowEvent e) {}
+        public void windowActivated(WindowEvent e) {}
+        public void windowDeactivated(WindowEvent e) {}
     }
 
 }
