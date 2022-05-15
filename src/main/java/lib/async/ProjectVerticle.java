@@ -91,6 +91,6 @@ public class ProjectVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
-        promise.tryFail("Library stopped");
+        promise.tryFail(Logger.STOP_ANALYZING_PROJECT);
     }
 }

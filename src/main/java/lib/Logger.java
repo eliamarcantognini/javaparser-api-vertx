@@ -15,6 +15,12 @@ import lib.reports.interfaces.ProjectReport;
  */
 @FunctionalInterface
 public interface Logger {
+
+    /**
+     * Message to sent to stop project analysis
+     */
+    String STOP_ANALYZING_PROJECT = ">>STOP<<";
+
     /**
      * Target method of the Functional Interface. It must be implemented to specify how to log a String, which
      * represents the message that has to be logged.
@@ -93,6 +99,10 @@ public interface Logger {
         log(createMessage(CodeElementFound.ERROR.getCode(), errorMessage));
     }
 
+    default void logInterrupt(String interruptMessage) {
+        log(createMessage(CodeElementFound.INTERRUPT.getCode(), interruptMessage));
+    }
+
     private String createMessage(String id, String json) {
         return id + json;
     }
@@ -107,7 +117,8 @@ public interface Logger {
         INTERFACE("INTERFACE_REPORT:"),
         PACKAGE("PACKAGE_REPORT:"),
         PROJECT("PROJECT_REPORT:"),
-        ERROR("ERROR:");
+        ERROR("ERROR:"),
+        INTERRUPT("INTERRUPT:");
 
         private final String code;
 

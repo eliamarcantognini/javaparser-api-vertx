@@ -76,7 +76,7 @@ public class AnalysisController {
      */
     public void stopAnalysisProject() {
         this.view.setStopEnabled(false);
-        this.vertx.eventBus().publish(AnalysisController.VERTX_CHANNEL_TOPIC, AsyncProjectAnalyzer.STOP_ANALYZING_PROJECT);
+        this.vertx.eventBus().publish(AnalysisController.VERTX_CHANNEL_TOPIC, Logger.STOP_ANALYZING_PROJECT);
     }
 
     /**
