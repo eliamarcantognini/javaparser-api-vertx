@@ -89,7 +89,11 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         } else {
             PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
             this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
-            promise.future().onFailure(res -> logger.logError(res.getMessage()));
+            promise.future().onFailure(res -> {
+                if (!res.getMessage().equals(Logger.STOP_ANALYZING_PROJECT)) {
+                    logger.logError(res.getMessage());
+                }
+            });
         }
         return promise.future();
     }
@@ -103,7 +107,11 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
         } else {
             ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
             this.vertx.deployVerticle(vert).onComplete(id -> this.verticleIDs.add(id.result()));
-            promise.future().onFailure(res -> logger.logError(res.getMessage()));
+            promise.future().onFailure(res -> {
+                if (!res.getMessage().equals(Logger.STOP_ANALYZING_PROJECT)) {
+                    logger.logError(res.getMessage());
+                }
+            });
         }
         return promise.future();
     }
@@ -114,7 +122,13 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
             if (m.body().toString().equals(Logger.STOP_ANALYZING_PROJECT)) this.stopLibrary();
         });
         this.logger = message -> vertx.eventBus().publish(topic, message);
-        this.getProjectReport(srcProjectFolderName).onFailure(res -> logger.logError(res.getMessage()));
+        this.getProjectReport(srcProjectFolderName).onFailure(res -> {
+            if (res.getMessage().equals(Logger.STOP_ANALYZING_PROJECT)) {
+                logger.logInterrupt(res.getMessage());
+            } else {
+                logger.logError(res.getMessage());
+            }
+        });
     }
 
     private void stopLibrary() {
