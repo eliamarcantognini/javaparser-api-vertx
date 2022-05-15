@@ -1,6 +1,7 @@
 package view.GUI;
 
 import view.utils.Strings;
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.awt.*;
 public class LoggerGUI {
 
     private static final int HEIGHT_DIVISOR = 3;
+    private static final int HEIGHT_OFFSET = 30;
     private static final int WIDTH_DIVISOR = 2;
 
     private JTextPane txtPane;
@@ -18,19 +20,11 @@ public class LoggerGUI {
     private VisualiserFrame frame;
 
     /**
-     * Constructor of the GUI
-     *
-     */
-    public LoggerGUI() {
-
-    }
-
-    /**
      * Launch GUI
      *
      * @see VisualiserFrame
      */
-    public void launch(){
+    public void launch() {
         var h = Toolkit.getDefaultToolkit().getScreenSize().height / HEIGHT_DIVISOR;
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / WIDTH_DIVISOR;
         frame = new VisualiserFrame(w, h);
@@ -51,6 +45,7 @@ public class LoggerGUI {
             getContentPane().setLayout(new BorderLayout());
             setTitle(Strings.LOGGER_TITLE);
             setSize(w, h);
+            setLocation(Toolkit.getDefaultToolkit().getScreenSize().width - getWidth(), Toolkit.getDefaultToolkit().getScreenSize().height - getHeight() - HEIGHT_OFFSET);
             setResizable(true);
 
             txtPane = new JTextPane();
@@ -62,10 +57,6 @@ public class LoggerGUI {
             this.getContentPane().add(txtScrollPane, BorderLayout.CENTER);
 
             this.setVisible(true);
-        }
-
-        void setText(final String text) {
-            txtPane.setText(text);
         }
 
         void addText(final String text) {
