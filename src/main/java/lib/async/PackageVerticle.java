@@ -60,12 +60,6 @@ public class PackageVerticle extends AbstractVerticle {
         final List<Future<InterfaceReport>> interfaceReports = new ArrayList<>();
 
         File folder = new File(srcPackagePath);
-
-//        if (!folder.isDirectory()){
-//            promise.fail("Package path is not a directory");
-//            return;
-//        }
-
         List<String> list = Stream.of(Objects.requireNonNull(
                         folder.listFiles((dir, name) -> name.endsWith(".java"))))
                 .map(File::getPath)
