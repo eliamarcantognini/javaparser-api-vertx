@@ -95,10 +95,20 @@ public interface Logger {
         log(createMessage(CodeElementFound.PROJECT.getCode(), DTOParser.parseString(DTOs.createProjectDTO(projectReport))));
     }
 
+    /**
+     * Log an error message.
+     *
+     * @param errorMessage - the message to log
+     */
     default void logError(String errorMessage) {
         log(createMessage(CodeElementFound.ERROR.getCode(), errorMessage));
     }
 
+    /**
+     * Log an user interrupt message.
+     *
+     * @param interruptMessage - the message to log
+     */
     default void logInterrupt(String interruptMessage) {
         log(createMessage(CodeElementFound.INTERRUPT.getCode(), interruptMessage));
     }
