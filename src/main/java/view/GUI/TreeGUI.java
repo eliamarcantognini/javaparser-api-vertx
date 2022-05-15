@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /**
  * Analysis GUI
@@ -28,6 +30,8 @@ public class TreeGUI implements View {
 
     private final ViewListener listener;
     private final LoggerGUI loggerGUI;
+
+    public static boolean error = false;
 
     /**
      * Constructor of the GUI
@@ -103,7 +107,18 @@ public class TreeGUI implements View {
      * @see InfoDialog#showDialog(String, String, int)
      */
     public void showError(final String message, final String title) {
-        SwingUtilities.invokeLater(() -> InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE));
+        if (!error) {
+            var j = new JOptionPane();
+            var o = j.createDialog(frame, title);
+            j.setMessage(message);
+            o.addWindowListener(new MyWindowListener());
+            o.setVisible(true);
+        }
+//        SwingUtilities.invokeLater(() -> InfoDialog.showDialog(this.frame, message,title, JOptionPane.ERROR_MESSAGE));
+    }
+
+    public static void setError(boolean enabled) {
+        error = enabled;
     }
 
     private class VisualiserFrame extends JFrame {
@@ -132,6 +147,25 @@ public class TreeGUI implements View {
             this.setVisible(true);
         }
 
+    }
+
+    private static class MyWindowListener implements WindowListener {
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+            setError(true);
+        }
+
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+            setError(false);
+        }
+        public void windowClosing(WindowEvent e) {}
+        public void windowIconified(WindowEvent e) {}
+        public void windowDeiconified(WindowEvent e) {}
+        public void windowActivated(WindowEvent e) {}
+        public void windowDeactivated(WindowEvent e) {}
     }
 
 }
