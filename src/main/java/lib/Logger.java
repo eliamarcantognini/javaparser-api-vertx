@@ -93,6 +93,10 @@ public interface Logger {
         log(createMessage(CodeElementFound.ERROR.getCode(), errorMessage));
     }
 
+    default void logInterrupt(String interruptMessage) {
+        log(createMessage(CodeElementFound.INTERRUPT.getCode(), interruptMessage));
+    }
+
     private String createMessage(String id, String json) {
         return id + json;
     }
@@ -107,7 +111,8 @@ public interface Logger {
         INTERFACE("INTERFACE_REPORT:"),
         PACKAGE("PACKAGE_REPORT:"),
         PROJECT("PROJECT_REPORT:"),
-        ERROR("ERROR:");
+        ERROR("ERROR:"),
+        INTERRUPT("INTERRUPT:");
 
         private final String code;
 
