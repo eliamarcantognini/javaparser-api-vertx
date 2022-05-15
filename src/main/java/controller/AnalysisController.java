@@ -129,6 +129,7 @@ public class AnalysisController {
         } else if (message.startsWith(Logger.CodeElementFound.ERROR.getCode())) {
             this.view.printText("Error: " + message.substring(Logger.CodeElementFound.ERROR.getCode().length()));
             this.view.showError(message.substring(Logger.CodeElementFound.ERROR.getCode().length()), "ERROR");
+            this.view.setStartEnabled(true);
         }
     }
 }
