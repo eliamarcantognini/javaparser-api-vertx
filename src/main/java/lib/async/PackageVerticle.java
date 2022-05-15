@@ -116,7 +116,7 @@ public class PackageVerticle extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         super.stop();
-        promise.tryFail("Library stopped");
+        promise.tryFail(Logger.STOP_ANALYZING_PROJECT);
     }
 
     private void setPackageNameAndPath(PackageReport packageReport, AtomicBoolean set, String name, String sourceFullPath) {

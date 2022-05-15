@@ -31,10 +31,6 @@ import java.util.List;
 public class AsyncProjectAnalyzer implements ProjectAnalyzer {
 
     /**
-     * Message to sent to {@link Vertx#eventBus()} to stop project analysis
-     */
-    public final static String STOP_ANALYZING_PROJECT = ">>STOP<<";
-    /**
      * Topic where messages are sent if no channel for {@link Vertx#eventBus()}
      * hasn't been specified yet
      */
@@ -115,7 +111,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public void analyzeProject(String srcProjectFolderName, String topic) {
         this.vertx.eventBus().consumer(topic, m -> {
-            if (m.body().toString().equals(STOP_ANALYZING_PROJECT)) this.stopLibrary();
+            if (m.body().toString().equals(Logger.STOP_ANALYZING_PROJECT)) this.stopLibrary();
         });
         this.logger = message -> vertx.eventBus().publish(topic, message);
         this.getProjectReport(srcProjectFolderName).onFailure(res -> logger.logError(res.getMessage()));
@@ -137,6 +133,4 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {
         return StaticJavaParser.parse(new File(path));
     }
-
 }
-

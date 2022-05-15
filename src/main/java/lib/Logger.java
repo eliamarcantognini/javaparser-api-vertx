@@ -15,6 +15,12 @@ import lib.reports.interfaces.ProjectReport;
  */
 @FunctionalInterface
 public interface Logger {
+
+    /**
+     * Message to sent to stop project analysis
+     */
+    String STOP_ANALYZING_PROJECT = ">>STOP<<";
+
     /**
      * Target method of the Functional Interface. It must be implemented to specify how to log a String, which
      * represents the message that has to be logged.
