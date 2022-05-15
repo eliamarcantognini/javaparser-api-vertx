@@ -4,9 +4,9 @@ import io.vertx.core.Vertx;
 import lib.Logger;
 import lib.ProjectAnalyzer;
 import lib.async.AsyncProjectAnalyzer;
-import utils.dto.DTOParser;
-import utils.dto.PackageDTO;
-import utils.dto.ProjectDTO;
+import lib.dto.DTOParser;
+import lib.dto.PackageDTO;
+import lib.dto.ProjectDTO;
 import view.View;
 import view.utils.Strings;
 
@@ -17,7 +17,7 @@ import java.io.IOException;
  * Controller to manage application about project analysis
  *
  * @see AsyncProjectAnalyzer
- * @see utils.dto
+ * @see lib.dto
  */
 public class AnalysisController {
 

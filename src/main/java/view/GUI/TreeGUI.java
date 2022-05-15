@@ -1,8 +1,10 @@
 package view.GUI;
 
-import utils.dto.ClassInterfaceDTO;
-import utils.dto.PackageDTO;
-import utils.dto.ProjectDTO;
+import lib.dto.ClassInterfaceDTO;
+import lib.dto.DTOParser;
+import lib.dto.DTOs;
+import lib.dto.PackageDTO;
+import lib.dto.ProjectDTO;
 import view.View;
 import view.ViewListener;
 import view.utils.Commands;
@@ -22,6 +24,7 @@ public class TreeGUI implements View {
 
     private static final int HEIGHT_OFFSET = 30;
     private static final int WIDTH_DIVISOR = 2;
+    public static boolean error = false;
 
     private VisualiserFrame frame;
     private JButton btnStart;
@@ -31,7 +34,6 @@ public class TreeGUI implements View {
     private final ViewListener listener;
     private final LoggerGUI loggerGUI;
 
-    public static boolean error = false;
 
     /**
      * Constructor of the GUI
@@ -75,8 +77,8 @@ public class TreeGUI implements View {
      *
      * @param dto the report to show with a render tree
      * @param <T> DTO report type
-     * @see utils.dto.DTOs
-     * @see utils.dto.DTOParser
+     * @see DTOs
+     * @see DTOParser
      */
     public <T> void renderTree(T dto) {
         var node = new DefaultMutableTreeNode();
@@ -161,11 +163,21 @@ public class TreeGUI implements View {
         public void windowClosed(WindowEvent e) {
             setError(false);
         }
-        public void windowClosing(WindowEvent e) {}
-        public void windowIconified(WindowEvent e) {}
-        public void windowDeiconified(WindowEvent e) {}
-        public void windowActivated(WindowEvent e) {}
-        public void windowDeactivated(WindowEvent e) {}
+
+        public void windowClosing(WindowEvent e) {
+        }
+
+        public void windowIconified(WindowEvent e) {
+        }
+
+        public void windowDeiconified(WindowEvent e) {
+        }
+
+        public void windowActivated(WindowEvent e) {
+        }
+
+        public void windowDeactivated(WindowEvent e) {
+        }
     }
 
 }

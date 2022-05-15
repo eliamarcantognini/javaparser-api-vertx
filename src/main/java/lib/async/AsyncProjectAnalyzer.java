@@ -10,9 +10,13 @@ import lib.Logger;
 import lib.ProjectAnalyzer;
 import lib.reports.ClassReportImpl;
 import lib.reports.InterfaceReportImpl;
-import lib.reports.interfaces.*;
+import lib.reports.interfaces.ClassReport;
+import lib.reports.interfaces.InterfaceReport;
+import lib.reports.interfaces.PackageReport;
+import lib.reports.interfaces.ProjectReport;
 import lib.visitors.ClassesVisitor;
 import lib.visitors.InterfacesVisitor;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -84,7 +88,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<PackageReport> getPackageReport(String srcPackagePath) {
         Promise<PackageReport> promise = new PromiseImpl<>();
-        if (!new File(srcPackagePath).isDirectory()){
+        if (!new File(srcPackagePath).isDirectory()) {
             promise.fail("Package path is not a directory");
         } else {
             PackageVerticle vert = new PackageVerticle(this, promise, srcPackagePath, this.logger);
@@ -102,7 +106,7 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
     @Override
     public Future<ProjectReport> getProjectReport(String srcProjectFolderPath) {
         Promise<ProjectReport> promise = new PromiseImpl<>();
-        if (!new File(srcProjectFolderPath).isDirectory()){
+        if (!new File(srcProjectFolderPath).isDirectory()) {
             promise.fail("Package path is not a directory");
         } else {
             ProjectVerticle vert = new ProjectVerticle(this, promise, srcProjectFolderPath, this.logger);
@@ -141,7 +145,6 @@ public class AsyncProjectAnalyzer implements ProjectAnalyzer {
      *
      * @param path path of file to parse
      * @return compilation unit of file parsed
-     *
      * @throws FileNotFoundException if path passed not correspond to any file
      */
     CompilationUnit getCompilationUnit(String path) throws FileNotFoundException {

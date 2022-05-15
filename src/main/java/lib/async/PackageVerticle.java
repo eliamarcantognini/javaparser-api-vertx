@@ -36,10 +36,10 @@ public class PackageVerticle extends AbstractVerticle {
     /**
      * Class constructor
      *
-     * @param analyzer analyzer to use
-     * @param promise promise where {@link PackageReport} where will be present
+     * @param analyzer       analyzer to use
+     * @param promise        promise where {@link PackageReport} where will be present
      * @param srcPackagePath path to package to analyze
-     * @param logger logger used to send message during analysis
+     * @param logger         logger used to send message during analysis
      */
     public PackageVerticle(AsyncProjectAnalyzer analyzer, Promise<PackageReport> promise, String srcPackagePath, Logger logger) {
         this.analyzer = analyzer;
@@ -67,7 +67,7 @@ public class PackageVerticle extends AbstractVerticle {
 //        }
 
         List<String> list = Stream.of(Objects.requireNonNull(
-                folder.listFiles((dir, name) -> name.endsWith(".java"))))
+                        folder.listFiles((dir, name) -> name.endsWith(".java"))))
                 .map(File::getPath)
                 .toList();
         list.forEach(path -> {

@@ -33,10 +33,10 @@ public class ProjectVerticle extends AbstractVerticle {
     /**
      * Class constructor
      *
-     * @param analyzer analyzer to use
-     * @param promise promise where {@link ProjectReport} where will be present
+     * @param analyzer    analyzer to use
+     * @param promise     promise where {@link ProjectReport} where will be present
      * @param projectPath path to project to analyze
-     * @param logger logger used to send message during analysis
+     * @param logger      logger used to send message during analysis
      */
     public ProjectVerticle(AsyncProjectAnalyzer analyzer, Promise<ProjectReport> promise, String projectPath, Logger logger) {
         this.analyzer = analyzer;

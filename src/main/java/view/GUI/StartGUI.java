@@ -1,8 +1,8 @@
 package view.GUI;
 
+import view.ViewListener;
 import view.utils.Commands;
 import view.utils.Strings;
-import view.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class StartGUI extends JFrame {
      *
      * @param listener listener of view that will perform events
      */
-    public StartGUI(ViewListener listener){
+    public StartGUI(ViewListener listener) {
         var w = Toolkit.getDefaultToolkit().getScreenSize().width / 5;
         var h = Toolkit.getDefaultToolkit().getScreenSize().height / 5;
         setTitle(Strings.TITLE);

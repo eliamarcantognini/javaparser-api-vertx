@@ -1,6 +1,7 @@
 package lib.reports.info.interfaces;
 
 import lib.reports.interfaces.Report;
+
 import java.util.Optional;
 
 /**

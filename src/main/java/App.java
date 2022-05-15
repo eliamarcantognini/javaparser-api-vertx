@@ -1,6 +1,6 @@
 import controller.AnalysisController;
-import view.GUI.TreeGUI;
 import view.GUI.StartGUI;
+import view.GUI.TreeGUI;
 import view.ViewListener;
 
 public class App {
@@ -9,6 +9,5 @@ public class App {
         ViewListener viewListener = new ViewListener(analysisController);
         viewListener.setViewToRunForAnalysis(new TreeGUI(viewListener));
         new StartGUI(viewListener);
-        // TODO: Can be done in one line
     }
 }

@@ -1,5 +1,5 @@
-import utils.dto.DTOParser;
-import utils.dto.DTOs;
+import lib.dto.DTOParser;
+import lib.dto.DTOs;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lib.ProjectAnalyzer;
@@ -11,7 +11,7 @@ import lib.reports.interfaces.ProjectReport;
 
 public class TestProjectAnalyzer {
 
-    private static Vertx vertx = Vertx.vertx();
+    private static final Vertx vertx = Vertx.vertx();
 
     private final static String INTERFACE = "";
     private final static String CLASS = "";

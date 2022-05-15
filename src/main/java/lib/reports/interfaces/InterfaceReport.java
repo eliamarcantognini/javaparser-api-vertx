@@ -1,6 +1,7 @@
 package lib.reports.interfaces;
 
 import lib.reports.info.interfaces.MethodInfo;
+
 import java.util.List;
 
 /**

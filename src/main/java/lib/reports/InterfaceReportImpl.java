@@ -1,7 +1,6 @@
 package lib.reports;
 
 import lib.reports.info.interfaces.MethodInfo;
-import lib.reports.interfaces.ClassReport;
 import lib.reports.interfaces.InterfaceReport;
 
 import java.util.LinkedList;
@@ -19,7 +18,7 @@ public class InterfaceReportImpl implements InterfaceReport {
     /**
      * Class constructor. Initialize all information as empty
      */
-    public InterfaceReportImpl(){
+    public InterfaceReportImpl() {
         this.interfaceName = "";
         this.interfaceFullPath = "";
         this.methodsInfo = new LinkedList<>();

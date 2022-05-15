@@ -24,8 +24,7 @@ public class PathChooserGUI {
         chooser.setDialogTitle(Strings.CHOOSER);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         var choice = chooser.showOpenDialog(null);
-        if (choice == JFileChooser.APPROVE_OPTION)
-            return chooser.getSelectedFile().getAbsolutePath();
+        if (choice == JFileChooser.APPROVE_OPTION) return chooser.getSelectedFile().getAbsolutePath();
         return "";
     }
 }

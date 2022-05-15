@@ -2,6 +2,7 @@ package lib.reports.info;
 
 import lib.reports.info.interfaces.MethodInfo;
 import lib.reports.interfaces.Report;
+
 import java.util.Optional;
 
 /**
@@ -18,12 +19,11 @@ public class MethodInfoImpl implements MethodInfo {
     /**
      * Class constructor. Build info with data passed as parameters
      *
-     * @param methodName method name
-     * @param srcBeginLine line where method begins
-     * @param endBeginLine line where methd ends
-     * @param modifiers method modifiers
+     * @param methodName                   method name
+     * @param srcBeginLine                 line where method begins
+     * @param endBeginLine                 line where methd ends
+     * @param modifiers                    method modifiers
      * @param parentClassOrInterfaceReport method parent class or interface
-     *
      * @see com.github.javaparser.ast.nodeTypes.NodeWithModifiers
      */
     public MethodInfoImpl(String methodName, int srcBeginLine, int endBeginLine, String modifiers, Report parentClassOrInterfaceReport) {
@@ -61,7 +61,6 @@ public class MethodInfoImpl implements MethodInfo {
 
     @Override
     public String toString() {
-
         return "\n\t\tMethodInfoImpl{"
                 + "methodName=" + methodName
                 + ", srcBeginLine=" + srcBeginLine

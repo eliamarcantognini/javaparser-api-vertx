@@ -1,8 +1,8 @@
 package view;
 
-import utils.dto.ClassInterfaceDTO;
-import utils.dto.PackageDTO;
-import utils.dto.ProjectDTO;
+import lib.dto.ClassInterfaceDTO;
+import lib.dto.PackageDTO;
+import lib.dto.ProjectDTO;
 
 /**
  * //TODO: complete javadoc

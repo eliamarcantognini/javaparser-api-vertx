@@ -88,7 +88,8 @@ public class InfoBuilder {
      * @return a {@link MethodInfo}
      */
     public MethodInfo buildMethod() {
-        return new MethodInfoImpl(this.name, this.beginLine, this.endLine, this.modifiers, this.report);
+        return new MethodInfoImpl(this.name, this.beginLine, this.endLine,
+                this.modifiers, this.report);
     }
 
     /**
@@ -97,7 +98,8 @@ public class InfoBuilder {
      * @return a {@link FieldInfo}
      */
     public FieldInfo buildField() {
-        return new FieldInfoImpl(this.name, this.type, this.modifiers, this.report);
+        return new FieldInfoImpl(this.name, this.type,
+                this.modifiers, this.report);
     }
 
 }

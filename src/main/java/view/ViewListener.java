@@ -30,7 +30,6 @@ public class ViewListener {
      * Perform event sent.
      *
      * @param code event to perform
-     *
      * @see Commands
      */
     public void eventPerformed(Commands code) {
@@ -46,7 +45,6 @@ public class ViewListener {
      * Set the view that manage analysis
      *
      * @param view view that manage analysis
-     *
      * @see TreeGUI
      */
     public void setViewToRunForAnalysis(final View view) {

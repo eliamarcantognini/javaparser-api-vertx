@@ -1,6 +1,6 @@
 package view.GUI;
 
-import utils.dto.*;
+import lib.dto.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -33,7 +33,8 @@ public final class Trees {
         for (MethodDTO m : dto.methods()) {
             if (m.modifiers() != null)
                 methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - 1)));
-            else methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - CHARACTERS_TO_SUBSTRING_IN_METHODS_MODS_PRESENTS)));
+            else
+                methodsNode.add(new DefaultMutableTreeNode(m.toString().substring(CHARACTERS_TO_SUBSTRING_IN_METHODS, m.toString().length() - CHARACTERS_TO_SUBSTRING_IN_METHODS_MODS_PRESENTS)));
         }
         root.add(methodsNode);
         if (dto.fields() != null) {
@@ -76,8 +77,7 @@ public final class Trees {
     public static DefaultMutableTreeNode createProjectTreeNode(ProjectDTO dto) {
         var root = new DefaultMutableTreeNode("Project");
         var mainClass = new DefaultMutableTreeNode(dto.mainClass().name().isBlank() ? "no Main Class" : "Main class");
-        if (!dto.mainClass().name().isBlank())
-            mainClass.add(createClassOrInterfaceTreeNode(dto.mainClass()));
+        if (!dto.mainClass().name().isBlank()) mainClass.add(createClassOrInterfaceTreeNode(dto.mainClass()));
         root.add(mainClass);
         var packages = new DefaultMutableTreeNode(dto.packages().isEmpty() ? "no packages" : "packages");
         for (PackageDTO p : dto.packages())

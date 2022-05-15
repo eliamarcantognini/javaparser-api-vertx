@@ -12,28 +12,28 @@ public interface ProjectReport {
      *
      * @return the main class of project
      */
-	ClassReport getMainClass();
+    ClassReport getMainClass();
 
     /**
      * Set the main class of project
      *
      * @param classReport the main class of project to set
      */
-	void setMainClass(ClassReport classReport);
+    void setMainClass(ClassReport classReport);
 
     /**
      * Get all packages reports of project packages
      *
      * @return all packages reports of project packages
      */
-	List<PackageReport> getAllPackageReports();
+    List<PackageReport> getAllPackageReports();
 
     /**
      * Add package report to project report
      *
      * @param packageReport package report to add to project report
      */
-	void addPackageReport (PackageReport packageReport);
+    void addPackageReport(PackageReport packageReport);
 
     /**
      * Get a class report of class passed as parameter
@@ -41,5 +41,5 @@ public interface ProjectReport {
      * @param fullClassName the full class name of which get report
      * @return class report of class requested
      */
-	ClassReport getClassReport(String fullClassName);
+    ClassReport getClassReport(String fullClassName);
 }

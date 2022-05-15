@@ -17,9 +17,8 @@ public interface MyCompositeFuture extends CompositeFuture {
      * Method to join a list of futures passed as parameter
      *
      * @param futures list of futures to complete
-     * @param <T> type of future
+     * @param <T>     type of future
      * @return a {@link CompositeFuture} with the same type of future present in list passed as parameter
-     *
      * @see CompositeFuture#join(List)
      */
     static <T> CompositeFuture join(List<Future<T>> futures) {
