@@ -1,45 +1,175 @@
 \section{Analisi del problema}
 
-Si vuole implementare una libreria che metta a disposizione una serie di funzionalità minimali per l'analisi di un progetto sviluppato utilizzando il linguaggio Java.
-%
+Si vuole implementare una libreria che metta a disposizione una serie di funzionalità minimali per l'analisi di un progetto sviluppato utilizzando il linguaggio Java e un'iterfaccia grafica per poterla utilizzare. Tale libreria utilizzerà al suo interno un'ulteriore libreria, ovvero quella di Java Parser\footnote{Sito: \url{https://javaparser.org/} - Repository:  \url{https://github.com/javaparser/javaparser}}
+
+\subsection{Funzionalità della libreria}
+\label{subs:lib_goals}
+
 Le funzionalità fornite dalla libreria devono dar la possibilità di:
 
 \begin{enumerate}
     \item Analizzare un'interfaccia, restituendo il nome stesso e un elenco dei nomi dei metodi contenuti al suo interno.
-    
-    \item Analizzare una classe, restituendo il suo nome e un elenco dei metodi in essa contenuti, comprensivi di alcune informazioni ritenute essenziali: nome, modificatori (public, private, ecc.) e la loro posizione all'interno del file, specificando linea di inizio e di fine.
-    
-    \item Analizzare un package, riportando un analisi delle interfacce e delle classi al suo interno.
-    
-    \item Analizzare il progetto stesso, riportando un'analisi dei suoi package.
+
+    \item Analizzare una classe, restituendo il suo nome e un elenco dei metodi in essa contenuti, comprensivi di alcune informazioni ritenute essenziali: nome, modificatori (public, private, ecc.) e la loro posizione all'interno del file, specificando linea di inizio e di fine. L'analisi deve inoltre restiuire una lista dei campi dei campi, comprensiva anch'essa dei relativi modificatori.
+
+    \item Analizzare un package, riportando il suo nome completo e un analisi delle interfacce e delle classi al suo interno.
+
+    \item Analizzare un progetto java intero, permettendo di conoscere la sua main class e i package che lo compongono; tale analisi deve poter essere interrotta dal suo richiedente.
 \end{enumerate}
 
 Queste analisi si possono considerare a cascata, dato che le ultime si compongono di quelle precedenti.
 
-Ulteriore requisito è quello di realizzare la libreria in modo asincrono, utilizzando un event-loop come architettura di riferimento.
+\subsection{Funzionalità della GUI}
+\label{subs:gui_goals}
+
+La GUI deve dare la possibilità di selezionare un progetto Java e avviare un'analisi su di esso; durante quest'ultima dovranno essere mostrati gli elementi trovati all'interno del progetto. L'interfaccia grafica deve inoltre permettere di interrompere l'analisi avviata precedentemente.
+
+\subsection{Requisiti riguardanti la metodologia di sviluppo}
+
+Ulteriore requisito è quello di realizzare la libreria in modo asincrono, utilizzando un event-loop come architettura di riferimento facendo eseguire le relative analisi come degli handler in risposta a degli eventi.
+
+%Si richiede anche una funzione di log della libreria che permetta di capire e verificare ciò che sta succedendo durante un'analisi in tempo reale.
+
+% Infine, si intende realizzare una semplice applicazione provvista di GUI per poter testare l'analisi di un progetto java mostrando a schermo i risultati ottenuti oltre ai log inviati dalla libreria.
 %
-In questo modo sarà possibile utilizzare la libreria in modo non bloccante, grazie al meccanismo delle \textit{Future}.
-
-Inoltre, deve essere possibile poter interrompere in qualsiasi momento l'esecuzione di un'analisi precedentemente richiesta.
-
-Infine, si intende realizzare una semplice applicazione provvista di GUI per poter testare le funzionalità messe a disposizione dalla libreria mostrando a schermo i risultati delle varie analisi.
+% L'interfaccia dovrà anche permettere di inviare un segnale alla libreria per interrompere la sua esecuzione.
 
 \section{Strategia risolutiva}
 
-La soluzione implementata, come specificato nei requisiti, si basa su programmazione asincrona in cui le varie operazioni vengono eseguite tramite l'utilizzo di un event-loop.
+La soluzione implementata, come specificato nei requisiti, si basa su programmazione asincrona in cui le varie operazioni sono eseguite tramite l'utilizzo di un event-loop.
 %
-Per realizzare questo comportamento si è utilizzato il \textit{framework} \textit{Vertx}, che permette appunto di realizzare funzionalità asincrone in modo semplice, senza doversi preoccupare di molti aspetti di basso livello, come l'utilizzo effettivo dei \textit{Thread}.
+Per mettere in pratica questo approccio si è utilizzato il framework \textit{Vertx}\footnote{\url{https://vertx.io/}}, che permette appunto di realizzare funzionalità asincrone in modo semplice, senza doversi preoccupare di molti aspetti di basso livello, come l'utilizzo effettivo dei \textit{Thread}.
 
-Per quanto riguarda l'analisi degli elementi di un progetto Java si è utilizzato la libreria \textit{Java Parser}, che permette di creare degli \textit{Abstract Sintaxt Tree} (AST) a partire da un file .java e visitare i sui nodi per recuperare le informazioni di interesse.
+In particolare, si è deciso di realizzare il comportamento legato all'analisi di una classe o di un'interfaccia come un'insieme di operazioni rispondenti ad un hanler relativo alla richiesta di ottenere informazioni relative ad, appunto quella classe o interfaccia. Potendo tale operazione poter richiedere del tempo, le istruzioni relative vengono eseguite da un ulteriore handler di Vertx, senza andare a incidere sull'event-loop\footnote{Questo per quanto concerne il calcolo; il risultato invece viene gestito dall'event-loop}.
+%da considerare atomiche da eseguire su un \textit{worker thread} scelto da \textit{Vertx} tra quelli disponibili nella sua pool.
 %
-Nello specifico, la visita viene effettuata tramite dei \textit{Visitor} in cui è possibile specificare il comportamento da adottare quando viene visitato un certo tipo di nodo.
 
-Utilizzo di un \textit{event-loop} esterno che dovrà gestire i vari eventi che nel nostro caso sono le chiamate ai metodi per ottenere un determinato report.
+\redCor{Questa cosa non la metterei perché non so se al prof piace $\Rightarrow{}$} Adottando questa soluzione è avviare in parallelo l'analisi di più file, velocizzando il procedimento complessivo, soprattutto quando si chiede di eseguire l'analisi di un progetto con molti package, che a loro volta contengono molte classi o interfacce).\redCor{$\Leftarrow{}$}
 
-La funzionalità analyzeProject lancerà una serie di eventi in base al tipo di file che si incontra durante la visita del progetto, ognuno dei quali relativo ad un certo report.
+La scelta di questa soluzione è anche data dal fatto che Vertx permette di ottenere da tali hanler delle \textit{Future} ottenendo quindi il risultato in modo asincrono.% tramite il meccanismo delle \textit{Future} si riesce a gestire facilmente il risultato asincrono di un'analisi, impostando semplicemente un \textit{handler} che lo gestisca coerentemente, aggiungendo all'analisi di un package per esempio.
 
-Si pensa ad una possibile soluzione in cui per ogni report si va a creare un event-loop personale in cui gestire i singoli elementi da analizzare. Tale soluzione diventa interessante se si riuscisse a fare in modo che l'event-loop generale avvia un event-loop figlio per ottenere un certo report e poi va a gestire un altro evento (la richiesta di un altro report). Deve essere l'event-loop figlio a comunicare di aver terminato al padre per fargli raccogliere il risultato. 
+Per quanto riguarda l'analisi di un progetto o di un package, invece, si è deciso di realizzarle in maniera differente rispetto i due casi precedenti, dato che necessitano anche di essere fermati nel caso venisse fatta richiesta, per questo si è deciso di realizzarli come \textit{Verticle} gestiti da Vertx. Queste due riutilizzano i le informazioni ottenibili grazie alle analisi delle interfacce e classi.
+\redCor{Cose riguardo l'undeploy le metterei nell'implementazione.}
+%
+%- LO TOGLIEREI - La scelta è dovuta principalmente al fatto che a livello di analisi i report dei project e del package sono dipendenti dai report delle classi e interfacce e di conseguenza non sono considerabili come operazioni ``atomiche""\redCor{\footnote{\redCor{Non è che fa pensare che ipotizziamo i getter precedenti come atomici?}}}, perciò si è ritenuto più corretto procedere in questo modo.
+%
+% Inoltre, dato che uno dei requisiti è quello di rendere le operazioni della libreria interrompibili in qualsiasi momento, si è potuto sfruttare la possibilità dei \textit{Verticle} di richiamare la \textit{undeploy}\footnote{\url{https://vertx.io/docs/apidocs/io/vertx/core/Vertx.html\#undeploy-java.lang.String-}} per bloccare la sua esecuzione in modo semplice a livello di programmazione.
+
+Siccome durante l'analisi è necessario comunicare con chi è in ascolto (in questo caso la GUI) gli elementi che vengono scoperti all'interno dei file, si è pensato di utilizzare l'\textit{event-bus} messo a disposizione da Vertx per poter inviare sia dei messaggi per indicare cosa è stato scoperto elemento è stato trovato, sia dei messaggi per eventuali errori. \redCor{Differenza tra report e "Trovato X" la metterei in implementazione}
+%p sa è stato scoperto,  le quinte, inclusi eventuali errori, sia per inviare i report che man mano vengono realizzati sotto forma di json.
+%
+
+\redCor{Direi che ci scambiamo messaggi per notificare cose, ma quali siano li metterei nell'implementazione $(1)\Rightarrow{}$}
+Per distinguere i vari messaggi si è ideato un semplice protocollo per cui all'inizio del messaggio viene inserita una parola chiave che permette di riconoscere il contenuto di ciò è stato inviato.
+Le parole chiavi possibili sono le seguenti:
+
+\begin{itemize}
+    \item \textbf{INTERFACE\_REPORT}: indica che il contenuto successivo del messaggio è un oggetto in formato JSON e rappresenta il report di un'interfaccia.
+
+    \item \textbf{CLASS\_REPORT}: come sopra, ma il JSON rappresenta il report di una classe.
+
+    \item \textbf{PACKAGE\_REPORT}: come sopra, ma il JSON rappresenta il report di un package.
+
+    \item \textbf{PROJECT\_REPORT}: come sopra, ma il JSON rappresenta il report del progetto.
+
+    \item \textbf{METHOD\_REPORT} \label{itemize:method_report}: viene utilizzato per comunicare all'esterno il fatto che durante l'analisi di una classe o un'interfaccia è stato individuato un metodo e il resto del messaggio è un oggetto in formato JSON che contiene le informazioni su di esso che verranno poi inserite nei report.
+
+    \item \textbf{FIELD\_REPORT}: significato simile a METHOD\_REPORT, ma riferito al campo di una classe.
+
+    \item \textbf{ERROR}: indica che è avvenuto un errore durante l'esecuzione e il resto del messaggio è una stringa che ne indica il tipo.
+
+    \item \textbf{INTERRUPT}: serve ad indicare all'esterno che è stato ricevuto il comando per interrompere l'esecuzione in atto.
+
+\end{itemize}
+
+\redCor{$\Leftarrow{}(1)$}
+%INIZIO JAVAPARSER
 
 \section{Architettura ed implementazione}
 
-I metodi getReport devono essere asincroni quindi tornano una Future del tipo relativo al report che si vuole ottenere (per esempio Future<ClassReport>)
+\subsection{Libreria di appoggio - Java Parser}
+\label{subs:javaparser}
+
+Libreria di appoggio utilizzata per la creazione dei metodi forniti richiesti per l'assignment, permette di creare degli \textit{Abstract Sintaxt Tree} (AST) a partire da un file \texttt{.java} e visitare i sui nodi per recuperare le informazioni di interesse.
+%
+Nello specifico, la visita viene effettuata tramite dei \textit{Visitor} in cui è possibile specificare il comportamento da adottare quando viene visitato un certo tipo di nodo, permettendo quindi il recupero e la memorizzazione dei dati che deve trovare la libreria, per poi restituirli al chiamante sotto forma di oggetto del tipo specificato nel \texttt{VoidVisitoAdapter}\footnote{\url{https://javadoc.io/doc/com.github.javaparser/javaparser-core/3.24.2/com/github/javaparser/ast/visitor/VoidVisitorAdapter.html}}.
+
+\subsection{Libreria sviluppata}
+\label{subs:library_developed}
+
+Per l'implementazione della libreria si è cercato di realizzare tutte le sue componenti in modo che svolgessero il loro compito in modo asincrono.
+
+Si è deciso di suddividere il contenuto della libreria in tre \textit{sottopackage}:
+
+\begin{itemize}
+    \item \texttt{async}: all'interno del quale sono contenute le classi direttamente coinvolte nella programmazione asincrona, che sono quindi direttamente dipendenti dal framework Vertx e dai meccanismi di questa ideologia.
+
+    \item \texttt{visitors}: contiene le classi e le interfacce che descrivono i Visitor realizzati utilizzando Java Parser e che si occupano di estarre le informazioni contenuti nei file \texttt{.java}.
+
+    \item \texttt{reports}: contiene le classi e interfacce in grado di contenere le informazioni relative ai report da creare durante il processo di analisi.
+\end{itemize}
+
+Tale divisione è stata fatta per dividere quelli componenti generiche che non dipendono dal paradigma ad eventi e che possono essere riutilizzate per realizzare una versione della libreria basata su un'altra metodologia di sviluppo.
+
+Al di fuori dei package, invece, sono state estratte le due interfacce che sono utilizzate per interagire con la libreria stessa, cioè \texttt{ProjectAnalyzer} e il \texttt{Logger}.
+%
+La prima indica l'effettivo entry point della libreria in quanto contiene i metodi da richiamare per interagire con essa.
+%
+La seconda invece, come intuibile dal nome stesso, è utilizzabile per poter accedere alla lista di comandi per poter interpretare correttamente il log della libreria.
+
+\subsubsection{Reports}
+
+All'interno di questo p0.30
+
+Package sono contenute le classi che descrivono i report che vengono realizzati dalla libreria e sono descritte nella figura \ref{fig:reports_interfaces}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{img/ReportsInterafaces.png}
+    \caption{Interfacce dei Report}
+    \label{fig:reports_interfaces}
+\end{figure}
+
+
+
+
+I metodi getReport devono essere asincroni quindi tornano una Future del tipo relativo al report che si vuole ottenere (per esempio Future\textless ClassReport\textgreater)
+
+\subsubsection{Visitors}
+\label{subsubs:visitors}
+
+Package con al suo interno i ``visitatori" dell'abract syntax tree generato da Java Parser; come detto in precedenza, estondono da \texttt{VoidVisitor} di Java Parser. I loro metodi vengono richiamati direttamente dal metodo \texttt{visit} della \texttt{CompilationUnit}\footnote{\url{https://javadoc.io/doc/com.github.javaparser/javaparser-core/latest/com/github/javaparser/ast/CompilationUnit.html}} di Java Parser. Il visitor base è \texttt{FileVisitor} il quale viene esteso a sua volta da \texttt{ClassesVisitor} e \texttt{InterfaceVisitor} i quali vengono richiamati in base al contesto in cui ci si trova. \redCor{Vogliamo aggiungere un'immagine?}
+\redCor{Non aggiungerei altro. Al massimo cosa normalmente fa un visit.}
+
+\subsubsection{ProjectAnalyzer}
+\label{subsubs:project_analyzer}
+
+Rappresenta l'interfaccia con i metodi che deve fornire la libreria richiesta. Tutti i metodi ritornano delle \texttt{Future} in maniera tale da poter utilizzarli in maniera asincrona rispetto al contesto in cui sta operando, eccetto l'ultimo, \texttt{analyzeProject} che permette di avviare l'analisi di un progetto. Quest'ultima comunica le informazioni che ottiene durante l'esecuzione sul topic,  passato come secondo parametro sotto forma di stringa.
+\redCor{Non aggiungerei altro, semplicemente metterei un UML della classe}
+
+\subsubsection{Logger}
+\label{subsubs:logger}
+
+\subsubsection{Async}
+\label{subsubs:async}
+
+Dentro tale package abbiamo \texttt{AsyncProjectAnalyzer} che consiste nell'implementazione di \texttt{\nameref{subsubs:project_analyzer}}. Utilizza un'istanza di Vertx per le diverse esecuzioni asincrone e il \nameref{subsubs:logger} per scambiare messaggi.
+
+I getter relativi a interfacce e classi sono stati realizzati utilizzando il metodo \texttt{executeBlocking} di Vertx in maniera tale che la loro esecuzione non venisse effettuata sullo stesso thread dell'event-loop, il quale non deve perdere reattività. Quando il report è stato generato, viene completata la future inviandolo come parametro oltre a comunicarlo al \nameref{subsubs:logger}. Questi getter vengono utilizzati anche da \nameref{para:package_verticle} e \nameref{para:project_verticle} durante la costruzione dei relativi report.
+
+\paragraph{ProjectVerticle}
+\label{para:project_verticle}
+\redCor{Non metterei molto di più del fatto che si prende diversi package verticle e che cerca il main}
+
+\paragraph{PackageVerticle}
+\label{para:package_verticle}
+
+Classe che estende \texttt{AbstracVerticle} permette di analizzare un package. Il risulato sarà ottenibile grazie alla promise che viene passata come parametro al costruttore. Anche in questo caso è utilizzato il \nameref{subsubs:logger} per comunicare le informazioni ottenute durante l'analisi.
+
+Quando avviene la deploy sul verticle, quest'ultimo cerca i sorgenti java all'interno del package passato come parametro al costruttore e per ognuno di loro effettua una \texttt{getInterfaceReport} o \texttt{getClassReport} relativamente al tipo di sorgente che si sta analizzando.
+\newline
+Il risultato del report finale verrà posto all'interno della promise solo dopo che tutte le future siano state completate\footnote{Le informazioni parziali dell'analisi saranno comunque ottenibili prima grazie al \nameref{subsubs:logger}.} grazie a \texttt{MyCompositeFuture}, un'interfaccia con soli metodi statici che permette di effettuare una \texttt{join} di una lista di \texttt{Future}.
+
+Essendo un verticle, \nameref{para:package_verticle} può essere fermato in caso venga effettuato l'undeploy del verticle.
+
+\redCor{A PackageVerticle non aggiungerei altro}
