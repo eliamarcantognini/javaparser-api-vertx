@@ -86,7 +86,8 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">MethodDTO</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, int&nbsp;srcBeginLine, int&nbsp;endBeginLine, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modifiers)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
-<div class="block">Record representing a serializable version of a <a href="../reports/info/interfaces/MethodInfo.html" title="interface in lib.reports.info.interfaces"><code>MethodInfo</code></a>.</div>
+<div class="block">Record representing a serializable version of a <a href="../reports/info/interfaces/MethodInfo.html" title="interface in lib.reports.info.interfaces"><code>MethodInfo</code></a>.
+ Used for classes.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -101,7 +102,9 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,int,int)" class="member-name-link">MethodDTO</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  int&nbsp;srcBeginLine,
  int&nbsp;endBeginLine)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Record representing a serializable version of a <a href="../reports/info/interfaces/MethodInfo.html" title="interface in lib.reports.info.interfaces"><code>MethodInfo</code></a>.</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,int,int,java.lang.String)" class="member-name-link">MethodDTO</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  int&nbsp;srcBeginLine,
  int&nbsp;endBeginLine,
@@ -181,6 +184,14 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">MethodDTO</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  int&nbsp;srcBeginLine,
  int&nbsp;endBeginLine)</span></div>
+<div class="block">Record representing a serializable version of a <a href="../reports/info/interfaces/MethodInfo.html" title="interface in lib.reports.info.interfaces"><code>MethodInfo</code></a>.
+ Used for interfaces.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - - name of the method</dd>
+<dd><code>srcBeginLine</code> - - the number of the first line of the method inside the file</dd>
+<dd><code>endBeginLine</code> - - the number of the last line of the method inside the file</dd>
+</dl>
 </section>
 </li>
 <li>
